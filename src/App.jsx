@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import Auth from './Auth'
 
 function App() {
+  const [session, setSession] = useState(null)
   const [suplementos, setSuplementos] = useState([])
 
   const [nuevoNombre, setNuevoNombre] = useState('')
@@ -15,7 +17,7 @@ function App() {
     if (!nombre || !dosis) return
     const { data, error } = await supabase
       .from('suplementos')
-      .insert([{ nombre, dosis, tomado: false }])
+      .insert([{ nombre, dosis, tomado: false, user_id: session.user.id }])
       .select()
     if (!error) {
       setSuplementos([...suplementos, data[0]])
@@ -64,18 +66,34 @@ function App() {
   }, [busqueda])
 
   useEffect(() => {
-    cargarSuplemento()
-  }, [])
+    if (session) cargarSuplemento()
+  }, [session])
 
   const cargarSuplemento = async () => {
     const { data, error } = await supabase
       .from('suplementos')
       .select('*')
+      .eq('user_id', session.user.id)
     if (!error) setSuplementos(data)
   }
 
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  }, [])
+
+  if (!session) return <Auth />
   return (
     <div className="max-w-xl mx-auto mt-10 px-4 font-sans">
+      <button
+        onClick={() => supabase.auth.signOut()}
+        className="block ml-auto text-sm text-gray-400 hover:text-red-400 transition mb-4">
+        Cerrar sesión →
+      </button>
       <h1 className="text-3xl font-bold text-center mb-2">💊 Mis Suplementos</h1>
       <p className="text-center text-gray-500 mb-6">
         ✅ {suplementos.filter(s => s.tomado).length} de {suplementos.length} tomados
