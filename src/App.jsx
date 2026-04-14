@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react'
+import { supabase } from './supabaseClient'
 
 function App() {
-  const [suplementos, setSuplementos] = useState([
-    { id: 1, nombre: 'Proteína Whey', dosis: '30g', tomado: false },
-    { id: 2, nombre: 'Creatina', dosis: '5g', tomado: false },
-    { id: 3, nombre: 'Omega 3', dosis: '2 cápsulas', tomado: false },
-  ])
+  const [suplementos, setSuplementos] = useState([])
 
   const [nuevoNombre, setNuevoNombre] = useState('')
   const [nuevaDosis, setNuevaDosis] = useState('')
@@ -14,28 +11,40 @@ function App() {
   const [resultados, setResultados] = useState([])
   const [cargando, setCargando] = useState(false)
 
-  const agregarSuplemento = (nombre = nuevoNombre, dosis = nuevaDosis) => {
-
+  const agregarSuplemento = async (nombre = nuevoNombre, dosis = nuevaDosis) => {
     if (!nombre || !dosis) return
-    const nuevo = {
-      id: suplementos.length + 1,
-      nombre: nombre,
-      dosis: dosis,
-      tomado: false,
+    const { data, error } = await supabase
+      .from('suplementos')
+      .insert([{ nombre, dosis, tomado: false }])
+      .select()
+    if (!error) {
+      setSuplementos([...suplementos, data[0]])
+      setNuevoNombre('')
+      setNuevaDosis('')
     }
-    setSuplementos([...suplementos, nuevo])
-    setNuevoNombre('')
-    setNuevaDosis('')
   }
 
-  const marcarTomado = (id) => {
-    setSuplementos(suplementos.map(s =>
-      s.id === id ? { ...s, tomado: !s.tomado } : s
-    ))
+  const marcarTomado = async (id) => {
+    const suplemendo = suplementos.find(s => s.id === id)
+    const { error } = await supabase
+      .from('suplementos')
+      .update({ tomado: !suplemendo.tomado })
+      .eq('id', id)
+    if (!error) {
+      setSuplementos(suplementos.map(s =>
+        s.id === id ? { ...s, tomado: !s.tomado } : s
+      ))
+    }
   }
-  const deleteSuplemento = (id) =>
-  {
-    setSuplementos(suplementos.filter(s => s.id !== id));
+
+  const deleteSuplemento = async (id) => {
+    const { error } = await supabase
+      .from('suplementos')
+      .delete()
+      .eq('id', id)
+    if (!error) {
+      setSuplementos(suplementos.filter(s => s.id !== id))
+    }
   }
 
   const buscarAlimento = () => {
@@ -53,6 +62,17 @@ function App() {
     if (!busqueda) return
       buscarAlimento()
   }, [busqueda])
+
+  useEffect(() => {
+    cargarSuplemento()
+  }, [])
+
+  const cargarSuplemento = async () => {
+    const { data, error } = await supabase
+      .from('suplementos')
+      .select('*')
+    if (!error) setSuplementos(data)
+  }
 
   return (
     <div className="max-w-xl mx-auto mt-10 px-4 font-sans">
