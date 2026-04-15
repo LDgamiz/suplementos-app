@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
 import Auth from "./Auth";
+import Rutinas from './Rutinas'
 
 function App() {
   const [session, setSession] = useState(null);
@@ -60,6 +61,22 @@ function App() {
         setCargando(false);
       });
   };
+  const aplicarRutina = async (suplementosDeRutina) => {
+    const hoy = new Date().toISOString().split('T')[0]
+    const filas = suplementosDeRutina.map(s => ({
+      nombre: s.nombre,
+      dosis: s.dosis,
+      tomado: false,
+      user_id: session.user.id,
+      fecha: hoy
+    }))
+    const { data, error } = await supabase
+      .from('suplementos')
+      .insert(filas)
+      .select()
+    if (!error) setSuplementos([...suplementos, ...data])
+  }
+
   useEffect(() => {
     if (!busqueda) return;
     buscarAlimento();
@@ -165,6 +182,8 @@ function App() {
           Agregar
         </button>
       </div>
+
+      <Rutinas session={session} onAplicarRutina={aplicarRutina} />
 
       {/* Buscador */}
       <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
