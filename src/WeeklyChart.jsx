@@ -75,8 +75,8 @@ export default function WeeklyChart({ refreshKey }) {
       : null
     setPromedio(avg)
 
-    renderChart(labels, taken, totals, pcts)
     setLoading(false)
+    setTimeout(() => renderChart(labels, taken, totals, pcts), 50)
   }
 
   function renderChart(labels, taken, totals, pcts) {
