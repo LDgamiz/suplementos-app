@@ -117,13 +117,13 @@ function Rutinas({ session, onAplicarRutina }) {
             placeholder="Nombre"
             value={s.nombre}
             onChange={e => actualizarFila(index, 'nombre', e.target.value)}
-            className="flex-1 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
           <input
             placeholder="Dosis"
             value={s.dosis}
             onChange={e => actualizarFila(index, 'dosis', e.target.value)}
-            className="flex-1 px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
           />
         </div>
       ))}
