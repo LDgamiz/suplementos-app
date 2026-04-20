@@ -1,17 +1,10 @@
 // src/WeeklyChart.jsx
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from './supabaseClient'
-import {
-  Chart,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  BarController
-} from 'chart.js'
+import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 
-Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, BarController, ChartDataLabels)
+Chart.register(ChartDataLabels)
 
 const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
