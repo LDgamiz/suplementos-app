@@ -10,9 +10,6 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icons/*.png'],
-      workbox: {
-        excludeChunks: ['chart']  // 👈 agrega esto
-      },
       manifest: {
         name: 'Mis Suplementos',
         short_name: 'Suplementos',
