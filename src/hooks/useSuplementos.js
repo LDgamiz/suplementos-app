@@ -68,5 +68,15 @@ export function useSuplementes(session, fecha) {
     }
   }
 
-  return { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina, togglePublico  }
+  const editarSuplemento = async (id, nombre, dosis) => {
+    const { error } = await supabase
+      .from('suplementos')
+      .update({ nombre, dosis })
+      .eq('id', id)
+    if (!error) {
+      setSuplementos(prev => prev.map(s => s.id === id ? { ...s, nombre, dosis } : s))
+    }
+  }
+
+  return { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina, togglePublico, editarSuplemento  }
 }

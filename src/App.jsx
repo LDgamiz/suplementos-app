@@ -15,7 +15,7 @@ import Notificaciones from './components/Notificaciones'
 function App() {
   const { session, signOut } = useAuth()
   const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
-  const { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina, togglePublico } = useSuplementes(session, fecha)
+  const { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina, togglePublico, editarSuplemento } = useSuplementes(session, fecha)
 
   if (!session) return <Auth />
 
@@ -51,7 +51,7 @@ function App() {
 
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {suplementos.map(s => (
-            <SupplementoItem key={s.id} suple={s} onMarcar={marcarTomado} onEliminar={eliminarSuplemento} onTogglePublico={togglePublico} />
+            <SupplementoItem key={s.id} suple={s} onMarcar={marcarTomado} onEliminar={eliminarSuplemento} onTogglePublico={togglePublico} onEditar={editarSuplemento} />
           ))}
         </ul>
 
