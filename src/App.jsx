@@ -11,11 +11,13 @@ import { Routes, Route } from 'react-router-dom'
 import PerfilPublico from './pages/PerfilPublico'
 import ConfigPerfil from './components/ConfigPerfil'
 import Notificaciones from './components/Notificaciones'
+import { useRacha } from './hooks/useRacha'
 
 function App() {
   const { session, signOut } = useAuth()
   const [fecha, setFecha] = useState(new Date().toISOString().split('T')[0])
   const { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina, togglePublico, editarSuplemento } = useSuplementes(session, fecha)
+  const { racha } = useRacha(session)
 
   if (!session) return <Auth />
 
@@ -34,9 +36,16 @@ function App() {
           </div>
         </div>
 
-        <p className="text-center text-gray-500 mb-6">
-          ✅ {suplementos.filter(s => s.tomado).length} de {suplementos.length} tomados
-        </p>
+        <div className="flex justify-center items-center gap-6 mb-6">
+          <p className="text-gray-500">
+            ✅ {suplementos.filter(s => s.tomado).length} de {suplementos.length} tomados
+          </p>
+          {racha > 0 && (
+            <p className="text-orange-500 font-semibold">
+              🔥 {racha} {racha === 1 ? 'día' : 'días'}
+            </p>
+          )}
+        </div>
 
         <WeeklyChart refreshKey={refreshKey} />
 
