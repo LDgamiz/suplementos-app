@@ -10,6 +10,7 @@ import BuscadorAlimento from './components/BuscadorAlimento'
 import { Routes, Route } from 'react-router-dom'
 import PerfilPublico from './pages/PerfilPublico'
 import ConfigPerfil from './components/ConfigPerfil'
+import Notificaciones from './components/Notificaciones'
 
 function App() {
   const { session, signOut } = useAuth()
@@ -58,6 +59,7 @@ function App() {
         <Rutinas session={session} onAplicarRutina={aplicarRutina} />
         <BuscadorAlimento onAgregar={agregarSuplemento} />
         <ConfigPerfil session={session} />
+        <Notificaciones />
       </div>
       } />
     </Routes>
