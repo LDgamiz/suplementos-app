@@ -58,5 +58,15 @@ export function useSuplementes(session, fecha) {
     if (!error) setSuplementos(prev => [...prev, ...data])
   }
 
-  return { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina }
+  const togglePublico = async (id, publicoActual) => {
+    const { error } = await supabase
+      .from('suplementos')
+      .update({ publico: !publicoActual })
+      .eq('id', id)
+    if (!error) {
+      setSuplementos(prev => prev.map(s => s.id === id ? { ...s, publico: !s.publico } : s))
+    }
+  }
+
+  return { suplementos, refreshKey, agregarSuplemento, marcarTomado, eliminarSuplemento, aplicarRutina, togglePublico  }
 }
