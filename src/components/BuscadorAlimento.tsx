@@ -1,8 +1,18 @@
 import { useState, useEffect } from 'react'
 
-export default function BuscadorAlimento({ onAgregar }) {
+interface Producto {
+  product_name: string
+  nutrition_data_per: string
+  nutriments?: { energy_value?: number }
+}
+
+interface Props {
+  onAgregar: (nombre: string, dosis: string) => void
+}
+
+export default function BuscadorAlimento({ onAgregar }: Props) {
   const [busqueda, setBusqueda] = useState('')
-  const [resultados, setResultados] = useState([])
+  const [resultados, setResultados] = useState<Producto[]>([])
   const [cargando, setCargando] = useState(false)
 
   useEffect(() => {

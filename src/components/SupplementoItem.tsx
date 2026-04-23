@@ -1,6 +1,15 @@
 import { useState } from 'react'
+import { Suplemento } from '../hooks/useSuplementos'
 
-export default function SupplementoItem({ suple, onMarcar, onEliminar, onTogglePublico, onEditar }) {
+interface Props {
+  suple: Suplemento
+  onMarcar: (id: number) => void
+  onEliminar: (id: number) => void
+  onTogglePublico: (id: number, publico: boolean) => void
+  onEditar: (id: number, nombre: string, dosis: string) => void
+}
+
+export default function SupplementoItem({ suple, onMarcar, onEliminar, onTogglePublico, onEditar }: Props) {
   const [editando, setEditando] = useState(false)
   const [nombre, setNombre] = useState(suple.nombre)
   const [dosis, setDosis] = useState(suple.dosis)

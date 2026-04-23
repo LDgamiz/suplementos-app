@@ -1,4 +1,3 @@
-// src/WeeklyChart.jsx
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from './supabaseClient'
 import Chart from 'chart.js/auto'
@@ -8,18 +7,27 @@ Chart.register(ChartDataLabels)
 
 const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
-const getColor = (pct) => {
+const getColor = (pct: number | null): string => {
   if (pct === null) return '#E5E4DF'
   if (pct >= 80) return '#3B6D11'
   if (pct >= 50) return '#BA7517'
   return '#A32D2D'
 }
 
-export default function WeeklyChart({ refreshKey }) {
-  const canvasRef = useRef(null)
-  const chartRef = useRef(null)
-  const [loading, setLoading] = useState(true)
-  const [promedio, setPromedio] = useState(null)
+interface Props {
+  refreshKey: number
+}
+
+interface Grouped {
+  taken: number
+  total: number
+}
+
+export default function WeeklyChart({ refreshKey }: Props) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const chartRef = useRef<Chart | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
+  const [promedio, setPromedio] = useState<number | null>(null)
 
   useEffect(() => {
     fetchWeeklyData()
@@ -27,6 +35,7 @@ export default function WeeklyChart({ refreshKey }) {
 
   async function fetchWeeklyData() {
     const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return
 
     const today = new Date()
     const sevenDaysAgo = new Date(today)
@@ -41,20 +50,18 @@ export default function WeeklyChart({ refreshKey }) {
 
     if (error) { console.error(error); return }
 
-    // Agrupar por fecha
-    const grouped = {}
-    logs.forEach(log => {
+    const grouped: Record<string, Grouped> = {}
+    logs.forEach((log: { fecha: string; tomado: boolean }) => {
       const day = log.fecha
       if (!grouped[day]) grouped[day] = { taken: 0, total: 0 }
       grouped[day].total++
       if (log.tomado) grouped[day].taken++
     })
 
-    // Construir los 7 días
-    const labels = []
-    const taken = []
-    const totals = []
-    const pcts = []
+    const labels: string[] = []
+    const taken: number[] = []
+    const totals: number[] = []
+    const pcts: (number | null)[] = []
 
     for (let i = 6; i >= 0; i--) {
       const d = new Date(today)
@@ -68,19 +75,16 @@ export default function WeeklyChart({ refreshKey }) {
       pcts.push(g && g.total > 0 ? Math.round((g.taken / g.total) * 100) : null)
     }
 
-    // Promedio solo de días con datos
-    const diasConDatos = pcts.filter(p => p !== null)
+    const diasConDatos = pcts.filter((p): p is number => p !== null)
     const avg = diasConDatos.length > 0
       ? Math.round(diasConDatos.reduce((a, b) => a + b, 0) / diasConDatos.length)
       : null
     setPromedio(avg)
-
     setLoading(false)
     setTimeout(() => renderChart(labels, taken, totals, pcts), 50)
   }
 
-  function renderChart(labels, taken, totals, pcts) {
-    // Destruir chart anterior si existe
+  function renderChart(labels: string[], taken: number[], totals: number[], pcts: (number | null)[]) {
     if (chartRef.current) {
       chartRef.current.destroy()
       chartRef.current = null
@@ -119,7 +123,7 @@ export default function WeeklyChart({ refreshKey }) {
               offset: 2,
               color: tickColor,
               font: { size: 11, weight: '500' },
-              formatter: (_, ctx) => pcts[ctx.dataIndex] + '%'
+              formatter: (_: number, ctx: { dataIndex: number }) => pcts[ctx.dataIndex] + '%'
             }
           }
         ]
@@ -155,11 +159,8 @@ export default function WeeklyChart({ refreshKey }) {
     })
   }
 
-  // Limpiar al desmontar
   useEffect(() => {
-    return () => {
-      if (chartRef.current) chartRef.current.destroy()
-    }
+    return () => { if (chartRef.current) chartRef.current.destroy() }
   }, [])
 
   return (
@@ -176,14 +177,12 @@ export default function WeeklyChart({ refreshKey }) {
           </div>
         )}
       </div>
-
       {loading
         ? <p className="text-center text-gray-400 py-10 text-sm">Cargando...</p>
         : <div style={{ position: 'relative', height: '180px' }}>
             <canvas ref={canvasRef} />
           </div>
       }
-
       <div className="flex gap-4 mt-3 justify-center flex-wrap">
         {[
           { color: '#3B6D11', label: '≥80%' },

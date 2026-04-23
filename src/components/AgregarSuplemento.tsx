@@ -1,6 +1,10 @@
 import { useState } from 'react'
 
-export default function AgregarSuplemento({ onAgregar }) {
+interface Props {
+  onAgregar: (nombre: string, dosis: string) => void
+}
+
+export default function AgregarSuplemento({ onAgregar }: Props) {
   const [nombre, setNombre] = useState('')
   const [dosis, setDosis] = useState('')
 

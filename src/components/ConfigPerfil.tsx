@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
+import { Session } from '@supabase/supabase-js'
 
-export default function ConfigPerfil({ session }) {
+interface Props {
+  session: Session
+}
+
+export default function ConfigPerfil({ session }: Props) {
   const [username, setUsername] = useState('')
-  const [usernameActual, setUsernameActual] = useState(null)
+  const [usernameActual, setUsernameActual] = useState<string | null>(null)
   const [guardando, setGuardando] = useState(false)
-  const [mensaje, setMensaje] = useState(null)
+  const [mensaje, setMensaje] = useState<string | null>(null)
 
   useEffect(() => {
     cargarPerfil()
@@ -24,12 +29,10 @@ export default function ConfigPerfil({ session }) {
     if (!username.trim()) return
     setGuardando(true)
     setMensaje(null)
-
     const { error } = await supabase
       .from('perfiles')
       .upsert({ user_id: session.user.id, username: username.trim().toLowerCase() },
                { onConflict: 'user_id' })
-
     if (error) {
       setMensaje(error.message.includes('unique') ? '❌ Ese username ya está tomado' : '❌ Error al guardar')
     } else {
@@ -45,7 +48,6 @@ export default function ConfigPerfil({ session }) {
   return (
     <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
       <h2 className="text-xl font-semibold mb-4">🔗 Perfil público</h2>
-
       {usernameActual && (
         <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
           <p className="text-xs text-gray-500 mb-1">Tu link público:</p>
@@ -59,21 +61,18 @@ export default function ConfigPerfil({ session }) {
           </div>
         </div>
       )}
-
       <input
         placeholder={usernameActual ? `Cambiar (actual: @${usernameActual})` : 'Elige tu username (ej. ldgamiz)'}
         value={username}
         onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
         className="w-full mb-3 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
       />
-
       <button
         onClick={guardarUsername}
         disabled={guardando}
         className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition disabled:opacity-50">
         {guardando ? 'Guardando...' : usernameActual ? 'Actualizar username' : 'Crear perfil público'}
       </button>
-
       {mensaje && <p className="text-sm text-center mt-3 text-gray-600">{mensaje}</p>}
     </div>
   )

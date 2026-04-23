@@ -1,10 +1,28 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './supabaseClient'
+import { Session } from '@supabase/supabase-js'
 
-function Rutinas({ session, onAplicarRutina }) {
-  const [rutinas, setRutinas] = useState([])
-  const [nombreRutina, setNombreRutina] = useState('')
-  const [suplementosRutina, setSuplementosRutina] = useState([
+interface SupplementoRutina {
+  nombre: string
+  dosis: string
+}
+
+interface Rutina {
+  id: number
+  nombre: string
+  user_id: string
+  rutina_suplementos: SupplementoRutina[]
+}
+
+interface Props {
+  session: Session
+  onAplicarRutina: (suplementos: SupplementoRutina[]) => void
+}
+
+export default function Rutinas({ session, onAplicarRutina }: Props) {
+  const [rutinas, setRutinas] = useState<Rutina[]>([])
+  const [nombreRutina, setNombreRutina] = useState<string>('')
+  const [suplementosRutina, setSuplementosRutina] = useState<SupplementoRutina[]>([
     { nombre: '', dosis: '' }
   ])
 
@@ -29,13 +47,13 @@ function Rutinas({ session, onAplicarRutina }) {
       })
     )
     setRutinas(rutinasConSuplemento)
-}
+  }
 
   const agregarFilaSuplemento = () => {
     setSuplementosRutina([...suplementosRutina, { nombre: '', dosis: '' }])
   }
 
-  const actualizarFila = (index, campo, valor) => {
+  const actualizarFila = (index: number, campo: keyof SupplementoRutina, valor: string) => {
     const nuevas = [...suplementosRutina]
     nuevas[index][campo] = valor
     setSuplementosRutina(nuevas)
@@ -60,11 +78,7 @@ function Rutinas({ session, onAplicarRutina }) {
     cargarRutinas()
   }
 
-  const aplicarRutina = async (rutina) => {
-    onAplicarRutina(rutina.rutina_suplementos)
-  }
-
-  const eliminarRutina = async (id) => {
+  const eliminarRutina = async (id: number) => {
     await supabase.from('rutina_suplementos').delete().eq('rutina_id', id)
     await supabase.from('rutinas').delete().eq('id', id)
     setRutinas(rutinas.filter(r => r.id !== id))
@@ -74,20 +88,17 @@ function Rutinas({ session, onAplicarRutina }) {
     <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
       <h2 className="text-xl font-semibold mb-4">⚡ Rutinas</h2>
 
-      {/* Lista de rutinas guardadas */}
       {rutinas.length > 0 && (
         <div className="mb-6 space-y-3">
           {rutinas.map(rutina => (
             <div key={rutina.id} className="flex justify-between items-center p-3 bg-gray-50 border border-gray-200 rounded-xl">
               <div>
                 <p className="font-semibold text-gray-800">{rutina.nombre}</p>
-                <p className="text-xs text-gray-400">
-                  {rutina.rutina_suplementos.length} suplementos
-                </p>
+                <p className="text-xs text-gray-400">{rutina.rutina_suplementos.length} suplementos</p>
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => aplicarRutina(rutina)}
+                  onClick={() => onAplicarRutina(rutina.rutina_suplementos)}
                   className="text-sm px-3 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold transition">
                   ▶ Aplicar
                 </button>
@@ -102,7 +113,6 @@ function Rutinas({ session, onAplicarRutina }) {
         </div>
       )}
 
-      {/* Formulario nueva rutina */}
       <h3 className="font-semibold text-gray-700 mb-3">Nueva rutina</h3>
       <input
         placeholder="Nombre de la rutina (ej. Stack mañana)"
@@ -128,19 +138,12 @@ function Rutinas({ session, onAplicarRutina }) {
         </div>
       ))}
 
-      <button
-        onClick={agregarFilaSuplemento}
-        className="text-sm text-blue-500 hover:underline mb-4 mt-1">
+      <button onClick={agregarFilaSuplemento} className="text-sm text-blue-500 hover:underline mb-4 mt-1">
         + Agregar suplemento a la rutina
       </button>
-
-      <button
-        onClick={guardarRutina}
-        className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition">
+      <button onClick={guardarRutina} className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition">
         Guardar rutina
       </button>
     </div>
   )
 }
-
-export default Rutinas

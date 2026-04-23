@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { supabase } from './supabaseClient'
 
-function Auth() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [esRegistro, setEsRegistro] = useState(false)
-  const [mensaje, setMensaje] = useState('')
+export default function Auth() {
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [esRegistro, setEsRegistro] = useState<boolean>(false)
+  const [mensaje, setMensaje] = useState<string>('')
 
   const handleSubmit = async () => {
     if (esRegistro) {
@@ -53,5 +53,3 @@ function Auth() {
     </div>
   )
 }
-
-export default Auth
