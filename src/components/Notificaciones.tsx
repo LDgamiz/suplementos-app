@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Bell, BellOff, Clock, Check } from 'lucide-react'
 
 export default function Notificaciones() {
   const [permiso, setPermiso] = useState<NotificationPermission>(Notification.permission)
@@ -55,41 +56,56 @@ export default function Notificaciones() {
   }
 
   return (
-    <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-      <h2 className="text-xl font-semibold mb-4">🔔 Recordatorio diario</h2>
+    <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
+      <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
+        <Bell size={16} className="text-brand" />
+        Recordatorio diario
+      </h2>
+
       {permiso === 'denied' && (
-        <p className="text-sm text-red-400 mb-4">Bloqueaste las notificaciones. Actívalas en la configuración del navegador.</p>
+        <div className="flex items-start gap-2 p-3 bg-rose-400/10 border border-rose-400/20 rounded-xl mb-4">
+          <BellOff size={15} className="text-rose-400 mt-0.5 shrink-0" />
+          <p className="text-sm text-rose-400">Bloqueaste las notificaciones. Actívalas en la configuración del navegador.</p>
+        </div>
       )}
+
       {permiso === 'default' && (
-        <button onClick={solicitarPermiso} className="w-full mb-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-lg transition">
+        <button
+          onClick={solicitarPermiso}
+          className="w-full mb-4 py-2.5 flex items-center justify-center gap-2 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-400 font-semibold rounded-xl transition">
+          <Bell size={15} />
           Permitir notificaciones
         </button>
       )}
+
       {permiso === 'granted' && (
         <>
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-sm text-gray-600">Recordatorio activo</span>
+          <div className="flex items-center justify-between mb-4 p-3 bg-surface-2 border border-white/10 rounded-xl">
+            <span className="text-sm text-slate-300">Recordatorio activo</span>
             <button
               onClick={() => toggleActiva(!activa)}
-              className={`w-12 h-6 rounded-full transition-colors ${activa ? 'bg-blue-500' : 'bg-gray-300'}`}>
-              <span className={`block w-5 h-5 bg-white rounded-full shadow transition-transform mx-0.5 ${activa ? 'translate-x-6' : 'translate-x-0'}`} />
+              className={`w-11 h-6 rounded-full transition-colors relative ${activa ? 'bg-brand' : 'bg-slate-700'}`}>
+              <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all ${activa ? 'left-[22px]' : 'left-0.5'}`} />
             </button>
           </div>
-          <div className="flex items-center gap-3 mb-4">
-            <label className="text-sm text-gray-600">Hora del recordatorio</label>
+
+          <div className="flex items-center gap-3 mb-4 p-3 bg-surface-2 border border-white/10 rounded-xl">
+            <Clock size={15} className="text-slate-400 shrink-0" />
+            <label className="text-sm text-slate-300 flex-1">Hora del recordatorio</label>
             <input
               type="time"
               value={hora}
               onChange={e => setHora(e.target.value)}
               disabled={!activa}
-              className="px-3 py-1.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-40"
+              className="px-3 py-1.5 rounded-lg bg-[#0A0E1A] border border-white/[0.08] text-slate-200 focus:outline-none focus:border-brand/50 disabled:opacity-40 transition"
             />
           </div>
+
           <button
             onClick={guardarConfiguracion}
             disabled={!activa}
-            className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition disabled:opacity-40">
-            {guardado ? '✅ Guardado' : 'Guardar recordatorio'}
+            className="w-full py-2.5 flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition disabled:opacity-40">
+            {guardado ? <><Check size={15} /> Guardado</> : 'Guardar recordatorio'}
           </button>
         </>
       )}

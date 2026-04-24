@@ -8,10 +8,10 @@ Chart.register(ChartDataLabels)
 const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
 const getColor = (pct: number | null): string => {
-  if (pct === null) return '#E5E4DF'
-  if (pct >= 80) return '#3B6D11'
-  if (pct >= 50) return '#BA7517'
-  return '#A32D2D'
+  if (pct === null) return '#1E293B'
+  if (pct >= 80) return '#00C896'
+  if (pct >= 50) return '#F59E0B'
+  return '#F87171'
 }
 
 interface Props {
@@ -93,9 +93,8 @@ export default function WeeklyChart({ refreshKey }: Props) {
     const ctx = canvasRef.current?.getContext('2d')
     if (!ctx) return
 
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const tickColor = '#888780'
-    const bgBar = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)'
+    const tickColor = '#475569'
+    const bgBar = 'rgba(255,255,255,0.05)'
 
     chartRef.current = new Chart(ctx, {
       type: 'bar',
@@ -143,6 +142,11 @@ export default function WeeklyChart({ refreshKey }: Props) {
         plugins: {
           legend: { display: false },
           tooltip: {
+            backgroundColor: '#1E293B',
+            titleColor: '#E2E8F0',
+            bodyColor: '#94A3B8',
+            borderColor: 'rgba(255,255,255,0.08)',
+            borderWidth: 1,
             callbacks: {
               title: (items) => items.length ? labels[items[0].dataIndex] : '',
               label: (item) => {
@@ -164,33 +168,33 @@ export default function WeeklyChart({ refreshKey }: Props) {
   }, [])
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm mt-8 mb-6">
+    <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 mt-8 mb-6">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h2 className="text-base font-semibold text-gray-700">Consistencia semanal</h2>
-          <p className="text-xs text-gray-400">Últimos 7 días</p>
+          <h2 className="text-base font-semibold text-slate-200">Consistencia semanal</h2>
+          <p className="text-xs text-slate-500">Últimos 7 días</p>
         </div>
         {promedio !== null && (
           <div className="text-right">
-            <p className="text-2xl font-semibold text-gray-800">{promedio}%</p>
-            <p className="text-xs text-gray-400">promedio</p>
+            <p className="text-2xl font-bold text-white">{promedio}%</p>
+            <p className="text-xs text-slate-500">promedio</p>
           </div>
         )}
       </div>
       {loading
-        ? <p className="text-center text-gray-400 py-10 text-sm">Cargando...</p>
+        ? <p className="text-center text-slate-600 py-10 text-sm">Cargando...</p>
         : <div style={{ position: 'relative', height: '180px' }}>
             <canvas ref={canvasRef} />
           </div>
       }
       <div className="flex gap-4 mt-3 justify-center flex-wrap">
         {[
-          { color: '#3B6D11', label: '≥80%' },
-          { color: '#BA7517', label: '50–79%' },
-          { color: '#A32D2D', label: '<50%' },
-          { color: '#E5E4DF', label: 'Sin datos' },
+          { color: '#00C896', label: '≥80%' },
+          { color: '#F59E0B', label: '50–79%' },
+          { color: '#F87171', label: '<50%' },
+          { color: '#1E293B', label: 'Sin datos' },
         ].map(({ color, label }) => (
-          <span key={label} className="flex items-center gap-1 text-xs text-gray-500">
+          <span key={label} className="flex items-center gap-1 text-xs text-slate-500">
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, display: 'inline-block' }} />
             {label}
           </span>

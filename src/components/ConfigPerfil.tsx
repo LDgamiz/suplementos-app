@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { Session } from '@supabase/supabase-js'
+import { Link2, Copy, Check } from 'lucide-react'
 
 interface Props {
   session: Session
@@ -11,6 +12,7 @@ export default function ConfigPerfil({ session }: Props) {
   const [usernameActual, setUsernameActual] = useState<string | null>(null)
   const [guardando, setGuardando] = useState(false)
   const [mensaje, setMensaje] = useState<string | null>(null)
+  const [copiado, setCopiado] = useState(false)
 
   useEffect(() => {
     cargarPerfil()
@@ -37,26 +39,36 @@ export default function ConfigPerfil({ session }: Props) {
       setMensaje(error.message.includes('unique') ? '❌ Ese username ya está tomado' : '❌ Error al guardar')
     } else {
       setUsernameActual(username.trim().toLowerCase())
-      setMensaje('✅ Username guardado')
+      setMensaje('Username guardado')
       setUsername('')
     }
     setGuardando(false)
   }
 
+  function copiarLink() {
+    navigator.clipboard.writeText(`${window.location.origin}/perfil/${usernameActual}`)
+    setCopiado(true)
+    setTimeout(() => setCopiado(false), 2000)
+  }
+
   const urlPerfil = `${window.location.origin}/perfil/${usernameActual}`
 
   return (
-    <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-      <h2 className="text-xl font-semibold mb-4">🔗 Perfil público</h2>
+    <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
+      <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
+        <Link2 size={16} className="text-brand" />
+        Perfil público
+      </h2>
       {usernameActual && (
-        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-xl">
-          <p className="text-xs text-gray-500 mb-1">Tu link público:</p>
+        <div className="mb-4 p-3 bg-surface-2 border border-white/10 rounded-xl">
+          <p className="text-xs text-slate-500 mb-1">Tu link público:</p>
           <div className="flex items-center justify-between gap-2">
-            <p className="text-sm text-blue-600 font-medium truncate">{urlPerfil}</p>
+            <p className="text-sm text-brand font-medium truncate">{urlPerfil}</p>
             <button
-              onClick={() => { navigator.clipboard.writeText(urlPerfil); setMensaje('📋 Link copiado') }}
-              className="text-xs px-3 py-1 rounded-lg bg-blue-500 text-white hover:bg-blue-600 transition shrink-0">
-              Copiar
+              onClick={copiarLink}
+              className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
+              {copiado ? <Check size={13} /> : <Copy size={13} />}
+              {copiado ? 'Copiado' : 'Copiar'}
             </button>
           </div>
         </div>
@@ -65,15 +77,15 @@ export default function ConfigPerfil({ session }: Props) {
         placeholder={usernameActual ? `Cambiar (actual: @${usernameActual})` : 'Elige tu username (ej. ldgamiz)'}
         value={username}
         onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
-        className="w-full mb-3 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="w-full mb-3 px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition"
       />
       <button
         onClick={guardarUsername}
         disabled={guardando}
-        className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg transition disabled:opacity-50">
+        className="w-full py-2.5 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition disabled:opacity-50">
         {guardando ? 'Guardando...' : usernameActual ? 'Actualizar username' : 'Crear perfil público'}
       </button>
-      {mensaje && <p className="text-sm text-center mt-3 text-gray-600">{mensaje}</p>}
+      {mensaje && <p className="text-sm text-center mt-3 text-slate-400">{mensaje}</p>}
     </div>
   )
 }

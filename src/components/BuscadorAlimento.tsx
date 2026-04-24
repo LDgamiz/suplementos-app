@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Search, Plus } from 'lucide-react'
 
 interface Producto {
   product_name: string
@@ -24,26 +25,30 @@ export default function BuscadorAlimento({ onAgregar }: Props) {
   }, [busqueda])
 
   return (
-    <div className="mt-8 bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-      <h2 className="text-xl font-semibold mb-4">🔍 Buscar alimento</h2>
+    <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
+      <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
+        <Search size={16} className="text-brand" />
+        Buscar alimento
+      </h2>
       <input
         placeholder="Ej. whey protein, creatine..."
         value={busqueda}
         onChange={e => setBusqueda(e.target.value)}
-        className="w-full mb-4 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-300"
+        className="w-full mb-4 px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition"
       />
-      {cargando && <p className="text-center text-gray-400 text-sm">Buscando...</p>}
-      <ul className="space-y-3 mt-2">
+      {cargando && <p className="text-center text-slate-500 text-sm">Buscando...</p>}
+      <ul className="space-y-2 mt-2">
         {resultados.map((producto, index) => (
-          <li key={index} className="flex justify-between items-center p-4 bg-gray-50 border border-gray-200 rounded-xl">
+          <li key={index} className="flex justify-between items-center p-4 bg-surface-2 border border-white/10 rounded-xl">
             <div>
-              <p className="font-semibold text-gray-800">{producto.product_name || 'Sin nombre'}</p>
-              <p className="text-sm text-gray-500">Calorías: {producto.nutriments?.energy_value || 'N/A'} kcal</p>
+              <p className="font-semibold text-slate-200">{producto.product_name || 'Sin nombre'}</p>
+              <p className="text-sm text-slate-500">Calorías: {producto.nutriments?.energy_value || 'N/A'} kcal</p>
             </div>
             <button
               onClick={() => onAgregar(producto.product_name, producto.nutrition_data_per)}
-              className="text-sm px-3 py-1 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold transition">
-              ➕ Agregar
+              className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
+              <Plus size={14} />
+              Agregar
             </button>
           </li>
         ))}

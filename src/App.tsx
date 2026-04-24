@@ -12,6 +12,7 @@ import PerfilPublico from './pages/PerfilPublico'
 import ConfigPerfil from './components/ConfigPerfil'
 import Notificaciones from './components/Notificaciones'
 import { useRacha } from './hooks/useRacha'
+import { Pill, Flame, LogOut } from 'lucide-react'
 
 function App() {
   const { session, signOut } = useAuth()
@@ -21,46 +22,82 @@ function App() {
 
   if (!session) return <Auth />
 
+  const tomados = suplementos.filter(s => s.tomado).length
+  const total = suplementos.length
+  const pct = total > 0 ? Math.round((tomados / total) * 100) : 0
+
   return (
     <Routes>
       <Route path="/perfil/:username" element={<PerfilPublico />} />
       <Route path="/*" element={
-        <div className="max-w-xl mx-auto mt-6 px-4 font-sans pb-10">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold">💊 Mis Suplementos</h1>
+        <div className="max-w-xl mx-auto px-4 pb-12 pt-6">
+
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
+                <Pill size={18} className="text-brand" />
+              </div>
+              <h1 className="text-xl font-bold text-white tracking-tight">Mis Suplementos</h1>
+            </div>
             <div className="text-right">
-              <p className="text-xs text-gray-400">{session.user.email}</p>
-              <button onClick={signOut} className="text-xs text-red-400 hover:underline transition">
+              <p className="text-xs text-slate-500 mb-0.5 truncate max-w-[140px]">{session.user.email}</p>
+              <button
+                onClick={signOut}
+                className="flex items-center gap-1 text-xs text-rose-400/70 hover:text-rose-400 transition ml-auto">
+                <LogOut size={11} />
                 Cerrar sesión
               </button>
             </div>
           </div>
 
-          <div className="flex justify-center items-center gap-6 mb-6">
-            <p className="text-gray-500">
-              ✅ {suplementos.filter(s => s.tomado).length} de {suplementos.length} tomados
-            </p>
+          {/* Stats bar */}
+          <div className="flex items-stretch gap-3 mb-6">
+            <div className="flex-1 bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
+              <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Hoy</p>
+              <div className="flex items-end gap-2">
+                <span className="text-2xl font-bold text-white">
+                  {tomados}
+                  <span className="text-slate-600 text-base font-normal">/{total}</span>
+                </span>
+                {total > 0 && (
+                  <span className="text-brand text-sm font-semibold mb-0.5">{pct}%</span>
+                )}
+              </div>
+            </div>
             {racha > 0 && (
-              <p className="text-orange-500 font-semibold">
-                🔥 {racha} {racha === 1 ? 'día' : 'días'}
-              </p>
+              <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
+                <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Racha</p>
+                <div className="flex items-center gap-1.5">
+                  <Flame size={20} className="text-amber-400" />
+                  <span className="text-2xl font-bold text-amber-400">{racha}</span>
+                </div>
+              </div>
             )}
           </div>
 
           <WeeklyChart refreshKey={refreshKey} />
 
+          {/* Date picker */}
           <div className="flex justify-center my-6">
             <input
               type="date"
               value={fecha}
               onChange={e => setFecha(e.target.value)}
-              className="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="px-4 py-2 rounded-xl bg-surface border border-white/[0.08] text-slate-300 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition"
             />
           </div>
 
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {suplementos.map(s => (
-              <SupplementoItem key={s.id} suple={s} onMarcar={marcarTomado} onEliminar={eliminarSuplemento} onTogglePublico={togglePublico} onEditar={editarSuplemento} />
+              <SupplementoItem
+                key={s.id}
+                suple={s}
+                onMarcar={marcarTomado}
+                onEliminar={eliminarSuplemento}
+                onTogglePublico={togglePublico}
+                onEditar={editarSuplemento}
+              />
             ))}
           </ul>
 
