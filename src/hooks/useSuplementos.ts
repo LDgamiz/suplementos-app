@@ -2,15 +2,24 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { Session } from '@supabase/supabase-js'
 
+export interface SuplementoCat {
+  id: string
+  name: string
+  category: string
+  recommended_dose: number
+  dose_unit: string
+}
+
 export interface Suplemento {
   id: number
-  nombre: string
+  suplemento_id: string
   dosis: string
   tomado: boolean
   publico: boolean
   fecha: string
   user_id: string
   created_at: string
+  suplementos_cat: { name: string; category: string }
 }
 
 export function useSuplementos(session: Session | null, fecha: string) {
@@ -24,19 +33,19 @@ export function useSuplementos(session: Session | null, fecha: string) {
   const cargarSuplemento = async () => {
     const { data, error } = await supabase
       .from('suplementos')
-      .select('*')
+      .select('*, suplementos_cat(name, category)')
       .eq('user_id', session!.user.id)
       .eq('fecha', fecha)
     if (!error) setSuplementos(data as Suplemento[])
   }
 
-  const agregarSuplemento = async (nombre: string, dosis: string) => {
-    if (!nombre || !dosis) return
+  const agregarSuplemento = async (suplemento_id: string, dosis: string) => {
+    if (!suplemento_id || !dosis) return
     const hoy = new Date().toISOString().split('T')[0]
     const { data, error } = await supabase
       .from('suplementos')
-      .insert([{ nombre, dosis, tomado: false, user_id: session!.user.id, fecha: hoy }])
-      .select()
+      .insert([{ suplemento_id, dosis, tomado: false, user_id: session!.user.id, fecha: hoy }])
+      .select('*, suplementos_cat(name, category)')
     if (!error) setSuplementos(prev => [...prev, data[0] as Suplemento])
   }
 
@@ -68,26 +77,29 @@ export function useSuplementos(session: Session | null, fecha: string) {
     }
   }
 
-  const editarSuplemento = async (id: number, nombre: string, dosis: string) => {
+  const editarSuplemento = async (id: number, dosis: string) => {
     const { error } = await supabase
       .from('suplementos')
-      .update({ nombre, dosis })
+      .update({ dosis })
       .eq('id', id)
     if (!error) {
-      setSuplementos(prev => prev.map(s => s.id === id ? { ...s, nombre, dosis } : s))
+      setSuplementos(prev => prev.map(s => s.id === id ? { ...s, dosis } : s))
     }
   }
 
-  const aplicarRutina = async (suplementosDeRutina: { nombre: string; dosis: string }[]) => {
+  const aplicarRutina = async (suplementosDeRutina: { suplemento_id: string; dosis: string }[]) => {
     const hoy = new Date().toISOString().split('T')[0]
     const filas = suplementosDeRutina.map(s => ({
-      nombre: s.nombre,
+      suplemento_id: s.suplemento_id,
       dosis: s.dosis,
       tomado: false,
       user_id: session!.user.id,
       fecha: hoy
     }))
-    const { data, error } = await supabase.from('suplementos').insert(filas).select()
+    const { data, error } = await supabase
+      .from('suplementos')
+      .insert(filas)
+      .select('*, suplementos_cat(name, category)')
     if (!error) setSuplementos(prev => [...prev, ...(data as Suplemento[])])
   }
 

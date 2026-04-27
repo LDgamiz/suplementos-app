@@ -5,7 +5,7 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 
 Chart.register(ChartDataLabels)
 
-const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 const getColor = (pct: number | null): string => {
   if (pct === null) return '#1E293B'
@@ -102,7 +102,7 @@ export default function WeeklyChart({ refreshKey }: Props) {
         labels,
         datasets: [
           {
-            label: 'Fondo',
+            label: 'Background',
             data: totals.map(t => t > 0 ? t : 1),
             backgroundColor: bgBar,
             borderRadius: 6,
@@ -110,7 +110,7 @@ export default function WeeklyChart({ refreshKey }: Props) {
             datalabels: { display: false }
           },
           {
-            label: 'Tomados',
+            label: 'Taken',
             data: taken,
             backgroundColor: pcts.map(getColor),
             borderRadius: 6,
@@ -152,8 +152,8 @@ export default function WeeklyChart({ refreshKey }: Props) {
               label: (item) => {
                 if (item.datasetIndex === 0) return null
                 const i = item.dataIndex
-                if (totals[i] === 0) return 'Sin registros'
-                return `${taken[i]} de ${totals[i]} tomados (${pcts[i]}%)`
+                if (totals[i] === 0) return 'No records'
+                return `${taken[i]} of ${totals[i]} taken (${pcts[i]}%)`
               }
             },
             filter: (item) => item.datasetIndex === 1
@@ -171,18 +171,18 @@ export default function WeeklyChart({ refreshKey }: Props) {
     <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 mt-8 mb-6">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <h2 className="text-base font-semibold text-slate-200">Consistencia semanal</h2>
-          <p className="text-xs text-slate-500">Últimos 7 días</p>
+          <h2 className="text-base font-semibold text-slate-200">Weekly consistency</h2>
+          <p className="text-xs text-slate-500">Last 7 days</p>
         </div>
         {promedio !== null && (
           <div className="text-right">
             <p className="text-2xl font-bold text-white">{promedio}%</p>
-            <p className="text-xs text-slate-500">promedio</p>
+            <p className="text-xs text-slate-500">average</p>
           </div>
         )}
       </div>
       {loading
-        ? <p className="text-center text-slate-600 py-10 text-sm">Cargando...</p>
+        ? <p className="text-center text-slate-600 py-10 text-sm">Loading...</p>
         : <div style={{ position: 'relative', height: '180px' }}>
             <canvas ref={canvasRef} />
           </div>
@@ -192,7 +192,7 @@ export default function WeeklyChart({ refreshKey }: Props) {
           { color: '#00C896', label: '≥80%' },
           { color: '#F59E0B', label: '50–79%' },
           { color: '#F87171', label: '<50%' },
-          { color: '#1E293B', label: 'Sin datos' },
+          { color: '#1E293B', label: 'No data' },
         ].map(({ color, label }) => (
           <span key={label} className="flex items-center gap-1 text-xs text-slate-500">
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: color, display: 'inline-block' }} />

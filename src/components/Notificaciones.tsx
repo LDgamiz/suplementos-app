@@ -28,8 +28,8 @@ export default function Notificaciones() {
 
     const msHastaNotif = objetivo.getTime() - ahora.getTime()
     const id = setTimeout(() => {
-      new Notification('💊 Mis Suplementos', {
-        body: '¿Ya tomaste tus suplementos hoy?',
+      new Notification('💊 My Supplements', {
+        body: 'Have you taken your supplements today?',
         icon: '/icons/icon-192.png'
       })
       programarNotificacion(horaSeleccionada)
@@ -59,13 +59,13 @@ export default function Notificaciones() {
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
       <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
         <Bell size={16} className="text-brand" />
-        Recordatorio diario
+        Daily reminder
       </h2>
 
       {permiso === 'denied' && (
         <div className="flex items-start gap-2 p-3 bg-rose-400/10 border border-rose-400/20 rounded-xl mb-4">
           <BellOff size={15} className="text-rose-400 mt-0.5 shrink-0" />
-          <p className="text-sm text-rose-400">Bloqueaste las notificaciones. Actívalas en la configuración del navegador.</p>
+          <p className="text-sm text-rose-400">You blocked notifications. Enable them in your browser settings.</p>
         </div>
       )}
 
@@ -74,14 +74,14 @@ export default function Notificaciones() {
           onClick={solicitarPermiso}
           className="w-full mb-4 py-2.5 flex items-center justify-center gap-2 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/30 text-amber-400 font-semibold rounded-xl transition">
           <Bell size={15} />
-          Permitir notificaciones
+          Allow notifications
         </button>
       )}
 
       {permiso === 'granted' && (
         <>
           <div className="flex items-center justify-between mb-4 p-3 bg-surface-2 border border-white/10 rounded-xl">
-            <span className="text-sm text-slate-300">Recordatorio activo</span>
+            <span className="text-sm text-slate-300">Reminder active</span>
             <button
               onClick={() => toggleActiva(!activa)}
               className={`w-11 h-6 rounded-full transition-colors relative ${activa ? 'bg-brand' : 'bg-slate-700'}`}>
@@ -91,7 +91,7 @@ export default function Notificaciones() {
 
           <div className="flex items-center gap-3 mb-4 p-3 bg-surface-2 border border-white/10 rounded-xl">
             <Clock size={15} className="text-slate-400 shrink-0" />
-            <label className="text-sm text-slate-300 flex-1">Hora del recordatorio</label>
+            <label className="text-sm text-slate-300 flex-1">Reminder time</label>
             <input
               type="time"
               value={hora}
@@ -105,7 +105,7 @@ export default function Notificaciones() {
             onClick={guardarConfiguracion}
             disabled={!activa}
             className="w-full py-2.5 flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition disabled:opacity-40">
-            {guardado ? <><Check size={15} /> Guardado</> : 'Guardar recordatorio'}
+            {guardado ? <><Check size={15} /> Saved</> : 'Save reminder'}
           </button>
         </>
       )}

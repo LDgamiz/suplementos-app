@@ -6,7 +6,6 @@ import Rutinas from './Rutinas'
 import WeeklyChart from './WeeklyChart'
 import SupplementoItem from './components/SupplementoItem'
 import AgregarSuplemento from './components/AgregarSuplemento'
-import BuscadorAlimento from './components/BuscadorAlimento'
 import { Routes, Route } from 'react-router-dom'
 import PerfilPublico from './pages/PerfilPublico'
 import ConfigPerfil from './components/ConfigPerfil'
@@ -38,7 +37,7 @@ function App() {
               <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
                 <Pill size={18} className="text-brand" />
               </div>
-              <h1 className="text-xl font-bold text-white tracking-tight">Mis Suplementos</h1>
+              <h1 className="text-xl font-bold text-white tracking-tight">My Supplements</h1>
             </div>
             <div className="text-right">
               <p className="text-xs text-slate-500 mb-0.5 truncate max-w-[140px]">{session.user.email}</p>
@@ -46,7 +45,7 @@ function App() {
                 onClick={signOut}
                 className="flex items-center gap-1 text-xs text-rose-400/70 hover:text-rose-400 transition ml-auto">
                 <LogOut size={11} />
-                Cerrar sesión
+                Sign out
               </button>
             </div>
           </div>
@@ -54,7 +53,7 @@ function App() {
           {/* Stats bar */}
           <div className="flex items-stretch gap-3 mb-6">
             <div className="flex-1 bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
-              <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Hoy</p>
+              <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Today</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold text-white">
                   {tomados}
@@ -67,7 +66,7 @@ function App() {
             </div>
             {racha > 0 && (
               <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
-                <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Racha</p>
+                <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
                 <div className="flex items-center gap-1.5">
                   <Flame size={20} className="text-amber-400" />
                   <span className="text-2xl font-bold text-amber-400">{racha}</span>
@@ -103,7 +102,6 @@ function App() {
 
           <AgregarSuplemento onAgregar={agregarSuplemento} />
           <Rutinas session={session} onAplicarRutina={aplicarRutina} />
-          <BuscadorAlimento onAgregar={agregarSuplemento} />
           <ConfigPerfil session={session} />
           <Notificaciones />
         </div>

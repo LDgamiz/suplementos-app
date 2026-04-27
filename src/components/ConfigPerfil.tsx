@@ -36,10 +36,10 @@ export default function ConfigPerfil({ session }: Props) {
       .upsert({ user_id: session.user.id, username: username.trim().toLowerCase() },
                { onConflict: 'user_id' })
     if (error) {
-      setMensaje(error.message.includes('unique') ? '❌ Ese username ya está tomado' : '❌ Error al guardar')
+      setMensaje(error.message.includes('unique') ? '❌ Username already taken' : '❌ Error saving')
     } else {
       setUsernameActual(username.trim().toLowerCase())
-      setMensaje('Username guardado')
+      setMensaje('Username saved')
       setUsername('')
     }
     setGuardando(false)
@@ -57,24 +57,24 @@ export default function ConfigPerfil({ session }: Props) {
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
       <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
         <Link2 size={16} className="text-brand" />
-        Perfil público
+        Public profile
       </h2>
       {usernameActual && (
         <div className="mb-4 p-3 bg-surface-2 border border-white/10 rounded-xl">
-          <p className="text-xs text-slate-500 mb-1">Tu link público:</p>
+          <p className="text-xs text-slate-500 mb-1">Your public link:</p>
           <div className="flex items-center justify-between gap-2">
             <p className="text-sm text-brand font-medium truncate">{urlPerfil}</p>
             <button
               onClick={copiarLink}
               className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
               {copiado ? <Check size={13} /> : <Copy size={13} />}
-              {copiado ? 'Copiado' : 'Copiar'}
+              {copiado ? 'Copied' : 'Copy'}
             </button>
           </div>
         </div>
       )}
       <input
-        placeholder={usernameActual ? `Cambiar (actual: @${usernameActual})` : 'Elige tu username (ej. ldgamiz)'}
+        placeholder={usernameActual ? `Change (current: @${usernameActual})` : 'Choose your username (e.g. ldgamiz)'}
         value={username}
         onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
         className="w-full mb-3 px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition"
@@ -83,7 +83,7 @@ export default function ConfigPerfil({ session }: Props) {
         onClick={guardarUsername}
         disabled={guardando}
         className="w-full py-2.5 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition disabled:opacity-50">
-        {guardando ? 'Guardando...' : usernameActual ? 'Actualizar username' : 'Crear perfil público'}
+        {guardando ? 'Saving...' : usernameActual ? 'Update username' : 'Create public profile'}
       </button>
       {mensaje && <p className="text-sm text-center mt-3 text-slate-400">{mensaje}</p>}
     </div>
