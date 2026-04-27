@@ -103,7 +103,7 @@ function App() {
           <AgregarSuplemento onAgregar={agregarSuplemento} />
           <Rutinas session={session} onAplicarRutina={aplicarRutina} />
           <ConfigPerfil session={session} />
-          <Notificaciones />
+          <Notificaciones session={session} />
         </div>
       } />
     </Routes>

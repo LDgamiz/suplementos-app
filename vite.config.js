@@ -9,13 +9,23 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icons/*.png'],
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}']
+      },
+      devOptions: {
+        enabled: true,
+        type: 'module'
+      },
+      includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'Mis Suplementos',
-        short_name: 'Suplementos',
-        description: 'Seguimiento diario de suplementos',
-        theme_color: '#3b82f6',
-        background_color: '#ffffff',
+        name: 'My Supplements',
+        short_name: 'Supplements',
+        description: 'Daily supplement tracker',
+        theme_color: '#00C896',
+        background_color: '#0A0E1A',
         display: 'standalone',
         start_url: '/',
         icons: [
