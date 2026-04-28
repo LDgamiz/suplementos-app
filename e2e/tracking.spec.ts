@@ -16,7 +16,7 @@ test.describe('tracking', () => {
 
   test('navigates between sections via the menu', async ({ page }) => {
     await page.getByRole('link', { name: /profile/i }).first().click()
-    await expect(page.getByRole('heading', { name: 'Profile' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Profile', exact: true })).toBeVisible()
 
     await page.getByRole('link', { name: /support/i }).first().click()
     await expect(page.getByRole('heading', { name: /support us/i })).toBeVisible()
