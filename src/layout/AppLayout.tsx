@@ -29,7 +29,9 @@ export default function AppLayout() {
           </button>
         </header>
 
-        <div className="max-w-2xl mx-auto px-4 pt-6 pb-24 md:pb-12">
+        <div
+          className="max-w-2xl mx-auto px-4 pt-6 md:pb-12"
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 6rem)' }}>
           <Outlet context={{ session, perfil, isAdmin }} />
         </div>
       </main>

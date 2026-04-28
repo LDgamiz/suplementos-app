@@ -7,12 +7,14 @@ interface Props {
 
 export default function BottomNav({ isAdmin }: Props) {
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex-1 flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-medium transition ${
+    `flex-1 flex flex-col items-center justify-center gap-0.5 py-2.5 text-[11px] font-medium transition ${
       isActive ? 'text-brand' : 'text-slate-400'
     }`
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex bg-surface/95 backdrop-blur border-t border-white/[0.06] pb-[env(safe-area-inset-bottom)]">
+    <nav
+      className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex bg-surface/95 backdrop-blur border-t border-white/[0.06]"
+      style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 0.75rem)' }}>
       <NavLink to="/" end className={linkClass}>
         <Pill size={18} />
         Supps
