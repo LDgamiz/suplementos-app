@@ -16,7 +16,7 @@ test.describe('auth', () => {
     await page.getByRole('button', { name: /sign in/i }).click()
 
     // After login the email is shown in the header (mobile) or sidebar (desktop)
-    await expect(page.getByText(EMAIL!)).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByText(EMAIL!).first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('shows an error message with bad credentials', async ({ page }) => {

@@ -7,11 +7,27 @@ test.describe('public profile', () => {
 
   test('loads /perfil/:username without authentication', async ({ page }) => {
     await page.goto(`/perfil/${PUBLIC_USERNAME}`)
-    // The page should not redirect to /auth and should not show the sign-in form
+
+    // Should never show the sign-in form (the route is public)
     await expect(page.getByPlaceholder('Email')).toHaveCount(0)
-    // It should mention the username somewhere
-    await expect(page.getByText(new RegExp(`@?${PUBLIC_USERNAME}`, 'i'))).toBeVisible({
-      timeout: 10_000,
-    })
+
+    // Wait for the loading text to disappear
+    await expect(page.getByText('Loading...')).toHaveCount(0, { timeout: 10_000 })
+
+    // Fail loudly if the username doesn't exist in the perfiles table.
+    // Lets you spot a config issue (wrong E2E_PUBLIC_USERNAME) instead of a
+    // generic locator timeout.
+    const notFound = page.getByText(/profile not found/i)
+    if (await notFound.isVisible().catch(() => false)) {
+      throw new Error(
+        `E2E_PUBLIC_USERNAME="${PUBLIC_USERNAME}" was not found in the perfiles table. ` +
+        `Make sure that user exists and has set their username via /profile.`
+      )
+    }
+
+    // The h1 contains "Stack of @<username>"
+    await expect(
+      page.getByRole('heading').filter({ hasText: new RegExp(`@${PUBLIC_USERNAME}`, 'i') })
+    ).toBeVisible({ timeout: 10_000 })
   })
 })

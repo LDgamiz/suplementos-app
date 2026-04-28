@@ -11,7 +11,7 @@ test.describe('tracking', () => {
     await page.getByPlaceholder('Email').fill(EMAIL!)
     await page.getByPlaceholder('Password').fill(PASSWORD!)
     await page.getByRole('button', { name: /sign in/i }).click()
-    await expect(page.getByText(EMAIL!)).toBeVisible({ timeout: 10_000 })
+    await expect(page.getByText(EMAIL!).first()).toBeVisible({ timeout: 10_000 })
   })
 
   test('navigates between sections via the menu', async ({ page }) => {
