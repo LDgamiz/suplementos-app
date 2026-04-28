@@ -121,7 +121,7 @@ export default function WeeklyChart({ refreshKey }: Props) {
               align: 'end',
               offset: 2,
               color: tickColor,
-              font: { size: 11, weight: '500' },
+              font: { size: 11, weight: 500 },
               formatter: (_: number, ctx: { dataIndex: number }) => pcts[ctx.dataIndex] + '%'
             }
           }
@@ -150,7 +150,7 @@ export default function WeeklyChart({ refreshKey }: Props) {
             callbacks: {
               title: (items) => items.length ? labels[items[0].dataIndex] : '',
               label: (item) => {
-                if (item.datasetIndex === 0) return null
+                if (item.datasetIndex === 0) return ''
                 const i = item.dataIndex
                 if (totals[i] === 0) return 'No records'
                 return `${taken[i]} of ${totals[i]} taken (${pcts[i]}%)`

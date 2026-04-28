@@ -9,29 +9,28 @@ export default function PerfilPublico() {
   const [found, setFound] = useState(true)
 
   useEffect(() => {
+    async function fetchPerfil() {
+      const { data: perfil, error } = await supabase
+        .from('perfiles')
+        .select('user_id')
+        .eq('username', username)
+        .single()
+
+      if (error || !perfil) { setFound(false); setLoading(false); return }
+
+      const hoy = new Date().toISOString().split('T')[0]
+      const { data } = await supabase
+        .from('suplementos')
+        .select('dosis, tomado, suplementos_cat(name)')
+        .eq('user_id', perfil.user_id)
+        .eq('fecha', hoy)
+        .eq('publico', true)
+
+      setSuplementos(data || [])
+      setLoading(false)
+    }
     fetchPerfil()
   }, [username])
-
-  async function fetchPerfil() {
-    const { data: perfil, error } = await supabase
-      .from('perfiles')
-      .select('user_id')
-      .eq('username', username)
-      .single()
-
-    if (error || !perfil) { setFound(false); setLoading(false); return }
-
-    const hoy = new Date().toISOString().split('T')[0]
-    const { data } = await supabase
-      .from('suplementos')
-      .select('dosis, tomado, suplementos_cat(name)')
-      .eq('user_id', perfil.user_id)
-      .eq('fecha', hoy)
-      .eq('publico', true)
-
-    setSuplementos(data || [])
-    setLoading(false)
-  }
 
   if (loading) return <p className="text-center mt-10 text-gray-400">Loading...</p>
   if (!found) return <p className="text-center mt-10 text-gray-500">Profile not found.</p>
