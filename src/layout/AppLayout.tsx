@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { usePerfil } from '../hooks/usePerfil'
@@ -33,9 +33,14 @@ export default function AppLayout() {
           className="max-w-2xl mx-auto px-4 pt-6 md:pb-12"
           style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 6rem)' }}>
           <Outlet context={{ session, perfil, isAdmin }} />
-          <p className="text-center text-[10px] text-slate-700 mt-10 tracking-wide">
-            DailyStack: Supplement Tracker
-          </p>
+          <div className="text-center mt-10 space-y-1">
+            <p className="text-[10px] text-slate-700 tracking-wide">DailyStack: Supplement Tracker</p>
+            <p className="text-[10px] text-slate-700 space-x-3">
+              <Link to="/privacy" className="hover:text-slate-500 transition">Privacy</Link>
+              <span aria-hidden="true">·</span>
+              <Link to="/terms" className="hover:text-slate-500 transition">Terms</Link>
+            </p>
+          </div>
         </div>
       </main>
 

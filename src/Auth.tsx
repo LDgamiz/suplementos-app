@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from './supabaseClient'
 import { Pill } from 'lucide-react'
 
@@ -65,6 +66,12 @@ export default function Auth() {
           </p>
           {mensaje && <p className="text-center text-sm text-slate-400 mt-3">{mensaje}</p>}
         </div>
+
+        <p className="text-center text-[10px] text-slate-600 mt-6 space-x-3">
+          <Link to="/privacy" className="hover:text-slate-400 transition">Privacy</Link>
+          <span aria-hidden="true">·</span>
+          <Link to="/terms" className="hover:text-slate-400 transition">Terms</Link>
+        </p>
       </div>
     </div>
   )

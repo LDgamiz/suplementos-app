@@ -1,0 +1,48 @@
+-- =====================================================================
+-- Avatars storage setup.
+--
+-- This file ONLY creates/ensures the bucket. Storage policies on
+-- `storage.objects` cannot be created from the regular SQL Editor
+-- (it errors with 42501 — the table is owned by supabase_storage_admin).
+--
+-- Create the 4 policies from the Supabase Dashboard:
+--   Storage → avatars → Policies → New Policy → "For full customization"
+-- and paste each block below as its own policy. Names matter (the audit
+-- script searches for them).
+--
+-- 1) Policy name: anyone reads avatars
+--    Allowed operation: SELECT
+--    Target roles: (leave empty / public)
+--    USING expression:
+--      bucket_id = 'avatars'
+--
+-- 2) Policy name: users upload own avatar
+--    Allowed operation: INSERT
+--    Target roles: authenticated
+--    WITH CHECK expression:
+--      bucket_id = 'avatars'
+--      and (storage.foldername(name))[1] = auth.uid()::text
+--
+-- 3) Policy name: users update own avatar
+--    Allowed operation: UPDATE
+--    Target roles: authenticated
+--    USING expression:
+--      bucket_id = 'avatars'
+--      and (storage.foldername(name))[1] = auth.uid()::text
+--    WITH CHECK expression: (same as USING)
+--
+-- 4) Policy name: users delete own avatar
+--    Allowed operation: DELETE
+--    Target roles: authenticated
+--    USING expression:
+--      bucket_id = 'avatars'
+--      and (storage.foldername(name))[1] = auth.uid()::text
+--
+-- After creating the 4 policies, also configure on the same bucket page:
+--   File size limit:    2 MB
+--   Allowed MIME types: image/png, image/jpeg, image/webp
+-- =====================================================================
+
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
