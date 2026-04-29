@@ -5,6 +5,7 @@ import { SuplementoCat } from '../hooks/useSuplementos'
 
 interface Props {
   onAgregar: (suplemento_id: string, dosis: string) => void
+  userId: string
 }
 
 interface NuevoCat {
@@ -14,7 +15,7 @@ interface NuevoCat {
   dose_unit: string
 }
 
-export default function AgregarSuplemento({ onAgregar }: Props) {
+export default function AgregarSuplemento({ onAgregar, userId }: Props) {
   const [busqueda, setBusqueda] = useState('')
   const [resultados, setResultados] = useState<SuplementoCat[]>([])
   const [seleccionado, setSeleccionado] = useState<SuplementoCat | null>(null)
@@ -22,6 +23,7 @@ export default function AgregarSuplemento({ onAgregar }: Props) {
   const [abierto, setAbierto] = useState(false)
   const [creandoNuevo, setCreandoNuevo] = useState(false)
   const [nuevoCat, setNuevoCat] = useState<NuevoCat>({ name: '', category: '', recommended_dose: '', dose_unit: '' })
+  const [submitMsg, setSubmitMsg] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -70,11 +72,17 @@ export default function AgregarSuplemento({ onAgregar }: Props) {
         name: nuevoCat.name,
         category: nuevoCat.category,
         recommended_dose: parseFloat(nuevoCat.recommended_dose),
-        dose_unit: nuevoCat.dose_unit
+        dose_unit: nuevoCat.dose_unit,
+        status: 'pending',
+        created_by: userId,
       }])
       .select()
       .single()
-    if (!error && data) seleccionar(data as SuplementoCat)
+    if (!error && data) {
+      seleccionar(data as SuplementoCat)
+      setSubmitMsg('Submitted for review — you can use it today, an admin will approve it.')
+      setTimeout(() => setSubmitMsg(null), 5000)
+    }
   }
 
   const handleAgregar = () => {
@@ -120,7 +128,14 @@ export default function AgregarSuplemento({ onAgregar }: Props) {
                     onMouseDown={() => seleccionar(cat)}
                     className="px-4 py-2.5 flex justify-between items-center cursor-pointer hover:bg-white/[0.05] transition">
                     <span className="text-slate-200 text-sm font-medium">{cat.name}</span>
-                    <span className="text-xs text-slate-500 capitalize">{cat.category}</span>
+                    <span className="flex items-center gap-2">
+                      {cat.status === 'pending' && (
+                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                          pending
+                        </span>
+                      )}
+                      <span className="text-xs text-slate-500 capitalize">{cat.category}</span>
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -189,6 +204,11 @@ export default function AgregarSuplemento({ onAgregar }: Props) {
         onChange={e => setDosis(e.target.value)}
         className={`${inputClass} mb-4`}
       />
+      {submitMsg && (
+        <p className="text-xs text-amber-400 mb-3 px-3 py-2 bg-amber-400/10 border border-amber-400/20 rounded-xl">
+          {submitMsg}
+        </p>
+      )}
       <button
         onClick={handleAgregar}
         disabled={!seleccionado || !dosis}

@@ -1,7 +1,7 @@
 import { vi } from 'vitest'
 import type { Session } from '@supabase/supabase-js'
 import type { Perfil } from '../../hooks/usePerfil'
-import type { Suplemento } from '../../hooks/useSuplementos'
+import type { Suplemento, SuplementoCat } from '../../hooks/useSuplementos'
 
 export function makeSession(overrides: Partial<Session['user']> = {}): Session {
   return {
@@ -39,6 +39,19 @@ export function makePerfil(overrides: Partial<Perfil> = {}): Perfil {
     activity: null,
     role: 'user',
     created_at: '2026-01-01',
+    ...overrides,
+  }
+}
+
+export function makeSuplementoCat(overrides: Partial<SuplementoCat> = {}): SuplementoCat {
+  return {
+    id: 'cat-1',
+    name: 'Vitamin D',
+    category: 'vitamin',
+    recommended_dose: 1000,
+    dose_unit: 'IU',
+    status: 'approved',
+    created_by: null,
     ...overrides,
   }
 }

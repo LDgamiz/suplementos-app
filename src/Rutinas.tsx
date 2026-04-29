@@ -139,7 +139,9 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
         name: cat.name,
         category: cat.category,
         recommended_dose: parseFloat(cat.recommended_dose),
-        dose_unit: cat.dose_unit
+        dose_unit: cat.dose_unit,
+        status: 'pending',
+        created_by: session.user.id,
       }])
       .select()
       .single()

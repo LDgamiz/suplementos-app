@@ -91,7 +91,7 @@ export default function Supplements() {
         ))}
       </ul>
 
-      <AgregarSuplemento onAgregar={agregarSuplemento} />
+      <AgregarSuplemento onAgregar={agregarSuplemento} userId={session.user.id} />
       <Rutinas session={session} onAplicarRutina={aplicarRutina} />
       <Notificaciones session={session} />
     </>

@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react'
 import { Plus, Trash2, Pencil, Check, X } from 'lucide-react'
 import { supabase } from '../../supabaseClient'
 
+type Status = 'pending' | 'approved' | 'rejected'
+type Tab = Status | 'all'
+
 interface Cat {
   id: string
   name: string
   category: string
   recommended_dose: number
   dose_unit: string
+  status: Status
+  created_by: string | null
 }
 
 interface Form {
@@ -24,12 +29,14 @@ const inputClass =
 
 export default function AdminCatalog() {
   const [items, setItems] = useState<Cat[]>([])
+  const [usernames, setUsernames] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(true)
   const [form, setForm] = useState<Form>(emptyForm)
   const [editId, setEditId] = useState<string | null>(null)
   const [editForm, setEditForm] = useState<Form>(emptyForm)
   const [busy, setBusy] = useState(false)
   const [filter, setFilter] = useState('')
+  const [tab, setTab] = useState<Tab>('pending')
 
   useEffect(() => { cargar() }, [])
 
@@ -39,7 +46,19 @@ export default function AdminCatalog() {
       .from('suplementos_cat')
       .select('*')
       .order('name')
-    setItems((data as Cat[]) ?? [])
+    const cats = (data as Cat[]) ?? []
+    setItems(cats)
+
+    const ids = Array.from(new Set(cats.map(c => c.created_by).filter(Boolean))) as string[]
+    if (ids.length > 0) {
+      const { data: perfiles } = await supabase
+        .from('perfiles')
+        .select('user_id, username')
+        .in('user_id', ids)
+      const map: Record<string, string> = {}
+      ;(perfiles ?? []).forEach((p: { user_id: string; username: string }) => { map[p.user_id] = p.username })
+      setUsernames(map)
+    }
     setLoading(false)
   }
 
@@ -52,7 +71,8 @@ export default function AdminCatalog() {
         name: form.name,
         category: form.category,
         recommended_dose: parseFloat(form.recommended_dose),
-        dose_unit: form.dose_unit
+        dose_unit: form.dose_unit,
+        status: 'approved',
       }])
       .select()
       .single()
@@ -98,15 +118,39 @@ export default function AdminCatalog() {
     setBusy(false)
   }
 
+  async function setStatus(c: Cat, status: Status) {
+    const { error } = await supabase
+      .from('suplementos_cat')
+      .update({ status })
+      .eq('id', c.id)
+    if (!error) setItems(prev => prev.map(x => x.id === c.id ? { ...x, status } : x))
+  }
+
   async function eliminar(c: Cat) {
     if (!confirm(`Delete "${c.name}" from catalog?`)) return
     const { error } = await supabase.from('suplementos_cat').delete().eq('id', c.id)
     if (!error) setItems(prev => prev.filter(x => x.id !== c.id))
   }
 
-  const visibles = items.filter(c =>
-    !filter || c.name.toLowerCase().includes(filter.toLowerCase()) || c.category.toLowerCase().includes(filter.toLowerCase())
-  )
+  const counts = {
+    pending: items.filter(c => c.status === 'pending').length,
+    approved: items.filter(c => c.status === 'approved').length,
+    rejected: items.filter(c => c.status === 'rejected').length,
+    all: items.length,
+  }
+
+  const visibles = items
+    .filter(c => tab === 'all' || c.status === tab)
+    .filter(c =>
+      !filter || c.name.toLowerCase().includes(filter.toLowerCase()) || c.category.toLowerCase().includes(filter.toLowerCase())
+    )
+
+  const tabs: { key: Tab; label: string }[] = [
+    { key: 'pending', label: 'Pending' },
+    { key: 'approved', label: 'Approved' },
+    { key: 'rejected', label: 'Rejected' },
+    { key: 'all', label: 'All' },
+  ]
 
   return (
     <>
@@ -129,6 +173,22 @@ export default function AdminCatalog() {
         </button>
       </div>
 
+      {/* Tabs */}
+      <div className="flex gap-2 mb-3">
+        {tabs.map(t => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`px-3 py-1.5 text-xs rounded-xl border transition ${
+              tab === t.key
+                ? 'bg-brand/10 border-brand/40 text-brand'
+                : 'bg-surface border-white/[0.08] text-slate-400 hover:text-slate-200'
+            }`}>
+            {t.label} <span className="opacity-60">({counts[t.key]})</span>
+          </button>
+        ))}
+      </div>
+
       {/* Filter */}
       <input
         placeholder="Filter by name or category..."
@@ -149,6 +209,7 @@ export default function AdminCatalog() {
                   <th className="px-4 py-3 font-medium">Name</th>
                   <th className="px-4 py-3 font-medium">Category</th>
                   <th className="px-4 py-3 font-medium">Dose</th>
+                  <th className="px-4 py-3 font-medium">Suggested by</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
@@ -163,6 +224,7 @@ export default function AdminCatalog() {
                         <input className={inputClass} value={editForm.dose_unit} onChange={e => setEditForm(p => ({ ...p, dose_unit: e.target.value }))} />
                       </div>
                     </td>
+                    <td className="px-4 py-2 text-slate-500">—</td>
                     <td className="px-4 py-2 text-right">
                       <div className="inline-flex gap-2">
                         <button onClick={guardarEdicion} disabled={busy} className="p-1.5 rounded-lg text-brand hover:bg-brand/10 transition"><Check size={14} /></button>
@@ -172,11 +234,44 @@ export default function AdminCatalog() {
                   </tr>
                 ) : (
                   <tr key={c.id} className="border-b border-white/[0.04] last:border-0">
-                    <td className="px-4 py-3 text-slate-200">{c.name}</td>
+                    <td className="px-4 py-3 text-slate-200">
+                      <div className="flex items-center gap-2">
+                        {c.name}
+                        {c.status === 'pending' && (
+                          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                            pending
+                          </span>
+                        )}
+                        {c.status === 'rejected' && (
+                          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-400/10 text-rose-400 border border-rose-400/20">
+                            rejected
+                          </span>
+                        )}
+                      </div>
+                    </td>
                     <td className="px-4 py-3 text-slate-400 capitalize">{c.category}</td>
                     <td className="px-4 py-3 text-slate-300">{c.recommended_dose} {c.dose_unit}</td>
+                    <td className="px-4 py-3 text-slate-400">
+                      {c.created_by ? (usernames[c.created_by] ? `@${usernames[c.created_by]}` : '—') : '—'}
+                    </td>
                     <td className="px-4 py-3 text-right">
                       <div className="inline-flex gap-2">
+                        {c.status === 'pending' && (
+                          <>
+                            <button
+                              aria-label={`Approve ${c.name}`}
+                              onClick={() => setStatus(c, 'approved')}
+                              className="p-1.5 rounded-lg text-brand hover:bg-brand/10 transition">
+                              <Check size={14} />
+                            </button>
+                            <button
+                              aria-label={`Reject ${c.name}`}
+                              onClick={() => setStatus(c, 'rejected')}
+                              className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-400/10 transition">
+                              <X size={14} />
+                            </button>
+                          </>
+                        )}
                         <button onClick={() => iniciarEdicion(c)} className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-brand/10 transition">
                           <Pencil size={14} />
                         </button>

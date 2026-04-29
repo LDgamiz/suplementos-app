@@ -8,6 +8,8 @@ export interface SuplementoCat {
   category: string
   recommended_dose: number
   dose_unit: string
+  status?: 'pending' | 'approved' | 'rejected'
+  created_by?: string | null
 }
 
 export interface Suplemento {
