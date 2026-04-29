@@ -33,6 +33,9 @@ export default function AppLayout() {
           className="max-w-2xl mx-auto px-4 pt-6 md:pb-12"
           style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 6rem)' }}>
           <Outlet context={{ session, perfil, isAdmin }} />
+          <p className="text-center text-[10px] text-slate-700 mt-10 tracking-wide">
+            DailyStack: Supplement Tracker
+          </p>
         </div>
       </main>
 

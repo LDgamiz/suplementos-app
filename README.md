@@ -1,4 +1,4 @@
-# 💊 Mis Suplementos
+# 💊 DailyStack: Supplement Tracker
 
 App de seguimiento diario de suplementos construida con React, Supabase y Tailwind CSS. Proyecto de portafolio orientado a la industria de health/fitness tech.
 

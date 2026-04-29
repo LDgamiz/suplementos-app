@@ -20,7 +20,7 @@ export default function SupportUs() {
         </div>
         <h2 className="text-lg font-semibold text-slate-200 mb-2">Help keep this app running</h2>
         <p className="text-sm text-slate-400 leading-relaxed">
-          My Supplements is built and maintained by a small team. If it helps you stay
+          DailyStack is built and maintained by a small team. If it helps you stay
           consistent with your stack, consider buying us a coffee — it covers servers,
           push notifications and lets us ship new features faster.
         </p>

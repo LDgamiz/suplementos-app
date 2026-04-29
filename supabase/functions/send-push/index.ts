@@ -87,7 +87,7 @@ Deno.serve(async (req) => {
   }
 
   const payload = JSON.stringify({
-    title: 'My Supplements',
+    title: 'DailyStack',
     body: 'Have you taken your supplements today?',
     url: '/'
   })

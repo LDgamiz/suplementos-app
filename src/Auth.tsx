@@ -32,8 +32,8 @@ export default function Auth() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand/10 border border-brand/20 mb-5">
             <Pill size={30} className="text-brand" />
           </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">My Supplements</h1>
-          <p className="text-slate-400 text-sm mt-2">Track your daily stack</p>
+          <h1 className="text-3xl font-bold text-white tracking-tight">DailyStack</h1>
+          <p className="text-slate-400 text-sm mt-2">Supplement Tracker</p>
         </div>
 
         <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 shadow-2xl">

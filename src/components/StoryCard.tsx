@@ -52,9 +52,14 @@ export const StoryCard = forwardRef<HTMLDivElement, StoryCardProps>(function Sto
         }}>
           <span style={{ color: BRAND, fontSize: 36, lineHeight: 1 }}>💊</span>
         </div>
-        <span style={{ fontSize: 36, fontWeight: 700, color: '#FFFFFF', letterSpacing: -0.5 }}>
-          My Supplements
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+          <span style={{ fontSize: 40, fontWeight: 800, color: '#FFFFFF', letterSpacing: -0.5 }}>
+            DailyStack
+          </span>
+          <span style={{ fontSize: 18, color: BRAND, marginTop: 6, letterSpacing: 1, textTransform: 'uppercase' }}>
+            Supplement Tracker
+          </span>
+        </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
