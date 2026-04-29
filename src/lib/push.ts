@@ -20,14 +20,21 @@ export async function subscribeToPush(userId: string): Promise<void> {
   if (!VAPID_PUBLIC_KEY) throw new Error('VITE_VAPID_PUBLIC_KEY is not configured.')
 
   const registration = await navigator.serviceWorker.ready
-  let sub = await registration.pushManager.getSubscription()
 
-  if (!sub) {
-    sub = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as BufferSource
-    })
+  // Force a fresh subscription. If a different account previously enabled
+  // push on this device, the existing row in push_subscriptions belongs to
+  // them (RLS hides it) and our upsert would 403. Re-subscribing gives this
+  // user a brand new endpoint they can own.
+  const existing = await registration.pushManager.getSubscription()
+  if (existing) {
+    await supabase.from('push_subscriptions').delete().eq('endpoint', existing.endpoint)
+    await existing.unsubscribe()
   }
+
+  const sub = await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) as BufferSource
+  })
 
   const json = sub.toJSON()
   const p256dh = json.keys?.p256dh

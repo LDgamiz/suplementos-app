@@ -19,7 +19,7 @@ export default function Notificaciones({ session }: Props) {
   const [error, setError] = useState<string | null>(null)
   const supported = pushSupported()
 
-  useEffect(() => { cargarConfig() }, [])
+  useEffect(() => { cargarConfig() }, [session.user.id])
 
   async function cargarConfig() {
     const { data } = await supabase

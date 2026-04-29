@@ -62,21 +62,26 @@ describe('subscribeToPush', () => {
     await expect(subscribeToPush('user-1')).rejects.toThrow(/not supported/i)
   })
 
-  it('reuses existing subscription if present and upserts to db', async () => {
+  it('force-resubscribes when an existing subscription is present', async () => {
     const existing = {
-      endpoint: 'https://push/abc',
-      toJSON: () => ({ endpoint: 'https://push/abc', keys: { p256dh: 'p256', auth: 'a' } }),
+      endpoint: 'https://push/old',
+      toJSON: () => ({ endpoint: 'https://push/old', keys: { p256dh: 'p', auth: 'a' } }),
       unsubscribe: unsubscribeMock,
     }
     getSubscriptionMock.mockResolvedValue(existing)
+    subscribeMock.mockResolvedValue({
+      endpoint: 'https://push/new',
+      toJSON: () => ({ endpoint: 'https://push/new', keys: { p256dh: 'p2', auth: 'a2' } }),
+    })
 
     const { subscribeToPush } = await import('./push')
     await subscribeToPush('user-1')
 
-    expect(subscribeMock).not.toHaveBeenCalled()
-    expect(fromMock).toHaveBeenCalledWith('push_subscriptions')
+    expect(eq).toHaveBeenCalledWith('endpoint', 'https://push/old')
+    expect(unsubscribeMock).toHaveBeenCalled()
+    expect(subscribeMock).toHaveBeenCalledOnce()
     expect(upsert).toHaveBeenCalledWith(
-      { user_id: 'user-1', endpoint: 'https://push/abc', p256dh: 'p256', auth: 'a' },
+      { user_id: 'user-1', endpoint: 'https://push/new', p256dh: 'p2', auth: 'a2' },
       { onConflict: 'endpoint' }
     )
   })
@@ -99,7 +104,8 @@ describe('subscribeToPush', () => {
   })
 
   it('throws when keys are missing in subscription', async () => {
-    getSubscriptionMock.mockResolvedValue({
+    getSubscriptionMock.mockResolvedValue(null)
+    subscribeMock.mockResolvedValue({
       endpoint: 'x',
       toJSON: () => ({ endpoint: 'x', keys: {} }),
     })
