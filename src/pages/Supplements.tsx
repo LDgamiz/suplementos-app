@@ -6,11 +6,12 @@ import { useLayoutCtx } from '../layout/context'
 import WeeklyChart from '../WeeklyChart'
 import SupplementoItem from '../components/SupplementoItem'
 import AgregarSuplemento from '../components/AgregarSuplemento'
+import ShareButton from '../components/ShareButton'
 import Rutinas from '../Rutinas'
 import Notificaciones from '../components/Notificaciones'
 
 export default function Supplements() {
-  const { session } = useLayoutCtx()
+  const { session, perfil } = useLayoutCtx()
   const [fecha, setFecha] = useState<string>(new Date().toISOString().split('T')[0])
   const {
     suplementos, refreshKey,
@@ -23,10 +24,18 @@ export default function Supplements() {
   const total = suplementos.length
   const pct = total > 0 ? Math.round((tomados / total) * 100) : 0
 
+  const publicSuplementos = suplementos
+    .filter(s => s.publico)
+    .map(s => ({
+      name: s.suplementos_cat?.name ?? '—',
+      dosis: s.dosis,
+      tomado: s.tomado,
+    }))
+
   return (
     <>
-      <div className="flex items-stretch gap-3 mb-6">
-        <div className="flex-1 bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
+      <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
           <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Today</p>
           <div className="flex items-end gap-2">
             <span className="text-2xl font-bold text-white">
@@ -38,15 +47,24 @@ export default function Supplements() {
             )}
           </div>
         </div>
-        {racha > 0 && (
-          <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
-            <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
-            <div className="flex items-center gap-1.5">
-              <Flame size={20} className="text-amber-400" />
-              <span className="text-2xl font-bold text-amber-400">{racha}</span>
-            </div>
+        <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
+          <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
+          <div className="flex items-center gap-1.5">
+            <Flame size={20} className={racha > 0 ? 'text-amber-400' : 'text-slate-600'} />
+            <span className={`text-2xl font-bold ${racha > 0 ? 'text-amber-400' : 'text-slate-600'}`}>{racha}</span>
           </div>
-        )}
+        </div>
+        <ShareButton
+          username={perfil?.username ?? null}
+          fullName={perfil?.full_name ?? null}
+          avatarUrl={perfil?.avatar_url ?? null}
+          bio={perfil?.bio ?? null}
+          racha={racha}
+          tomados={tomados}
+          total={total}
+          pct={pct}
+          suplementos={publicSuplementos}
+        />
       </div>
 
       <WeeklyChart refreshKey={refreshKey} />

@@ -16,6 +16,8 @@ const getColor = (pct: number | null): string => {
 
 interface Props {
   refreshKey: number
+  userId?: string
+  publicOnly?: boolean
 }
 
 interface Grouped {
@@ -23,7 +25,7 @@ interface Grouped {
   total: number
 }
 
-export default function WeeklyChart({ refreshKey }: Props) {
+export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const chartRef = useRef<Chart | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
@@ -31,22 +33,28 @@ export default function WeeklyChart({ refreshKey }: Props) {
 
   useEffect(() => {
     fetchWeeklyData()
-  }, [refreshKey])
+  }, [refreshKey, userId, publicOnly])
 
   async function fetchWeeklyData() {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return
+    let uid = userId
+    if (!uid) {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      uid = user.id
+    }
 
     const today = new Date()
     const sevenDaysAgo = new Date(today)
     sevenDaysAgo.setDate(today.getDate() - 6)
     const fromDate = sevenDaysAgo.toISOString().split('T')[0]
 
-    const { data: logs, error } = await supabase
+    let query = supabase
       .from('suplementos')
       .select('fecha, tomado')
-      .eq('user_id', user.id)
+      .eq('user_id', uid)
       .gte('fecha', fromDate)
+    if (publicOnly) query = query.eq('publico', true)
+    const { data: logs, error } = await query
 
     if (error) { console.error(error); return }
 

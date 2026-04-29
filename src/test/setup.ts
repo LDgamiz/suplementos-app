@@ -17,3 +17,15 @@ if (!('clipboard' in navigator)) {
     clipboard: { writeText: vi.fn().mockResolvedValue(undefined) },
   })
 }
+
+// Web Share API stub (jsdom doesn't ship it)
+Object.assign(navigator, {
+  share: vi.fn().mockResolvedValue(undefined),
+  canShare: vi.fn().mockReturnValue(true),
+})
+
+// URL.createObjectURL stub for fallback download path
+if (!URL.createObjectURL) {
+  URL.createObjectURL = vi.fn(() => 'blob:mock')
+  URL.revokeObjectURL = vi.fn()
+}
