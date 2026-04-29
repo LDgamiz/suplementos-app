@@ -25,9 +25,10 @@ test.describe('public profile', () => {
       )
     }
 
-    // The h1 contains "Stack of @<username>"
+    // The redesigned profile shows "@<username>" as a separate element under the
+    // full name (no longer inside the heading). Just check it's visible somewhere.
     await expect(
-      page.getByRole('heading').filter({ hasText: new RegExp(`@${PUBLIC_USERNAME}`, 'i') })
+      page.getByText(`@${PUBLIC_USERNAME}`, { exact: false }).first()
     ).toBeVisible({ timeout: 10_000 })
   })
 })
