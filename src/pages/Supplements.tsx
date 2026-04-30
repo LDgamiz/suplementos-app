@@ -8,6 +8,7 @@ import SupplementoItem from '../components/SupplementoItem'
 import AgregarSuplemento from '../components/AgregarSuplemento'
 import ShareButton from '../components/ShareButton'
 import WelcomeEmptyState from '../components/WelcomeEmptyState'
+import HintButton from '../components/HintButton'
 import Rutinas from '../Rutinas'
 import Notificaciones from '../components/Notificaciones'
 
@@ -35,6 +36,13 @@ export default function Supplements() {
 
   return (
     <>
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-xs uppercase tracking-wider text-slate-500 font-medium">Stats</h2>
+        <HintButton
+          label="Stats hint"
+          text="Today is what you've taken so far. Streak counts consecutive 100% days. Share generates a 9:16 image — needs a username."
+        />
+      </div>
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
           <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Today</p>
@@ -82,18 +90,27 @@ export default function Supplements() {
       {suplementos.length === 0 && fecha === new Date().toISOString().split('T')[0] ? (
         <WelcomeEmptyState onAdd={agregarSuplemento} />
       ) : (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {suplementos.map(s => (
-            <SupplementoItem
-              key={s.id}
-              suple={s}
-              onMarcar={marcarTomado}
-              onEliminar={eliminarSuplemento}
-              onTogglePublico={togglePublico}
-              onEditar={editarSuplemento}
+        <>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-xs uppercase tracking-wider text-slate-500 font-medium">Today's stack</h2>
+            <HintButton
+              label="Today's stack hint"
+              text="Your daily list. Tap Mark to log a dose, the globe to publish it on your public profile, or Edit to change the dose."
             />
-          ))}
-        </ul>
+          </div>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {suplementos.map(s => (
+              <SupplementoItem
+                key={s.id}
+                suple={s}
+                onMarcar={marcarTomado}
+                onEliminar={eliminarSuplemento}
+                onTogglePublico={togglePublico}
+                onEditar={editarSuplemento}
+              />
+            ))}
+          </ul>
+        </>
       )}
 
       <AgregarSuplemento onAgregar={agregarSuplemento} userId={session.user.id} />

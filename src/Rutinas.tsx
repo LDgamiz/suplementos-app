@@ -3,6 +3,7 @@ import { supabase } from './supabaseClient'
 import { Session } from '@supabase/supabase-js'
 import { Zap, Play, Trash2, Plus, Search } from 'lucide-react'
 import { SuplementoCat } from './hooks/useSuplementos'
+import HintButton from './components/HintButton'
 
 interface SupplementoRutina {
   suplemento_id: string
@@ -200,10 +201,16 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
 
   return (
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
-      <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
-        <Zap size={16} className="text-brand" />
-        Routines
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
+          <Zap size={16} className="text-brand" />
+          Routines
+        </h2>
+        <HintButton
+          label="Routines hint"
+          text="Save groups of supplements as a stack. Apply a routine to add all its items to today's list with one tap."
+        />
+      </div>
 
       {rutinas.length > 0 && (
         <div className="mb-6 space-y-2">

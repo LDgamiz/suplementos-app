@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Plus, Search } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import { SuplementoCat } from '../hooks/useSuplementos'
+import HintButton from './HintButton'
 
 interface Props {
   onAgregar: (suplemento_id: string, dosis: string) => void
@@ -102,10 +103,16 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
 
   return (
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
-      <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
-        <Plus size={16} className="text-brand" />
-        Add supplement
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
+          <Plus size={16} className="text-brand" />
+          Add supplement
+        </h2>
+        <HintButton
+          label="Add supplement hint"
+          text="Search the catalog. If it's missing, suggest it — admins approve new entries. You can use a pending suggestion right away."
+        />
+      </div>
 
       <div ref={containerRef} className="relative mb-3">
         <div className="relative">

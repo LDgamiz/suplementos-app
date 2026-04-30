@@ -3,6 +3,7 @@ import { Bell, BellOff, Clock, Check } from 'lucide-react'
 import { Session } from '@supabase/supabase-js'
 import { supabase } from '../supabaseClient'
 import { subscribeToPush, unsubscribeFromPush, pushSupported } from '../lib/push'
+import HintButton from './HintButton'
 
 interface Props {
   session: Session
@@ -60,10 +61,16 @@ export default function Notificaciones({ session }: Props) {
 
   return (
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
-      <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
-        <Bell size={16} className="text-brand" />
-        Daily reminder
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
+          <Bell size={16} className="text-brand" />
+          Daily reminder
+        </h2>
+        <HintButton
+          label="Daily reminder hint"
+          text="Push notification at the time you choose. Works on installed PWAs (iOS Safari ≥16, Android Chrome). Each device has its own subscription."
+        />
+      </div>
 
       {!supported && (
         <div className="flex items-start gap-2 p-3 bg-amber-400/10 border border-amber-400/20 rounded-xl mb-4">

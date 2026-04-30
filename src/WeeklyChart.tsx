@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { supabase } from './supabaseClient'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
+import HintButton from './components/HintButton'
 
 Chart.register(ChartDataLabels)
 
@@ -178,9 +179,15 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
   return (
     <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 mt-8 mb-6">
       <div className="flex justify-between items-start mb-4">
-        <div>
-          <h2 className="text-base font-semibold text-slate-200">Weekly consistency</h2>
-          <p className="text-xs text-slate-500">Last 7 days</p>
+        <div className="flex items-start gap-1">
+          <div>
+            <h2 className="text-base font-semibold text-slate-200">Weekly consistency</h2>
+            <p className="text-xs text-slate-500">Last 7 days</p>
+          </div>
+          <HintButton
+            label="Weekly consistency hint"
+            text="Your last 7 days. Each bar is a day's completion percentage from the supplements you marked taken."
+          />
         </div>
         {promedio !== null && (
           <div className="text-right">
