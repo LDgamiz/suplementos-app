@@ -25,9 +25,11 @@ test.describe('auth', () => {
     await page.getByPlaceholder('Password').fill('wrongwrongwrong')
     await page.getByRole('button', { name: /sign in/i }).click()
 
-    // Supabase returns "Invalid login credentials" or similar
-    await expect(page.locator('p').filter({ hasText: /invalid|credentials/i })).toBeVisible({
-      timeout: 10_000,
-    })
+    // Auth.tsx maps Supabase's "Invalid login credentials" to a friendly
+    // "Email or password is incorrect." Also keep the old keywords in case
+    // the mapping changes or a different auth provider returns its own text.
+    await expect(
+      page.locator('p').filter({ hasText: /incorrect|invalid|credentials/i })
+    ).toBeVisible({ timeout: 10_000 })
   })
 })
