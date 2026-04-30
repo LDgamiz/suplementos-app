@@ -7,6 +7,7 @@ import WeeklyChart from '../WeeklyChart'
 import SupplementoItem from '../components/SupplementoItem'
 import AgregarSuplemento from '../components/AgregarSuplemento'
 import ShareButton from '../components/ShareButton'
+import WelcomeEmptyState from '../components/WelcomeEmptyState'
 import Rutinas from '../Rutinas'
 import Notificaciones from '../components/Notificaciones'
 
@@ -78,18 +79,22 @@ export default function Supplements() {
         />
       </div>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {suplementos.map(s => (
-          <SupplementoItem
-            key={s.id}
-            suple={s}
-            onMarcar={marcarTomado}
-            onEliminar={eliminarSuplemento}
-            onTogglePublico={togglePublico}
-            onEditar={editarSuplemento}
-          />
-        ))}
-      </ul>
+      {suplementos.length === 0 && fecha === new Date().toISOString().split('T')[0] ? (
+        <WelcomeEmptyState onAdd={agregarSuplemento} />
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {suplementos.map(s => (
+            <SupplementoItem
+              key={s.id}
+              suple={s}
+              onMarcar={marcarTomado}
+              onEliminar={eliminarSuplemento}
+              onTogglePublico={togglePublico}
+              onEditar={editarSuplemento}
+            />
+          ))}
+        </ul>
+      )}
 
       <AgregarSuplemento onAgregar={agregarSuplemento} userId={session.user.id} />
       <Rutinas session={session} onAplicarRutina={aplicarRutina} />
