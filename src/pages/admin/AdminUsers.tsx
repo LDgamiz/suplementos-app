@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Trash2, Shield, ShieldOff } from 'lucide-react'
 import { supabase } from '../../supabaseClient'
 import { useLayoutCtx } from '../../layout/context'
+import ConfirmModal from '../../components/ConfirmModal'
 
 interface Row {
   id: string
@@ -17,6 +18,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState<Row[]>([])
   const [loading, setLoading] = useState(true)
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<Row | null>(null)
 
   useEffect(() => { cargar() }, [])
 
@@ -42,9 +44,10 @@ export default function AdminUsers() {
     setBusyId(null)
   }
 
-  async function eliminar(row: Row) {
-    if (row.user_id === session.user.id) return
-    if (!confirm(`Delete profile @${row.username ?? row.user_id}? This only removes the perfil row.`)) return
+  async function confirmDelete() {
+    const row = pendingDelete
+    if (!row) return
+    setPendingDelete(null)
     setBusyId(row.id)
     const { error } = await supabase.from('perfiles').delete().eq('id', row.id)
     if (!error) setUsers(prev => prev.filter(u => u.id !== row.id))
@@ -97,8 +100,9 @@ export default function AdminUsers() {
                         {isAdmin ? <ShieldOff size={14} /> : <Shield size={14} />}
                       </button>
                       <button
-                        onClick={() => eliminar(u)}
+                        onClick={() => setPendingDelete(u)}
                         disabled={self || busyId === u.id}
+                        aria-label={`Delete profile ${u.username ?? u.user_id}`}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-400/10 transition disabled:opacity-30 disabled:cursor-not-allowed">
                         <Trash2 size={14} />
                       </button>
@@ -110,6 +114,16 @@ export default function AdminUsers() {
           </tbody>
         </table>
       </div>
+
+      <ConfirmModal
+        open={!!pendingDelete}
+        title="Delete profile?"
+        body={pendingDelete ? `This removes the perfil row for @${pendingDelete.username ?? pendingDelete.user_id}. The auth user is not affected.` : ''}
+        confirmLabel="Delete"
+        confirmTone="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDelete(null)}
+      />
     </div>
   )
 }

@@ -5,6 +5,8 @@ import { usePerfil } from '../hooks/usePerfil'
 import Auth from '../Auth'
 import SideMenu from './SideMenu'
 import BottomNav from './BottomNav'
+import InstallPrompt from '../components/InstallPrompt'
+import UpdateBanner from '../components/UpdateBanner'
 
 export default function AppLayout() {
   const { session, signOut } = useAuth()
@@ -45,6 +47,9 @@ export default function AppLayout() {
       </main>
 
       <BottomNav isAdmin={isAdmin} />
+
+      <UpdateBanner />
+      <InstallPrompt />
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Plus, Trash2, Pencil, Check, X } from 'lucide-react'
 import { supabase } from '../../supabaseClient'
+import ConfirmModal from '../../components/ConfirmModal'
 
 type Status = 'pending' | 'approved' | 'rejected'
 type Tab = Status | 'all'
@@ -37,6 +38,7 @@ export default function AdminCatalog() {
   const [busy, setBusy] = useState(false)
   const [filter, setFilter] = useState('')
   const [tab, setTab] = useState<Tab>('pending')
+  const [pendingDelete, setPendingDelete] = useState<Cat | null>(null)
 
   useEffect(() => { cargar() }, [])
 
@@ -126,8 +128,10 @@ export default function AdminCatalog() {
     if (!error) setItems(prev => prev.map(x => x.id === c.id ? { ...x, status } : x))
   }
 
-  async function eliminar(c: Cat) {
-    if (!confirm(`Delete "${c.name}" from catalog?`)) return
+  async function confirmDelete() {
+    const c = pendingDelete
+    if (!c) return
+    setPendingDelete(null)
     const { error } = await supabase.from('suplementos_cat').delete().eq('id', c.id)
     if (!error) setItems(prev => prev.filter(x => x.id !== c.id))
   }
@@ -279,7 +283,7 @@ export default function AdminCatalog() {
                           <Pencil size={14} />
                         </button>
                         <button
-                          onClick={() => eliminar(c)}
+                          onClick={() => setPendingDelete(c)}
                           aria-label={`Delete ${c.name}`}
                           className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-400/10 transition">
                           <Trash2 size={14} />
@@ -293,6 +297,16 @@ export default function AdminCatalog() {
           </div>
         </div>
       )}
+
+      <ConfirmModal
+        open={!!pendingDelete}
+        title="Delete catalog entry?"
+        body={pendingDelete ? `"${pendingDelete.name}" will be permanently removed from the catalog.` : ''}
+        confirmLabel="Delete"
+        confirmTone="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setPendingDelete(null)}
+      />
     </>
   )
 }

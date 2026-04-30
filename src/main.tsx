@@ -5,9 +5,15 @@ import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App'
 import { initSentry, SentryErrorBoundary } from './lib/sentry'
+import { registerSWUpdate } from './lib/swUpdate'
 
 initSentry()
-registerSW({ immediate: true })
+const updateSW = registerSW({
+  immediate: true,
+  onNeedRefresh() {
+    registerSWUpdate(updateSW)
+  },
+})
 
 function ErrorFallback() {
   return (
