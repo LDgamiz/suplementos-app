@@ -58,7 +58,34 @@ export default function Profile() {
   const update = (k: keyof FormState) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm(prev => ({ ...prev, [k]: e.target.value }))
 
+  function validate(): string | null {
+    if (form.weight_kg) {
+      const w = parseFloat(form.weight_kg)
+      if (Number.isNaN(w) || w < 20 || w > 400) return 'Weight must be between 20 and 400 kg.'
+    }
+    if (form.height_cm) {
+      const h = parseFloat(form.height_cm)
+      if (Number.isNaN(h) || h < 50 || h > 250) return 'Height must be between 50 and 250 cm.'
+    }
+    if (form.birth_date) {
+      const d = new Date(form.birth_date)
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      if (Number.isNaN(d.getTime()) || d > today || d < new Date('1900-01-01')) {
+        return 'Birth date must be a real date no later than today.'
+      }
+    }
+    if (form.bio && form.bio.length > 500) return 'Bio is too long (max 500 characters).'
+    return null
+  }
+
   async function guardar() {
+    const err = validate()
+    if (err) {
+      setMensaje(err)
+      setTimeout(() => setMensaje(null), 4000)
+      return
+    }
     setGuardando(true)
     setMensaje(null)
     const payload = {
@@ -174,7 +201,14 @@ export default function Profile() {
           </div>
           <div>
             <label className={labelClass}>Birth date</label>
-            <input type="date" value={form.birth_date} onChange={update('birth_date')} className={inputClass} />
+            <input
+              type="date"
+              value={form.birth_date}
+              onChange={update('birth_date')}
+              min="1900-01-01"
+              max={new Date().toISOString().slice(0, 10)}
+              className={inputClass}
+            />
           </div>
           <div>
             <label className={labelClass}>Gender</label>
@@ -188,11 +222,19 @@ export default function Profile() {
           </div>
           <div>
             <label className={labelClass}>Weight (kg)</label>
-            <input type="number" step="0.1" value={form.weight_kg} onChange={update('weight_kg')} className={inputClass} />
+            <input
+              type="number" step="0.1" min="20" max="400"
+              value={form.weight_kg} onChange={update('weight_kg')}
+              className={inputClass}
+            />
           </div>
           <div>
             <label className={labelClass}>Height (cm)</label>
-            <input type="number" step="0.1" value={form.height_cm} onChange={update('height_cm')} className={inputClass} />
+            <input
+              type="number" step="0.1" min="50" max="250"
+              value={form.height_cm} onChange={update('height_cm')}
+              className={inputClass}
+            />
           </div>
           <div>
             <label className={labelClass}>Country</label>
@@ -221,7 +263,13 @@ export default function Profile() {
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>Bio</label>
-            <textarea value={form.bio} onChange={update('bio')} rows={3} className={`${inputClass} resize-none`} />
+            <textarea
+              value={form.bio}
+              onChange={update('bio')}
+              rows={3}
+              maxLength={500}
+              className={`${inputClass} resize-none`}
+            />
           </div>
         </div>
 
