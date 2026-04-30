@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Trash2, Shield, ShieldOff } from 'lucide-react'
 import { supabase } from '../../supabaseClient'
 import { useLayoutCtx } from '../../layout/context'
-import * as Sentry from '@sentry/react'
 
 interface Row {
   id: string
@@ -56,14 +55,6 @@ export default function AdminUsers() {
 
   return (
     <div className="bg-surface border border-white/[0.08] rounded-2xl overflow-hidden">
-      {/* SENTRY Test */}
-      <button
-        onClick={() => {
-          throw new Error('This is your first error!');
-        }}
-      >
-        Break the world
-      </button>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
