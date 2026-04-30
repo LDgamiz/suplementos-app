@@ -9,6 +9,7 @@ import AdminCatalog from './pages/admin/AdminCatalog'
 import PerfilPublico from './pages/PerfilPublico'
 import Privacy from './pages/legal/Privacy'
 import Terms from './pages/legal/Terms'
+import ResetPassword from './pages/ResetPassword'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <Route path="/perfil/:username" element={<PerfilPublico />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route element={<AppLayout />}>
         <Route path="/" element={<Supplements />} />
         <Route path="/profile" element={<Profile />} />
