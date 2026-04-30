@@ -272,10 +272,16 @@ export default function AdminCatalog() {
                             </button>
                           </>
                         )}
-                        <button onClick={() => iniciarEdicion(c)} className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-brand/10 transition">
+                        <button
+                          onClick={() => iniciarEdicion(c)}
+                          aria-label={`Edit ${c.name}`}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-brand/10 transition">
                           <Pencil size={14} />
                         </button>
-                        <button onClick={() => eliminar(c)} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-400/10 transition">
+                        <button
+                          onClick={() => eliminar(c)}
+                          aria-label={`Delete ${c.name}`}
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-400/10 transition">
                           <Trash2 size={14} />
                         </button>
                       </div>

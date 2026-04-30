@@ -67,17 +67,22 @@ export default function SupplementoItem({ suple, onMarcar, onEliminar, onToggleP
       <div className="flex gap-1.5">
         <button
           onClick={() => onTogglePublico(suple.id, suple.publico)}
+          aria-label={suple.publico ? `Remove ${nombre} from public profile` : `Show ${nombre} in public profile`}
+          aria-pressed={suple.publico}
           title={suple.publico ? 'Remove from public profile' : 'Show in public profile'}
           className={`${iconBtn} ${suple.publico ? 'bg-brand/10 border-brand/30 text-brand' : 'bg-surface-2 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-300'}`}>
           <Globe size={14} />
         </button>
         <button
           onClick={() => setEditando(true)}
+          aria-label={`Edit ${nombre} dose`}
           className={`${iconBtn} bg-surface-2 border-white/10 text-slate-400 hover:border-white/20 hover:text-slate-200`}>
           <Pencil size={14} />
         </button>
         <button
           onClick={() => onMarcar(suple.id)}
+          aria-label={suple.tomado ? `Mark ${nombre} as not taken` : `Mark ${nombre} as taken`}
+          aria-pressed={suple.tomado}
           className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border text-xs font-medium transition ${
             suple.tomado
               ? 'bg-brand/10 border-brand/30 text-brand'
@@ -88,6 +93,7 @@ export default function SupplementoItem({ suple, onMarcar, onEliminar, onToggleP
         </button>
         <button
           onClick={() => onEliminar(suple.id)}
+          aria-label={`Delete ${nombre}`}
           className={`${iconBtn} bg-surface-2 border-white/10 text-rose-400/50 hover:border-rose-400/30 hover:text-rose-400`}>
           <Trash2 size={14} />
         </button>

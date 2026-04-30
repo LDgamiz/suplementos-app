@@ -175,6 +175,7 @@ export default function Profile() {
           <button
             onClick={() => fileRef.current?.click()}
             disabled={subiendo}
+            aria-label="Change avatar"
             className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-brand hover:bg-brand-dark text-[#0A0E1A] flex items-center justify-center transition disabled:opacity-50">
             <Camera size={13} />
           </button>
@@ -298,6 +299,7 @@ export default function Profile() {
                 <p className="text-sm text-brand font-medium truncate">{urlPerfil}</p>
                 <button
                   onClick={copiarLink}
+                  aria-label="Copy public profile link"
                   className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
                   {copiado ? <Check size={13} /> : <Copy size={13} />}
                   {copiado ? 'Copied' : 'Copy'}
