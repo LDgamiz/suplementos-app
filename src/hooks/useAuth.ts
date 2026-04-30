@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { Session } from '@supabase/supabase-js'
+import { setSentryUser } from '../lib/sentry'
 
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null)
@@ -8,9 +9,11 @@ export function useAuth() {
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
+      setSentryUser(session?.user.id ?? null)
     })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
+      setSentryUser(session?.user.id ?? null)
     })
     return () => subscription.unsubscribe()
   }, [])
