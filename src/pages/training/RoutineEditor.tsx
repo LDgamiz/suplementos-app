@@ -367,13 +367,13 @@ function AddExerciseForm({ userId, routineId, dayOfWeek, existingDay, orderIndex
           value={sets}
           onChange={e => setSets(e.target.value)}
           type="number" min={1} max={20}
-          className={`${inputClass} w-20`}
+          className={`${inputClass} w-10`}
           placeholder="Sets"
         />
         <input
           value={repRange}
           onChange={e => setRepRange(e.target.value)}
-          className={`${inputClass} flex-1`}
+          className={`${inputClass} w-10`}
           placeholder="Rep range (e.g. 8-10)"
         />
       </div>
