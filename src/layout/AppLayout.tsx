@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Navigate, Outlet, useLocation } from 'react-router-dom'
 import { LogOut } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { usePerfil } from '../hooks/usePerfil'
@@ -10,11 +10,17 @@ import UpdateBanner from '../components/UpdateBanner'
 
 export default function AppLayout() {
   const { session, signOut } = useAuth()
-  const { perfil } = usePerfil(session)
+  const { perfil, loading: perfilLoading } = usePerfil(session)
+  const location = useLocation()
 
   if (!session) return <Auth />
+  if (perfilLoading) return null
 
   const isAdmin = perfil?.role === 'admin'
+  const needsOnboarding = !perfil?.username
+  if (needsOnboarding && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />
+  }
 
   return (
     <div className="min-h-screen flex">
