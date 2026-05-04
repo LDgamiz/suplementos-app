@@ -7,6 +7,7 @@ import HintButton from './components/HintButton'
 Chart.register(ChartDataLabels)
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const RANGES: ReadonlyArray<7 | 15 | 30> = [7, 15, 30]
 
 const getColor = (pct: number | null): string => {
   if (pct === null) return '#1E293B'
@@ -31,12 +32,14 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
   const chartRef = useRef<Chart | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [promedio, setPromedio] = useState<number | null>(null)
+  const [days, setDays] = useState<7 | 15 | 30>(7)
 
   useEffect(() => {
-    fetchWeeklyData()
-  }, [refreshKey, userId, publicOnly])
+    fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshKey, userId, publicOnly, days])
 
-  async function fetchWeeklyData() {
+  async function fetchData() {
     let uid = userId
     if (!uid) {
       const { data: { user } } = await supabase.auth.getUser()
@@ -45,9 +48,9 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
     }
 
     const today = new Date()
-    const sevenDaysAgo = new Date(today)
-    sevenDaysAgo.setDate(today.getDate() - 6)
-    const fromDate = sevenDaysAgo.toISOString().split('T')[0]
+    const from = new Date(today)
+    from.setDate(today.getDate() - (days - 1))
+    const fromDate = from.toISOString().split('T')[0]
 
     let query = supabase
       .from('suplementos')
@@ -72,13 +75,13 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
     const totals: number[] = []
     const pcts: (number | null)[] = []
 
-    for (let i = 6; i >= 0; i--) {
+    for (let i = days - 1; i >= 0; i--) {
       const d = new Date(today)
       d.setDate(today.getDate() - i)
       const key = d.toISOString().split('T')[0]
       const g = grouped[key]
 
-      labels.push(DAYS[d.getDay()])
+      labels.push(days === 7 ? DAYS[d.getDay()] : String(d.getDate()))
       taken.push(g?.taken ?? 0)
       totals.push(g?.total ?? 0)
       pcts.push(g && g.total > 0 ? Math.round((g.taken / g.total) * 100) : null)
@@ -104,6 +107,8 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
 
     const tickColor = '#475569'
     const bgBar = 'rgba(255,255,255,0.05)'
+    const dense = labels.length > 7
+    const showDataLabels = labels.length <= 15
 
     chartRef.current = new Chart(ctx, {
       type: 'bar',
@@ -125,12 +130,12 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
             borderRadius: 6,
             borderSkipped: false,
             datalabels: {
-              display: (ctx) => pcts[ctx.dataIndex] !== null,
+              display: (ctx) => showDataLabels && pcts[ctx.dataIndex] !== null,
               anchor: 'end',
               align: 'end',
               offset: 2,
               color: tickColor,
-              font: { size: 11, weight: 500 },
+              font: { size: 10, weight: 500 },
               formatter: (_: number, ctx: { dataIndex: number }) => pcts[ctx.dataIndex] + '%'
             }
           }
@@ -144,7 +149,12 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
           x: {
             grid: { display: false },
             border: { display: false },
-            ticks: { color: tickColor, font: { size: 12 }, autoSkip: false }
+            ticks: {
+              color: tickColor,
+              font: { size: dense ? 10 : 12 },
+              autoSkip: dense,
+              maxRotation: 0,
+            }
           },
           y: { display: false }
         },
@@ -178,15 +188,15 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
 
   return (
     <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 mt-8 mb-6">
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-3">
         <div className="flex items-start gap-1">
           <div>
-            <h2 className="text-base font-semibold text-slate-200">Weekly consistency</h2>
-            <p className="text-xs text-slate-500">Last 7 days</p>
+            <h2 className="text-base font-semibold text-slate-200">Consistency</h2>
+            <p className="text-xs text-slate-500">Last {days} days</p>
           </div>
           <HintButton
-            label="Weekly consistency hint"
-            text="Your last 7 days. Each bar is a day's completion percentage from the supplements you marked taken."
+            label="Consistency hint"
+            text="Each bar is a day's completion percentage from the supplements you marked taken. Use the buttons to switch between 7, 15 and 30 days."
           />
         </div>
         {promedio !== null && (
@@ -196,6 +206,24 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
           </div>
         )}
       </div>
+
+      <div className="flex gap-2 mb-3" role="group" aria-label="Range filter">
+        {RANGES.map(n => (
+          <button
+            key={n}
+            type="button"
+            onClick={() => setDays(n)}
+            aria-pressed={days === n}
+            className={`px-3 py-1 text-xs rounded-lg border transition ${
+              days === n
+                ? 'bg-brand/10 border-brand/30 text-brand'
+                : 'bg-surface-2 border-white/10 text-slate-400 hover:text-slate-200'
+            }`}>
+            {n}d
+          </button>
+        ))}
+      </div>
+
       {loading
         ? <p className="text-center text-slate-600 py-10 text-sm">Loading...</p>
         : <div style={{ position: 'relative', height: '180px' }}>
