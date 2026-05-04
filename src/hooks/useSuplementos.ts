@@ -43,10 +43,9 @@ export function useSuplementos(session: Session | null, fecha: string) {
 
   const agregarSuplemento = async (suplemento_id: string, dosis: string) => {
     if (!suplemento_id || !dosis) return
-    const hoy = new Date().toISOString().split('T')[0]
     const { data, error } = await supabase
       .from('suplementos')
-      .insert([{ suplemento_id, dosis, tomado: false, user_id: session!.user.id, fecha: hoy }])
+      .insert([{ suplemento_id, dosis, tomado: false, user_id: session!.user.id, fecha }])
       .select('*, suplementos_cat(name, category)')
     if (!error) setSuplementos(prev => [...prev, data[0] as Suplemento])
   }
@@ -90,13 +89,12 @@ export function useSuplementos(session: Session | null, fecha: string) {
   }
 
   const aplicarRutina = async (suplementosDeRutina: { suplemento_id: string; dosis: string }[]) => {
-    const hoy = new Date().toISOString().split('T')[0]
     const filas = suplementosDeRutina.map(s => ({
       suplemento_id: s.suplemento_id,
       dosis: s.dosis,
       tomado: false,
       user_id: session!.user.id,
-      fecha: hoy
+      fecha
     }))
     const { data, error } = await supabase
       .from('suplementos')

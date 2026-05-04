@@ -36,6 +36,48 @@ describe('useSuplementos', () => {
     await waitFor(() => expect(result.current.suplementos).toHaveLength(2))
   })
 
+  it('agregarSuplemento writes the selected fecha, not today', async () => {
+    mockFromOnce(() => selectBuilder([]))
+    const insert = vi.fn().mockReturnThis()
+    const select = vi.fn().mockResolvedValue({ data: [makeSuplemento({ fecha: '2026-05-02' })], error: null })
+    mockFromOnce(() => ({ insert, select }))
+
+    const session = makeSession()
+    const { useSuplementos } = await import('./useSuplementos')
+    const { result } = renderHook(() => useSuplementos(session, '2026-05-02'))
+    await waitFor(() => expect(result.current.suplementos).toEqual([]))
+
+    await act(async () => { await result.current.agregarSuplemento('cat-1', '5g') })
+
+    expect(insert).toHaveBeenCalledWith([
+      expect.objectContaining({ suplemento_id: 'cat-1', dosis: '5g', fecha: '2026-05-02' }),
+    ])
+  })
+
+  it('aplicarRutina writes rows with the selected fecha', async () => {
+    mockFromOnce(() => selectBuilder([]))
+    const insert = vi.fn().mockReturnThis()
+    const select = vi.fn().mockResolvedValue({ data: [], error: null })
+    mockFromOnce(() => ({ insert, select }))
+
+    const session = makeSession()
+    const { useSuplementos } = await import('./useSuplementos')
+    const { result } = renderHook(() => useSuplementos(session, '2026-05-02'))
+    await waitFor(() => expect(result.current.suplementos).toEqual([]))
+
+    await act(async () => {
+      await result.current.aplicarRutina([
+        { suplemento_id: 'a', dosis: '1g' },
+        { suplemento_id: 'b', dosis: '2g' },
+      ])
+    })
+
+    expect(insert).toHaveBeenCalledWith([
+      expect.objectContaining({ suplemento_id: 'a', fecha: '2026-05-02' }),
+      expect.objectContaining({ suplemento_id: 'b', fecha: '2026-05-02' }),
+    ])
+  })
+
   it('does not insert when suplemento_id or dosis is missing', async () => {
     mockFromOnce(() => selectBuilder([]))
     const session = makeSession()
