@@ -11,6 +11,9 @@ import Privacy from './pages/legal/Privacy'
 import Terms from './pages/legal/Terms'
 import ResetPassword from './pages/ResetPassword'
 import Onboarding from './pages/Onboarding'
+import Training from './pages/training/Training'
+import RoutineEditor from './pages/training/RoutineEditor'
+import WorkoutTracker from './pages/training/WorkoutTracker'
 
 export default function App() {
   return (
@@ -22,6 +25,9 @@ export default function App() {
       <Route element={<AppLayout />}>
         <Route path="/onboarding" element={<Onboarding />} />
         <Route path="/" element={<Supplements />} />
+        <Route path="/training" element={<Training />} />
+        <Route path="/training/routine" element={<RoutineEditor />} />
+        <Route path="/training/workout/:id" element={<WorkoutTracker />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/support" element={<SupportUs />} />
         <Route path="/admin" element={<AdminLayout />}>

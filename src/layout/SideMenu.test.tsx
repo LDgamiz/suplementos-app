@@ -11,6 +11,7 @@ describe('SideMenu', () => {
     )
     expect(screen.getByText('alice@test.com')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /supplements/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /training/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /profile/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /support/i })).toBeInTheDocument()
   })

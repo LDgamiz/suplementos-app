@@ -5,11 +5,16 @@ import { renderWithRouter } from '../test/utils'
 import BottomNav from './BottomNav'
 
 describe('BottomNav', () => {
-  it('shows Supps, Profile, Support always', () => {
+  it('shows Supps, Training, Profile always', () => {
     renderWithRouter(<BottomNav isAdmin={false} />)
     expect(screen.getByRole('link', { name: /supps/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /train/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /profile/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /support/i })).toBeInTheDocument()
+  })
+
+  it('does not show Support in the bottom nav (it lives in the sidebar)', () => {
+    renderWithRouter(<BottomNav isAdmin={false} />)
+    expect(screen.queryByRole('link', { name: /support/i })).not.toBeInTheDocument()
   })
 
   it('hides Admin link when isAdmin=false', () => {

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Pill, User, Heart, Shield } from 'lucide-react'
+import { Pill, User, Dumbbell, Shield } from 'lucide-react'
 
 interface Props {
   isAdmin: boolean
@@ -19,13 +19,13 @@ export default function BottomNav({ isAdmin }: Props) {
         <Pill size={18} />
         Supps
       </NavLink>
+      <NavLink to="/training" className={linkClass}>
+        <Dumbbell size={18} />
+        Train
+      </NavLink>
       <NavLink to="/profile" className={linkClass}>
         <User size={18} />
         Profile
-      </NavLink>
-      <NavLink to="/support" className={linkClass}>
-        <Heart size={18} />
-        Support
       </NavLink>
       {isAdmin && (
         <NavLink to="/admin" className={linkClass}>
