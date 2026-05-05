@@ -78,7 +78,7 @@ export default function Auth() {
             <Pill size={30} className="text-brand" />
           </div>
           <h1 className="text-3xl font-bold text-white tracking-tight">StackForge</h1>
-          <p className="text-slate-400 text-sm mt-2">Supplement Tracker</p>
+          <p className="text-slate-400 text-sm mt-2">Fitness Tracker</p>
         </div>
 
         <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 shadow-2xl">

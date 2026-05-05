@@ -57,7 +57,7 @@ export const StoryCard = forwardRef<HTMLDivElement, StoryCardProps>(function Sto
             StackForge
           </span>
           <span style={{ fontSize: 18, color: BRAND, marginTop: 6, letterSpacing: 1, textTransform: 'uppercase' }}>
-            Supplement Tracker
+            Fitness Tracker
           </span>
         </div>
       </div>

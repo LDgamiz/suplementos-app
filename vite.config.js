@@ -21,7 +21,7 @@ export default defineConfig({
       },
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'StackForge: Supplement Tracker',
+        name: 'StackForge: Fitness Tracker',
         short_name: 'StackForge',
         description: 'Daily supplement tracker',
         theme_color: '#00C896',

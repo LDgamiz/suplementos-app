@@ -108,7 +108,7 @@ export default function PerfilPublico() {
             </div>
 
             <p className="text-center text-xs text-slate-600 mt-8">
-              Powered by <Link to="/" className="text-brand/80 hover:text-brand transition">StackForge: Supplement Tracker</Link>
+              Powered by <Link to="/" className="text-brand/80 hover:text-brand transition">StackForge: Fitness Tracker</Link>
             </p>
           </>
         )}

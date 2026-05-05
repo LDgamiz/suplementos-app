@@ -30,7 +30,7 @@ export default function LegalPage({ title, lastUpdated, children }: Props) {
           {children}
         </article>
         <p className="text-center text-[10px] text-slate-700 mt-12 tracking-wide">
-          StackForge: Supplement Tracker
+          StackForge: Fitness Tracker
         </p>
       </main>
     </div>
