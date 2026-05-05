@@ -21,8 +21,8 @@ export default defineConfig({
       },
       includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'DailyStack: Supplement Tracker',
-        short_name: 'DailyStack',
+        name: 'StackForge: Supplement Tracker',
+        short_name: 'StackForge',
         description: 'Daily supplement tracker',
         theme_color: '#00C896',
         background_color: '#0A0E1A',

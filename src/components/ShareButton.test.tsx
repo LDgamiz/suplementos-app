@@ -41,7 +41,7 @@ describe('ShareButton', () => {
     await waitFor(() => expect(navigator.share).toHaveBeenCalled())
     const arg = vi.mocked(navigator.share).mock.calls[0][0]!
     expect(arg.files?.[0]).toBeInstanceOf(File)
-    expect(arg.files?.[0].name).toBe('dailystack-alice.png')
+    expect(arg.files?.[0].name).toBe('stackforge-alice.png')
     expect(arg.text).toContain('@alice')
   })
 

@@ -42,9 +42,9 @@ export default function ShareButton(props: Props) {
       if (!cardRef.current) throw new Error('Card not mounted')
       const blob = await generateStoryImage(cardRef.current)
       await shareImage(blob, {
-        title: 'DailyStack',
+        title: 'StackForge',
         text: `Check out my supplement stack — @${username}`,
-        filename: `dailystack-${username}.png`,
+        filename: `stackforge-${username}.png`,
       })
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not share')

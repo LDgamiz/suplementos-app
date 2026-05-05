@@ -21,7 +21,7 @@ export default function PerfilPublico() {
             <div className="w-7 h-7 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center">
               <Pill size={14} className="text-brand" />
             </div>
-            <span className="text-sm font-semibold">DailyStack</span>
+            <span className="text-sm font-semibold">StackForge</span>
           </Link>
           <Link to="/" className="text-xs text-brand/80 hover:text-brand transition">Sign in</Link>
         </div>
@@ -108,7 +108,7 @@ export default function PerfilPublico() {
             </div>
 
             <p className="text-center text-xs text-slate-600 mt-8">
-              Powered by <Link to="/" className="text-brand/80 hover:text-brand transition">DailyStack: Supplement Tracker</Link>
+              Powered by <Link to="/" className="text-brand/80 hover:text-brand transition">StackForge: Supplement Tracker</Link>
             </p>
           </>
         )}

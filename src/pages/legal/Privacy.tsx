@@ -7,7 +7,7 @@ export default function Privacy() {
     <LegalPage title="Privacy Policy" lastUpdated="2026-04-29">
       <Section title="1. Who we are">
         <p>
-          DailyStack ("we", "us") is a personal supplement-tracking application
+          StackForge ("we", "us") is a personal supplement-tracking application
           maintained by an individual developer. You can reach us at{' '}
           <a href={`mailto:${SUPPORT_EMAIL}`} className="text-brand hover:underline">
             {SUPPORT_EMAIL}
@@ -17,7 +17,7 @@ export default function Privacy() {
       </Section>
 
       <Section title="2. Data we collect">
-        <p>When you create an account and use DailyStack, the following data is stored:</p>
+        <p>When you create an account and use StackForge, the following data is stored:</p>
         <ul className="list-disc pl-5 space-y-1">
           <li><strong>Account:</strong> email address and password (hashed by our auth provider).</li>
           <li><strong>Profile (optional):</strong> full name, username, avatar image, bio, birth date, weight, height, gender, country, goal and activity level.</li>
@@ -89,7 +89,7 @@ export default function Privacy() {
 
       <Section title="8. Health information disclaimer">
         <p>
-          DailyStack is a tracking tool, <strong>not a medical device</strong>. The data you log
+          StackForge is a tracking tool, <strong>not a medical device</strong>. The data you log
           is for personal reference only and is not a substitute for professional medical advice,
           diagnosis or treatment. We do not infer, diagnose or recommend treatment based on it.
         </p>
@@ -97,7 +97,7 @@ export default function Privacy() {
 
       <Section title="9. Children">
         <p>
-          DailyStack is not directed to children under 13. If we become aware that a user is under
+          StackForge is not directed to children under 13. If we become aware that a user is under
           13, we will delete their account.
         </p>
       </Section>

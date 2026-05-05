@@ -10,7 +10,7 @@ test.describe('auth', () => {
     await page.goto('/')
 
     // Auth screen
-    await expect(page.getByRole('heading', { name: 'DailyStack' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'StackForge' })).toBeVisible()
     await page.getByPlaceholder('Email').fill(EMAIL!)
     await page.getByPlaceholder('Password').fill(PASSWORD!)
     await page.getByRole('button', { name: /sign in/i }).click()

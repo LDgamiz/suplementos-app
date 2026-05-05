@@ -7,14 +7,14 @@ export default function Terms() {
     <LegalPage title="Terms of Service" lastUpdated="2026-04-29">
       <Section title="1. Acceptance">
         <p>
-          By creating an account or using DailyStack ("the Service") you agree to these Terms of
+          By creating an account or using StackForge ("the Service") you agree to these Terms of
           Service. If you do not agree, do not use the Service.
         </p>
       </Section>
 
       <Section title="2. The service">
         <p>
-          DailyStack lets you log the supplements you take each day, view consistency stats and
+          StackForge lets you log the supplements you take each day, view consistency stats and
           optionally share a public profile. The Service is provided "as is" with no uptime or
           availability guarantees.
         </p>
@@ -22,7 +22,7 @@ export default function Terms() {
 
       <Section title="3. Eligibility">
         <p>
-          You must be at least 13 years old to use DailyStack. If you are under 18, you should
+          You must be at least 13 years old to use StackForge. If you are under 18, you should
           obtain a parent or guardian's consent before using the Service.
         </p>
       </Section>
@@ -37,7 +37,7 @@ export default function Terms() {
 
       <Section title="5. Health disclaimer (important)">
         <p>
-          DailyStack is a self-tracking tool. <strong>Nothing in the Service constitutes medical,
+          StackForge is a self-tracking tool. <strong>Nothing in the Service constitutes medical,
           nutritional, or pharmacological advice.</strong> Always consult a qualified healthcare
           professional before starting, stopping or changing any supplement regimen. Information
           shown about supplements (names, doses, categories) is community-curated and may be
@@ -74,7 +74,7 @@ export default function Terms() {
           royalty-free license to display it within the Service.
         </p>
         <p>
-          The DailyStack name, logo, codebase and visual design are owned by the developer and
+          The StackForge name, logo, codebase and visual design are owned by the developer and
           made available under the project's licence terms in the source repository.
         </p>
       </Section>
@@ -98,7 +98,7 @@ export default function Terms() {
 
       <Section title="11. Limitation of liability">
         <p>
-          To the maximum extent permitted by law, DailyStack and its developer will not be liable
+          To the maximum extent permitted by law, StackForge and its developer will not be liable
           for any indirect, incidental, consequential, special or punitive damages, or for any
           loss of profits, data or goodwill arising out of or in connection with your use of the
           Service. Our total liability for any claim relating to the Service shall not exceed

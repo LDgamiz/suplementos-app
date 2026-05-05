@@ -22,7 +22,7 @@ export default function SideMenu({ isAdmin, email, onSignOut }: Props) {
         <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
           <Pill size={18} className="text-brand" />
         </div>
-        <h1 className="text-base font-bold text-white tracking-tight">DailyStack</h1>
+        <h1 className="text-base font-bold text-white tracking-tight">StackForge</h1>
       </div>
 
       <nav className="flex flex-col gap-1 flex-1">

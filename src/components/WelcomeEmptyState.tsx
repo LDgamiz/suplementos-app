@@ -35,7 +35,7 @@ export default function WelcomeEmptyState({ onAdd }: Props) {
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand/10 border border-brand/20 mb-3">
         <Sparkles size={22} className="text-brand" />
       </div>
-      <h2 className="text-base font-semibold text-slate-200 mb-1">Welcome to DailyStack</h2>
+      <h2 className="text-base font-semibold text-slate-200 mb-1">Welcome to StackForge</h2>
       <p className="text-sm text-slate-500 mb-5">
         Track what you take daily and watch your consistency grow.
       </p>

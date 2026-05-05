@@ -22,7 +22,7 @@ self.addEventListener('push', (event: PushEvent) => {
   let payload: PushPayload = {}
   try { payload = event.data?.json() ?? {} } catch { payload = {} }
 
-  const title = payload.title || 'DailyStack'
+  const title = payload.title || 'StackForge'
   const body = payload.body || 'Have you taken your supplements today?'
   const url = payload.url || '/'
 

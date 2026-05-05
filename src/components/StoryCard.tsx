@@ -54,7 +54,7 @@ export const StoryCard = forwardRef<HTMLDivElement, StoryCardProps>(function Sto
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
           <span style={{ fontSize: 40, fontWeight: 800, color: '#FFFFFF', letterSpacing: -0.5 }}>
-            DailyStack
+            StackForge
           </span>
           <span style={{ fontSize: 18, color: BRAND, marginTop: 6, letterSpacing: 1, textTransform: 'uppercase' }}>
             Supplement Tracker

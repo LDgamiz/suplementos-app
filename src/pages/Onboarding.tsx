@@ -63,7 +63,7 @@ export default function Onboarding() {
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand/10 border border-brand/20 mb-3">
           <Pill size={26} className="text-brand" />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">Welcome to DailyStack</h1>
+        <h1 className="text-xl font-bold text-white tracking-tight">Welcome to StackForge</h1>
         <p className="text-sm text-slate-400 mt-1">
           One-time setup. You can fill the rest later from your Profile.
         </p>

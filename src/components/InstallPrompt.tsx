@@ -44,7 +44,7 @@ export default function InstallPrompt() {
           <Download size={16} className="text-brand" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-slate-100">Install DailyStack</p>
+          <p className="text-sm font-semibold text-slate-100">Install StackForge</p>
           <p className="text-xs text-slate-500">Get the app on your home screen.</p>
         </div>
         <button

@@ -42,7 +42,7 @@ export default function AppLayout() {
           style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 6rem)' }}>
           <Outlet context={{ session, perfil, isAdmin }} />
           <div className="text-center mt-10 space-y-1">
-            <p className="text-[10px] text-slate-700 tracking-wide">DailyStack: Supplement Tracker</p>
+            <p className="text-[10px] text-slate-700 tracking-wide">StackForge: Supplement Tracker</p>
             <p className="text-[10px] text-slate-700 space-x-3">
               <Link to="/privacy" className="hover:text-slate-500 transition">Privacy</Link>
               <span aria-hidden="true">·</span>

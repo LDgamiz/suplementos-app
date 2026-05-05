@@ -17,7 +17,7 @@ export default function LegalPage({ title, lastUpdated, children }: Props) {
             <div className="w-7 h-7 rounded-lg bg-brand/10 border border-brand/20 flex items-center justify-center">
               <Pill size={14} className="text-brand" />
             </div>
-            <span className="text-sm font-semibold">DailyStack</span>
+            <span className="text-sm font-semibold">StackForge</span>
           </Link>
           <Link to="/" className="text-xs text-brand/80 hover:text-brand transition">Back to app</Link>
         </div>
@@ -30,7 +30,7 @@ export default function LegalPage({ title, lastUpdated, children }: Props) {
           {children}
         </article>
         <p className="text-center text-[10px] text-slate-700 mt-12 tracking-wide">
-          DailyStack: Supplement Tracker
+          StackForge: Supplement Tracker
         </p>
       </main>
     </div>
