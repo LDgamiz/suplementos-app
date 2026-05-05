@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
+import { getLocalDateString } from '../lib/dates'
 
 export interface PublicPerfil {
   user_id: string
@@ -50,7 +51,7 @@ export function usePublicProfile(username: string | undefined) {
 
       setPerfil(p as PublicPerfil)
 
-      const hoy = new Date().toISOString().split('T')[0]
+      const hoy = getLocalDateString()
       const { data: sups } = await supabase
         .from('suplementos')
         .select('id, dosis, tomado, suplementos_cat(name, category)')

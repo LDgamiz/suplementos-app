@@ -6,6 +6,12 @@ declare const self: ServiceWorkerGlobalScope & typeof globalThis
 
 precacheAndRoute(self.__WB_MANIFEST)
 
+self.addEventListener('message', (event: ExtendableMessageEvent) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
+})
+
 interface PushPayload {
   title?: string
   body?: string

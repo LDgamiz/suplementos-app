@@ -11,10 +11,11 @@ import WelcomeEmptyState from '../components/WelcomeEmptyState'
 import HintButton from '../components/HintButton'
 import Rutinas from '../Rutinas'
 import Notificaciones from '../components/Notificaciones'
+import { getLocalDateString } from '../lib/dates'
 
 export default function Supplements() {
   const { session, perfil } = useLayoutCtx()
-  const [fecha, setFecha] = useState<string>(new Date().toISOString().split('T')[0])
+  const [fecha, setFecha] = useState<string>(getLocalDateString())
   const {
     suplementos, refreshKey,
     agregarSuplemento, marcarTomado, eliminarSuplemento,
@@ -87,7 +88,7 @@ export default function Supplements() {
         />
       </div>
 
-      {suplementos.length === 0 && fecha === new Date().toISOString().split('T')[0] ? (
+      {suplementos.length === 0 && fecha === getLocalDateString() ? (
         <WelcomeEmptyState onAdd={agregarSuplemento} />
       ) : (
         <>

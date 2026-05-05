@@ -3,6 +3,7 @@ import { supabase } from './supabaseClient'
 import Chart from 'chart.js/auto'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
 import HintButton from './components/HintButton'
+import { getLocalDateString } from './lib/dates'
 
 Chart.register(ChartDataLabels)
 
@@ -50,7 +51,7 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
     const today = new Date()
     const from = new Date(today)
     from.setDate(today.getDate() - (days - 1))
-    const fromDate = from.toISOString().split('T')[0]
+    const fromDate = getLocalDateString(from)
 
     let query = supabase
       .from('suplementos')
@@ -78,7 +79,7 @@ export default function WeeklyChart({ refreshKey, userId, publicOnly }: Props) {
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(today)
       d.setDate(today.getDate() - i)
-      const key = d.toISOString().split('T')[0]
+      const key = getLocalDateString(d)
       const g = grouped[key]
 
       labels.push(days === 7 ? DAYS[d.getDay()] : String(d.getDate()))

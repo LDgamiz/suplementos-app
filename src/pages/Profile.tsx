@@ -3,6 +3,7 @@ import { User, Camera, Link2, Copy, Check, Lock, Save } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import { useLayoutCtx } from '../layout/context'
 import { uploadAvatar } from '../lib/avatar'
+import { getLocalDateString } from '../lib/dates'
 
 interface FormState {
   full_name: string
@@ -207,7 +208,7 @@ export default function Profile() {
               value={form.birth_date}
               onChange={update('birth_date')}
               min="1900-01-01"
-              max={new Date().toISOString().slice(0, 10)}
+              max={getLocalDateString()}
               className={inputClass}
             />
           </div>

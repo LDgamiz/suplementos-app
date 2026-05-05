@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { Session } from '@supabase/supabase-js'
+import { getLocalDateString } from '../lib/dates'
 
 function useRachaInternal(userId: string | null, publicOnly: boolean) {
   const [racha, setRacha] = useState<number>(0)
@@ -35,7 +36,7 @@ async function calcular(userId: string, publicOnly: boolean): Promise<number> {
   for (let i = 0; i < 365; i++) {
     const d = new Date(hoy)
     d.setDate(hoy.getDate() - i)
-    const key = d.toISOString().split('T')[0]
+    const key = getLocalDateString(d)
     const dia = porFecha[key]
     if (!dia || dia.tomados < dia.total || dia.total === 0) break
     racha++
