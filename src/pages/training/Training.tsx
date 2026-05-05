@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Dumbbell, Plus, Play, Settings, Hourglass } from 'lucide-react'
+import { Dumbbell, Plus, Settings, Hourglass, ChevronRight } from 'lucide-react'
 import { useLayoutCtx } from '../../layout/context'
 import { useActiveRoutine } from '../../hooks/useActiveRoutine'
 import HintButton from '../../components/HintButton'
 import ConfirmModal from '../../components/ConfirmModal'
 import {
-  createRoutine, setActiveRoutine, startWorkout,
+  createRoutine, setActiveRoutine,
   getInProgressWorkout, abandonWorkout,
   Workout,
 } from '../../lib/training'
@@ -61,19 +61,6 @@ export default function Training() {
     }
   }
 
-  async function handleStart(routineDayId: string) {
-    setBusy(true)
-    setError(null)
-    try {
-      const { workoutId } = await startWorkout(session.user.id, routineDayId)
-      navigate(`/training/workout/${workoutId}`)
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not start workout')
-    } finally {
-      setBusy(false)
-    }
-  }
-
   async function handleDiscardInProgress() {
     if (!inProgress) return
     setDiscardOpen(false)
@@ -97,7 +84,7 @@ export default function Training() {
         <div className="ml-auto">
           <HintButton
             label="Training hint"
-            text="Build a weekly routine, then start a workout from today's plan. Sets autosave as you log them."
+            text="Build a weekly routine. Tap any exercise on today's plan to see how to do it and which variants you can use as alternatives."
           />
         </div>
       </div>
@@ -132,7 +119,7 @@ export default function Training() {
         <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 text-center">
           <p className="text-base font-semibold text-slate-200 mb-1">Build your weekly routine</p>
           <p className="text-sm text-slate-500 mb-5">
-            Pick days, add exercises, then come back to start a workout.
+            Pick days, add exercises, then tap any to learn how to do it.
           </p>
           <button
             onClick={() => setCreating(true)}
@@ -190,26 +177,23 @@ export default function Training() {
             {isRestDay ? (
               <p className="text-sm text-slate-500">No exercises planned for today.</p>
             ) : (
-              <>
-                <ul className="space-y-2 mb-5">
-                  {todayExercises.map(ex => (
-                    <li key={ex.id} className="flex items-center justify-between p-3 rounded-xl bg-surface-2 border border-white/[0.06]">
-                      <span className="text-sm text-slate-200 font-medium truncate">{ex.name}</span>
-                      <span className="text-xs text-slate-500 shrink-0 ml-3">
-                        {ex.sets} × {ex.rep_range || '—'}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => todayDay && handleStart(todayDay.id)}
-                  disabled={busy || !!inProgress}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition disabled:opacity-50">
-                  <Play size={16} />
-                  {inProgress ? 'Resume the active workout above' : 'Start workout'}
-                </button>
-                {error && <p className="text-xs text-rose-400 mt-3 text-center">{error}</p>}
-              </>
+              <ul className="space-y-2">
+                {todayExercises.map(ex => (
+                  <li key={ex.id}>
+                    <Link
+                      to={`/training/exercise/${encodeURIComponent(ex.name)}`}
+                      className="flex items-center gap-3 p-3 rounded-xl bg-surface-2 border border-white/[0.06] hover:border-brand/30 transition group">
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-slate-200 font-medium truncate">{ex.name}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          {ex.sets} × {ex.rep_range || '—'}
+                        </p>
+                      </div>
+                      <ChevronRight size={16} className="text-slate-600 group-hover:text-brand transition shrink-0" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
 

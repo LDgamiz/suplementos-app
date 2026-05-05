@@ -14,6 +14,7 @@ import Onboarding from './pages/Onboarding'
 import Training from './pages/training/Training'
 import RoutineEditor from './pages/training/RoutineEditor'
 import WorkoutTracker from './pages/training/WorkoutTracker'
+import ExerciseInfo from './pages/training/ExerciseInfo'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/training" element={<Training />} />
         <Route path="/training/routine" element={<RoutineEditor />} />
         <Route path="/training/workout/:id" element={<WorkoutTracker />} />
+        <Route path="/training/exercise/:name" element={<ExerciseInfo />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/support" element={<SupportUs />} />
         <Route path="/admin" element={<AdminLayout />}>
