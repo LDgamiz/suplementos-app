@@ -4,6 +4,7 @@ import { Session } from '@supabase/supabase-js'
 import { Zap, Play, Trash2, Plus, Search } from 'lucide-react'
 import { SuplementoCat } from './hooks/useSuplementos'
 import HintButton from './components/HintButton'
+import { LIMITS, ValidationError, requireString, boundedNumber } from './lib/validation'
 
 interface SupplementoRutina {
   suplemento_id: string
@@ -134,13 +135,23 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
   const crearEnCatalogoParaFila = async (index: number) => {
     const cat = filas[index].nuevoCat
     if (!cat.name || !cat.category || !cat.recommended_dose || !cat.dose_unit) return
+    let cleanName: string, cleanCategory: string, cleanUnit: string, cleanDose: number
+    try {
+      cleanName = requireString(cat.name, LIMITS.supplementName.min, LIMITS.supplementName.max, 'Name')
+      cleanCategory = requireString(cat.category, LIMITS.supplementCategory.min, LIMITS.supplementCategory.max, 'Category')
+      cleanUnit = requireString(cat.dose_unit, LIMITS.doseUnit.min, LIMITS.doseUnit.max, 'Unit')
+      cleanDose = boundedNumber(cat.recommended_dose, LIMITS.doseAmount.min, LIMITS.doseAmount.max, 'Dose amount')
+    } catch (e) {
+      console.warn(e instanceof ValidationError ? e.message : e)
+      return
+    }
     const { data, error } = await supabase
       .from('suplementos_cat')
       .insert([{
-        name: cat.name,
-        category: cat.category,
-        recommended_dose: parseFloat(cat.recommended_dose),
-        dose_unit: cat.dose_unit,
+        name: cleanName,
+        category: cleanCategory,
+        recommended_dose: cleanDose,
+        dose_unit: cleanUnit,
         status: 'pending',
         created_by: session.user.id,
       }])
@@ -166,17 +177,33 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
   }
 
   const guardarRutina = async () => {
-    if (!nombreRutina) return
+    let cleanName: string
+    try {
+      cleanName = requireString(nombreRutina, LIMITS.routineName.min, LIMITS.routineName.max, 'Routine name')
+    } catch {
+      return
+    }
+    const filasValidas = filas.filter(f => f.suplemento_id && f.dosis.trim().length > 0)
+    let insertar: Array<{ rutina_id: number; suplemento_id: string; nombre: string; dosis: string }>
+    try {
+      insertar = filasValidas.map(f => ({
+        rutina_id: 0,
+        suplemento_id: f.suplemento_id,
+        nombre: f.nombre,
+        dosis: requireString(f.dosis, LIMITS.dosis.min, LIMITS.dosis.max, 'Dose'),
+      }))
+    } catch {
+      return
+    }
+
     const { data, error } = await supabase
       .from('rutinas')
-      .insert([{ nombre: nombreRutina, user_id: session.user.id }])
+      .insert([{ nombre: cleanName, user_id: session.user.id }])
       .select()
     if (error) return
 
     const rutinaId = data[0].id
-    const insertar = filas
-      .filter(f => f.suplemento_id && f.dosis)
-      .map(f => ({ rutina_id: rutinaId, suplemento_id: f.suplemento_id, nombre: f.nombre, dosis: f.dosis }))
+    insertar.forEach(row => { row.rutina_id = rutinaId })
 
     await supabase.from('rutina_suplementos').insert(insertar)
     setNombreRutina('')
@@ -243,6 +270,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
         placeholder="Routine name (e.g. Morning stack)"
         value={nombreRutina}
         onChange={e => setNombreRutina(e.target.value)}
+        maxLength={LIMITS.routineName.max}
         className={`${inputClass} mb-4`}
       />
 
@@ -256,6 +284,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
                 value={fila.busqueda}
                 onChange={e => actualizarBusqueda(index, e.target.value)}
                 onBlur={() => setTimeout(() => cerrarDropdown(index), 150)}
+                maxLength={LIMITS.supplementName.max}
                 className={`${inputClass} pl-8`}
               />
               {fila.abierto && (
@@ -289,6 +318,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
               placeholder="Dose"
               value={fila.dosis}
               onChange={e => actualizarDosis(index, e.target.value)}
+              maxLength={LIMITS.dosis.max}
               className={dosisClass}
             />
           </div>
@@ -300,18 +330,23 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
                 placeholder="Name"
                 value={fila.nuevoCat.name}
                 onChange={e => actualizarNuevoCat(index, 'name', e.target.value)}
+                maxLength={LIMITS.supplementName.max}
                 className={`${miniInput} mb-2`}
               />
               <input
                 placeholder="Category (e.g. vitamin, mineral, protein)"
                 value={fila.nuevoCat.category}
                 onChange={e => actualizarNuevoCat(index, 'category', e.target.value)}
+                maxLength={LIMITS.supplementCategory.max}
                 className={`${miniInput} mb-2`}
               />
               <div className="flex gap-2 mb-3">
                 <input
                   placeholder="Dose amount"
                   type="number"
+                  min={LIMITS.doseAmount.min}
+                  max={LIMITS.doseAmount.max}
+                  step="any"
                   value={fila.nuevoCat.recommended_dose}
                   onChange={e => actualizarNuevoCat(index, 'recommended_dose', e.target.value)}
                   className={miniInput}
@@ -320,6 +355,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
                   placeholder="Unit (mg, mcg, g...)"
                   value={fila.nuevoCat.dose_unit}
                   onChange={e => actualizarNuevoCat(index, 'dose_unit', e.target.value)}
+                  maxLength={LIMITS.doseUnit.max}
                   className={miniInput}
                 />
               </div>

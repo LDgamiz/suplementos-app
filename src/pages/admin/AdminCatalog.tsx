@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Plus, Trash2, Pencil, Check, X } from 'lucide-react'
 import { supabase } from '../../supabaseClient'
 import ConfirmModal from '../../components/ConfirmModal'
+import { LIMITS, ValidationError, requireString, boundedNumber } from '../../lib/validation'
 
 type Status = 'pending' | 'approved' | 'rejected'
 type Tab = Status | 'all'
@@ -66,14 +67,24 @@ export default function AdminCatalog() {
 
   async function crear() {
     if (!form.name || !form.category || !form.recommended_dose || !form.dose_unit) return
+    let cleanName: string, cleanCategory: string, cleanUnit: string, cleanDose: number
+    try {
+      cleanName = requireString(form.name, LIMITS.supplementName.min, LIMITS.supplementName.max, 'Name')
+      cleanCategory = requireString(form.category, LIMITS.supplementCategory.min, LIMITS.supplementCategory.max, 'Category')
+      cleanUnit = requireString(form.dose_unit, LIMITS.doseUnit.min, LIMITS.doseUnit.max, 'Unit')
+      cleanDose = boundedNumber(form.recommended_dose, LIMITS.doseAmount.min, LIMITS.doseAmount.max, 'Dose amount')
+    } catch (e) {
+      if (e instanceof ValidationError) alert(e.message)
+      return
+    }
     setBusy(true)
     const { data, error } = await supabase
       .from('suplementos_cat')
       .insert([{
-        name: form.name,
-        category: form.category,
-        recommended_dose: parseFloat(form.recommended_dose),
-        dose_unit: form.dose_unit,
+        name: cleanName,
+        category: cleanCategory,
+        recommended_dose: cleanDose,
+        dose_unit: cleanUnit,
         status: 'approved',
       }])
       .select()
@@ -97,23 +108,33 @@ export default function AdminCatalog() {
 
   async function guardarEdicion() {
     if (!editId) return
+    let cleanName: string, cleanCategory: string, cleanUnit: string, cleanDose: number
+    try {
+      cleanName = requireString(editForm.name, LIMITS.supplementName.min, LIMITS.supplementName.max, 'Name')
+      cleanCategory = requireString(editForm.category, LIMITS.supplementCategory.min, LIMITS.supplementCategory.max, 'Category')
+      cleanUnit = requireString(editForm.dose_unit, LIMITS.doseUnit.min, LIMITS.doseUnit.max, 'Unit')
+      cleanDose = boundedNumber(editForm.recommended_dose, LIMITS.doseAmount.min, LIMITS.doseAmount.max, 'Dose amount')
+    } catch (e) {
+      if (e instanceof ValidationError) alert(e.message)
+      return
+    }
     setBusy(true)
     const { error } = await supabase
       .from('suplementos_cat')
       .update({
-        name: editForm.name,
-        category: editForm.category,
-        recommended_dose: parseFloat(editForm.recommended_dose),
-        dose_unit: editForm.dose_unit
+        name: cleanName,
+        category: cleanCategory,
+        recommended_dose: cleanDose,
+        dose_unit: cleanUnit
       })
       .eq('id', editId)
     if (!error) {
       setItems(prev => prev.map(c => c.id === editId ? {
         ...c,
-        name: editForm.name,
-        category: editForm.category,
-        recommended_dose: parseFloat(editForm.recommended_dose),
-        dose_unit: editForm.dose_unit
+        name: cleanName,
+        category: cleanCategory,
+        recommended_dose: cleanDose,
+        dose_unit: cleanUnit
       } : c).sort((a, b) => a.name.localeCompare(b.name)))
       setEditId(null)
     }
@@ -164,10 +185,10 @@ export default function AdminCatalog() {
           <Plus size={14} className="text-brand" /> New catalog entry
         </h2>
         <div className="grid grid-cols-2 gap-2 mb-2">
-          <input placeholder="Name" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} className={inputClass} />
-          <input placeholder="Category" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} className={inputClass} />
-          <input placeholder="Dose" type="number" value={form.recommended_dose} onChange={e => setForm(p => ({ ...p, recommended_dose: e.target.value }))} className={inputClass} />
-          <input placeholder="Unit (mg, mcg...)" value={form.dose_unit} onChange={e => setForm(p => ({ ...p, dose_unit: e.target.value }))} className={inputClass} />
+          <input placeholder="Name" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} maxLength={LIMITS.supplementName.max} className={inputClass} />
+          <input placeholder="Category" value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))} maxLength={LIMITS.supplementCategory.max} className={inputClass} />
+          <input placeholder="Dose" type="number" min={LIMITS.doseAmount.min} max={LIMITS.doseAmount.max} step="any" value={form.recommended_dose} onChange={e => setForm(p => ({ ...p, recommended_dose: e.target.value }))} className={inputClass} />
+          <input placeholder="Unit (mg, mcg...)" value={form.dose_unit} onChange={e => setForm(p => ({ ...p, dose_unit: e.target.value }))} maxLength={LIMITS.doseUnit.max} className={inputClass} />
         </div>
         <button
           onClick={crear}
@@ -220,12 +241,12 @@ export default function AdminCatalog() {
               <tbody>
                 {visibles.map(c => editId === c.id ? (
                   <tr key={c.id} className="border-b border-white/[0.04] last:border-0 bg-brand/[0.04]">
-                    <td className="px-4 py-2"><input className={inputClass} value={editForm.name} onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))} /></td>
-                    <td className="px-4 py-2"><input className={inputClass} value={editForm.category} onChange={e => setEditForm(p => ({ ...p, category: e.target.value }))} /></td>
+                    <td className="px-4 py-2"><input className={inputClass} value={editForm.name} onChange={e => setEditForm(p => ({ ...p, name: e.target.value }))} maxLength={LIMITS.supplementName.max} /></td>
+                    <td className="px-4 py-2"><input className={inputClass} value={editForm.category} onChange={e => setEditForm(p => ({ ...p, category: e.target.value }))} maxLength={LIMITS.supplementCategory.max} /></td>
                     <td className="px-4 py-2">
                       <div className="flex gap-1">
-                        <input type="number" className={inputClass} value={editForm.recommended_dose} onChange={e => setEditForm(p => ({ ...p, recommended_dose: e.target.value }))} />
-                        <input className={inputClass} value={editForm.dose_unit} onChange={e => setEditForm(p => ({ ...p, dose_unit: e.target.value }))} />
+                        <input type="number" min={LIMITS.doseAmount.min} max={LIMITS.doseAmount.max} step="any" className={inputClass} value={editForm.recommended_dose} onChange={e => setEditForm(p => ({ ...p, recommended_dose: e.target.value }))} />
+                        <input className={inputClass} value={editForm.dose_unit} onChange={e => setEditForm(p => ({ ...p, dose_unit: e.target.value }))} maxLength={LIMITS.doseUnit.max} />
                       </div>
                     </td>
                     <td className="px-4 py-2 text-slate-500">—</td>

@@ -3,6 +3,7 @@ import { Bell, BellOff, Clock, Check } from 'lucide-react'
 import { Session } from '@supabase/supabase-js'
 import { supabase } from '../supabaseClient'
 import { subscribeToPush, unsubscribeFromPush, pushSupported } from '../lib/push'
+import { LIMITS, trimToMax } from '../lib/validation'
 import HintButton from './HintButton'
 
 interface Props {
@@ -40,7 +41,7 @@ export default function Notificaciones({ session }: Props) {
     setGuardando(true)
     setError(null)
     try {
-      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+      const tz = trimToMax(Intl.DateTimeFormat().resolvedOptions().timeZone, LIMITS.timezone.max)
       if (activa) {
         await subscribeToPush(session.user.id)
       } else {

@@ -3,6 +3,7 @@ import { Plus, Search } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import { SuplementoCat } from '../hooks/useSuplementos'
 import HintButton from './HintButton'
+import { LIMITS, ValidationError, requireString, boundedNumber } from '../lib/validation'
 
 interface Props {
   onAgregar: (suplemento_id: string, dosis: string) => void
@@ -67,13 +68,24 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
 
   const crearEnCatalogo = async () => {
     if (!nuevoCat.name || !nuevoCat.category || !nuevoCat.recommended_dose || !nuevoCat.dose_unit) return
+    let cleanName: string, cleanCategory: string, cleanUnit: string, cleanDose: number
+    try {
+      cleanName = requireString(nuevoCat.name, LIMITS.supplementName.min, LIMITS.supplementName.max, 'Name')
+      cleanCategory = requireString(nuevoCat.category, LIMITS.supplementCategory.min, LIMITS.supplementCategory.max, 'Category')
+      cleanUnit = requireString(nuevoCat.dose_unit, LIMITS.doseUnit.min, LIMITS.doseUnit.max, 'Unit')
+      cleanDose = boundedNumber(nuevoCat.recommended_dose, LIMITS.doseAmount.min, LIMITS.doseAmount.max, 'Dose amount')
+    } catch (e) {
+      setSubmitMsg(e instanceof ValidationError ? e.message : 'Invalid input')
+      setTimeout(() => setSubmitMsg(null), 5000)
+      return
+    }
     const { data, error } = await supabase
       .from('suplementos_cat')
       .insert([{
-        name: nuevoCat.name,
-        category: nuevoCat.category,
-        recommended_dose: parseFloat(nuevoCat.recommended_dose),
-        dose_unit: nuevoCat.dose_unit,
+        name: cleanName,
+        category: cleanCategory,
+        recommended_dose: cleanDose,
+        dose_unit: cleanUnit,
         status: 'pending',
         created_by: userId,
       }])
@@ -122,6 +134,7 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
             value={busqueda}
             onChange={e => { setBusqueda(e.target.value); setSeleccionado(null); setCreandoNuevo(false) }}
             onFocus={() => busqueda.length >= 2 && !seleccionado && setAbierto(true)}
+            maxLength={LIMITS.supplementName.max}
             className={`${inputClass} pl-9`}
           />
         </div>
@@ -167,18 +180,23 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
             placeholder="Name"
             value={nuevoCat.name}
             onChange={e => setNuevoCat(prev => ({ ...prev, name: e.target.value }))}
+            maxLength={LIMITS.supplementName.max}
             className={`${miniInput} mb-2`}
           />
           <input
             placeholder="Category (e.g. vitamin, mineral, protein)"
             value={nuevoCat.category}
             onChange={e => setNuevoCat(prev => ({ ...prev, category: e.target.value }))}
+            maxLength={LIMITS.supplementCategory.max}
             className={`${miniInput} mb-2`}
           />
           <div className="flex gap-2 mb-3">
             <input
               placeholder="Dose amount"
               type="number"
+              min={LIMITS.doseAmount.min}
+              max={LIMITS.doseAmount.max}
+              step="any"
               value={nuevoCat.recommended_dose}
               onChange={e => setNuevoCat(prev => ({ ...prev, recommended_dose: e.target.value }))}
               className={miniInput}
@@ -187,6 +205,7 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
               placeholder="Unit (mg, mcg, g...)"
               value={nuevoCat.dose_unit}
               onChange={e => setNuevoCat(prev => ({ ...prev, dose_unit: e.target.value }))}
+              maxLength={LIMITS.doseUnit.max}
               className={miniInput}
             />
           </div>
@@ -209,6 +228,7 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
         placeholder="Dose (e.g. 16 mg)"
         value={dosis}
         onChange={e => setDosis(e.target.value)}
+        maxLength={LIMITS.dosis.max}
         className={`${inputClass} mb-4`}
       />
       {submitMsg && (

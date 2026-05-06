@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabaseClient'
 import { Session } from '@supabase/supabase-js'
+import { LIMITS, requireString } from '../lib/validation'
 
 export interface SuplementoCat {
   id: string
@@ -42,10 +43,11 @@ export function useSuplementos(session: Session | null, fecha: string) {
   }
 
   const agregarSuplemento = async (suplemento_id: string, dosis: string) => {
-    if (!suplemento_id || !dosis) return
+    if (!suplemento_id) return
+    const cleanDosis = requireString(dosis, LIMITS.dosis.min, LIMITS.dosis.max, 'Dose')
     const { data, error } = await supabase
       .from('suplementos')
-      .insert([{ suplemento_id, dosis, tomado: false, user_id: session!.user.id, fecha }])
+      .insert([{ suplemento_id, dosis: cleanDosis, tomado: false, user_id: session!.user.id, fecha }])
       .select('*, suplementos_cat(name, category)')
     if (!error) setSuplementos(prev => [...prev, data[0] as Suplemento])
   }
@@ -79,19 +81,20 @@ export function useSuplementos(session: Session | null, fecha: string) {
   }
 
   const editarSuplemento = async (id: number, dosis: string) => {
+    const cleanDosis = requireString(dosis, LIMITS.dosis.min, LIMITS.dosis.max, 'Dose')
     const { error } = await supabase
       .from('suplementos')
-      .update({ dosis })
+      .update({ dosis: cleanDosis })
       .eq('id', id)
     if (!error) {
-      setSuplementos(prev => prev.map(s => s.id === id ? { ...s, dosis } : s))
+      setSuplementos(prev => prev.map(s => s.id === id ? { ...s, dosis: cleanDosis } : s))
     }
   }
 
   const aplicarRutina = async (suplementosDeRutina: { suplemento_id: string; dosis: string }[]) => {
     const filas = suplementosDeRutina.map(s => ({
       suplemento_id: s.suplemento_id,
-      dosis: s.dosis,
+      dosis: requireString(s.dosis, LIMITS.dosis.min, LIMITS.dosis.max, 'Dose'),
       tomado: false,
       user_id: session!.user.id,
       fecha

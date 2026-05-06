@@ -1,4 +1,5 @@
 import { supabase } from '../supabaseClient'
+import { LIMITS, requireString, optionalString, boundedNumber } from './validation'
 
 // ---------- Types -----------------------------------------------------------
 
@@ -100,9 +101,10 @@ export async function getActiveRoutine(userId: string): Promise<Routine | null> 
 }
 
 export async function createRoutine(userId: string, name: string): Promise<Routine> {
+  const cleanName = requireString(name, LIMITS.routineName.min, LIMITS.routineName.max, 'Routine name')
   const { data, error } = await supabase
     .from('routines')
-    .insert({ user_id: userId, name, is_active: false })
+    .insert({ user_id: userId, name: cleanName, is_active: false })
     .select('*')
     .single()
   if (error) throw error
@@ -110,7 +112,8 @@ export async function createRoutine(userId: string, name: string): Promise<Routi
 }
 
 export async function renameRoutine(id: string, name: string): Promise<void> {
-  const { error } = await supabase.from('routines').update({ name }).eq('id', id)
+  const cleanName = requireString(name, LIMITS.routineName.min, LIMITS.routineName.max, 'Routine name')
+  const { error } = await supabase.from('routines').update({ name: cleanName }).eq('id', id)
   if (error) throw error
 }
 
@@ -153,10 +156,12 @@ export async function listRoutineDays(routineId: string): Promise<RoutineDay[]> 
 export async function upsertRoutineDay(
   userId: string, routineId: string, dayOfWeek: number, name: string | null
 ): Promise<RoutineDay> {
+  if (dayOfWeek < 0 || dayOfWeek > 6) throw new Error('day_of_week must be 0-6')
+  const cleanName = optionalString(name, LIMITS.routineDayName.max)
   const { data, error } = await supabase
     .from('routine_days')
     .upsert(
-      { user_id: userId, routine_id: routineId, day_of_week: dayOfWeek, name },
+      { user_id: userId, routine_id: routineId, day_of_week: dayOfWeek, name: cleanName },
       { onConflict: 'routine_id,day_of_week' }
     )
     .select('*')
@@ -200,16 +205,20 @@ export async function addRoutineExercise(input: {
   order_index?: number
   notes?: string | null
 }): Promise<RoutineExercise> {
+  const cleanName = requireString(input.name, LIMITS.exerciseName.min, LIMITS.exerciseName.max, 'Exercise name')
+  const cleanSets = boundedNumber(input.sets, LIMITS.exerciseSets.min, LIMITS.exerciseSets.max, 'Sets')
+  const cleanRepRange = optionalString(input.rep_range, LIMITS.repRange.max)
+  const cleanNotes = optionalString(input.notes, LIMITS.notes.max)
   const { data, error } = await supabase
     .from('routine_exercises')
     .insert({
       user_id: input.userId,
       routine_day_id: input.routineDayId,
-      name: input.name,
-      sets: input.sets,
-      rep_range: input.rep_range ?? null,
+      name: cleanName,
+      sets: cleanSets,
+      rep_range: cleanRepRange,
       order_index: input.order_index ?? 0,
-      notes: input.notes ?? null,
+      notes: cleanNotes,
     })
     .select('*')
     .single()
@@ -221,7 +230,20 @@ export async function updateRoutineExercise(
   id: string,
   patch: Partial<Pick<RoutineExercise, 'name' | 'sets' | 'rep_range' | 'order_index' | 'notes'>>
 ): Promise<void> {
-  const { error } = await supabase.from('routine_exercises').update(patch).eq('id', id)
+  const validated: typeof patch = { ...patch }
+  if (patch.name !== undefined) {
+    validated.name = requireString(patch.name, LIMITS.exerciseName.min, LIMITS.exerciseName.max, 'Exercise name')
+  }
+  if (patch.sets !== undefined) {
+    validated.sets = boundedNumber(patch.sets, LIMITS.exerciseSets.min, LIMITS.exerciseSets.max, 'Sets')
+  }
+  if (patch.rep_range !== undefined) {
+    validated.rep_range = optionalString(patch.rep_range, LIMITS.repRange.max)
+  }
+  if (patch.notes !== undefined) {
+    validated.notes = optionalString(patch.notes, LIMITS.notes.max)
+  }
+  const { error } = await supabase.from('routine_exercises').update(validated).eq('id', id)
   if (error) throw error
 }
 
@@ -346,7 +368,14 @@ export async function updateSet(
   id: string,
   patch: Partial<Pick<WorkoutSet, 'reps' | 'weight' | 'completed'>>
 ): Promise<void> {
-  const { error } = await supabase.from('workout_sets').update(patch).eq('id', id)
+  const validated: typeof patch = { ...patch }
+  if (patch.reps !== undefined && patch.reps !== null) {
+    validated.reps = boundedNumber(patch.reps, LIMITS.exerciseReps.min, LIMITS.exerciseReps.max, 'Reps')
+  }
+  if (patch.weight !== undefined && patch.weight !== null) {
+    validated.weight = boundedNumber(patch.weight, LIMITS.exerciseWeight.min, LIMITS.exerciseWeight.max, 'Weight')
+  }
+  const { error } = await supabase.from('workout_sets').update(validated).eq('id', id)
   if (error) throw error
 }
 

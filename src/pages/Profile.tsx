@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient'
 import { useLayoutCtx } from '../layout/context'
 import { uploadAvatar } from '../lib/avatar'
 import { getLocalDateString } from '../lib/dates'
+import { LIMITS, isUsername } from '../lib/validation'
 
 interface FormState {
   full_name: string
@@ -76,7 +77,9 @@ export default function Profile() {
         return 'Birth date must be a real date no later than today.'
       }
     }
-    if (form.bio && form.bio.length > 500) return 'Bio is too long (max 500 characters).'
+    if (form.full_name.length > LIMITS.fullName.max) return `Full name must be at most ${LIMITS.fullName.max} characters.`
+    if (form.country.length > LIMITS.country.max) return `Country must be at most ${LIMITS.country.max} characters.`
+    if (form.bio && form.bio.length > LIMITS.bio.max) return `Bio is too long (max ${LIMITS.bio.max} characters).`
     return null
   }
 
@@ -129,6 +132,10 @@ export default function Profile() {
   async function guardarUsername() {
     const u = username.trim().toLowerCase()
     if (!u) return
+    if (!isUsername(u)) {
+      setUsernameMsg('Username must be 3-30 chars (a-z, 0-9, _)')
+      return
+    }
     setUsernameMsg(null)
     const { error } = await supabase
       .from('perfiles')
@@ -199,7 +206,7 @@ export default function Profile() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="sm:col-span-2">
             <label className={labelClass}>Full name</label>
-            <input value={form.full_name} onChange={update('full_name')} className={inputClass} />
+            <input value={form.full_name} onChange={update('full_name')} maxLength={LIMITS.fullName.max} className={inputClass} />
           </div>
           <div>
             <label className={labelClass}>Birth date</label>
@@ -240,7 +247,7 @@ export default function Profile() {
           </div>
           <div>
             <label className={labelClass}>Country</label>
-            <input value={form.country} onChange={update('country')} className={inputClass} />
+            <input value={form.country} onChange={update('country')} maxLength={LIMITS.country.max} className={inputClass} />
           </div>
           <div>
             <label className={labelClass}>Goal</label>
@@ -269,7 +276,7 @@ export default function Profile() {
               value={form.bio}
               onChange={update('bio')}
               rows={3}
-              maxLength={500}
+              maxLength={LIMITS.bio.max}
               className={`${inputClass} resize-none`}
             />
           </div>
@@ -323,6 +330,7 @@ export default function Profile() {
               placeholder="Pick a username (a-z, 0-9, _)"
               value={username}
               onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+              maxLength={LIMITS.username.max}
               className={`${inputClass} mb-3`}
             />
             <button

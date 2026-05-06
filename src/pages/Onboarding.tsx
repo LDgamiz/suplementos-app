@@ -3,6 +3,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { Pill } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import { useLayoutCtx } from '../layout/context'
+import { LIMITS, isUsername, trimToMax } from '../lib/validation'
 
 const inputClass =
   'w-full px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition'
@@ -25,7 +26,8 @@ export default function Onboarding() {
   function validate(): string | null {
     const u = username.trim().toLowerCase()
     if (!u) return 'Pick a username to continue.'
-    if (!/^[a-z0-9_]{3,30}$/.test(u)) return 'Username must be 3–30 characters: a-z, 0-9 or _'
+    if (!isUsername(u)) return 'Username must be 3–30 characters: a-z, 0-9 or _'
+    if (fullName.length > LIMITS.fullName.max) return `Full name must be at most ${LIMITS.fullName.max} characters.`
     return null
   }
 
@@ -39,7 +41,7 @@ export default function Onboarding() {
       .upsert({
         user_id: session.user.id,
         username: username.trim().toLowerCase(),
-        full_name: fullName.trim() || null,
+        full_name: trimToMax(fullName, LIMITS.fullName.max) || null,
         goal: goal || null,
         activity: activity || null,
       }, { onConflict: 'user_id' })
@@ -76,6 +78,7 @@ export default function Onboarding() {
             placeholder="pick-a-handle"
             value={username}
             onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
+            maxLength={LIMITS.username.max}
             className={inputClass}
             autoFocus
           />
@@ -96,6 +99,7 @@ export default function Onboarding() {
                 placeholder="Jane Doe"
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
+                maxLength={LIMITS.fullName.max}
                 className={inputClass}
               />
             </div>

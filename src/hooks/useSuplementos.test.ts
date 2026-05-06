@@ -85,8 +85,12 @@ describe('useSuplementos', () => {
     const { result } = renderHook(() => useSuplementos(session, '2026-04-28'))
     await waitFor(() => expect(result.current.suplementos).toEqual([]))
 
+    // Missing suplemento_id is silently no-op
     await act(async () => { await result.current.agregarSuplemento('', '500mg') })
-    await act(async () => { await result.current.agregarSuplemento('cat-1', '') })
+    // Missing dosis throws (validation), still no insert
+    await act(async () => {
+      await expect(result.current.agregarSuplemento('cat-1', '')).rejects.toThrow(/Dose is required/)
+    })
 
     // No second from() call beyond initial load
     expect(mockClient.from).toHaveBeenCalledTimes(1)
