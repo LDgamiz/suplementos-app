@@ -111,7 +111,7 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
     'w-full px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition'
 
   const miniInput =
-    'w-full px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+    'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
 
   return (
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
@@ -150,7 +150,7 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
                     <span className="text-slate-200 text-sm font-medium">{cat.name}</span>
                     <span className="flex items-center gap-2">
                       {cat.status === 'pending' && (
-                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                        <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-warn/10 text-warn border border-warn/20">
                           pending
                         </span>
                       )}
@@ -217,7 +217,7 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
             </button>
             <button
               onClick={crearEnCatalogo}
-              className="flex-1 py-2 text-xs rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition">
+              className="flex-1 py-2 text-xs rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition">
               Add to catalog
             </button>
           </div>
@@ -232,14 +232,14 @@ export default function AgregarSuplemento({ onAgregar, userId }: Props) {
         className={`${inputClass} mb-4`}
       />
       {submitMsg && (
-        <p className="text-xs text-amber-400 mb-3 px-3 py-2 bg-amber-400/10 border border-amber-400/20 rounded-xl">
+        <p className="text-xs text-warn mb-3 px-3 py-2 bg-warn/10 border border-warn/20 rounded-xl">
           {submitMsg}
         </p>
       )}
       <button
         onClick={handleAgregar}
         disabled={!seleccionado || !dosis}
-        className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-40 disabled:cursor-not-allowed text-[#0A0E1A] font-bold rounded-xl transition flex items-center justify-center gap-2">
+        className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-40 disabled:cursor-not-allowed text-bg font-bold rounded-xl transition flex items-center justify-center gap-2">
         <Plus size={16} />
         Add
       </button>

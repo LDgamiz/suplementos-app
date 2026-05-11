@@ -1,22 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @theme {
+  /* brand */
   --color-brand: #00C896;
   --color-brand-dark: #009E78;
+
+  /* surfaces (legacy aliases retained) */
   --color-surface: #0F172A;
   --color-surface-2: #1E293B;
+
+  /* semantic background + elevation */
+  --color-bg: #0A0E1A;
+  --color-elev-1: #0F172A;
+  --color-elev-2: #1E293B;
+  --color-elev-3: #2A3447;
+
+  /* semantic status */
+  --color-success: #00C896;
+  --color-warn: #F59E0B;
+  --color-danger: #FB7185;
+  --color-streak: #F59E0B;
+  --color-pr: #C6F432;
+
+  /* typography */
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+  /* radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* elevation */
+  --shadow-elev-1: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-elev-2: 0 8px 24px rgb(0 0 0 / 0.4);
+  --shadow-elev-3: 0 20px 50px rgb(0 0 0 / 0.6);
 }
 
 @layer base {
   body {
-    background-color: #0A0E1A;
+    background-color: var(--color-bg);
     color: #CBD5E1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   input[type="date"] {
     color-scheme: dark;
+  }
+}
+
+@layer components {
+  .label-eyebrow {
+    font-size: 0.6875rem;       /* 11px */
+    line-height: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+    color: #64748B;             /* slate-500 */
   }
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+﻿import { useState, useEffect, useRef } from 'react'
 import { supabase } from './supabaseClient'
 import { Session } from '@supabase/supabase-js'
 import { Zap, Play, Trash2, Plus, Search } from 'lucide-react'
@@ -218,13 +218,13 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
   }
 
   const inputClass =
-    'w-full px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+    'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
 
   const dosisClass =
-    'w-28 shrink-0 px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+    'w-28 shrink-0 px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
 
   const miniInput =
-    'w-full px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+    'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
 
   return (
     <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
@@ -250,7 +250,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
               <div className="flex gap-2">
                 <button
                   onClick={() => onAplicarRutina(rutina.rutina_suplementos.map(s => ({ suplemento_id: s.suplemento_id, dosis: s.dosis })))}
-                  className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition">
+                  className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition">
                   <Play size={13} />
                   Apply
                 </button>
@@ -367,7 +367,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
                 </button>
                 <button
                   onClick={() => crearEnCatalogoParaFila(index)}
-                  className="flex-1 py-2 text-xs rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition">
+                  className="flex-1 py-2 text-xs rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition">
                   Add to catalog
                 </button>
               </div>
@@ -384,7 +384,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
       </button>
       <button
         onClick={guardarRutina}
-        className="w-full py-2.5 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition">
+        className="w-full py-2.5 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition">
         Save routine
       </button>
     </div>

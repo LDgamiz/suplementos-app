@@ -22,7 +22,7 @@ export default function AdminLayout() {
         <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
           <Shield size={18} className="text-brand" />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">Admin</h1>
+        <h1 className="font-display text-xl font-bold text-white tracking-tight">Admin</h1>
       </div>
 
       <div className="flex gap-2 mb-5 bg-surface border border-white/[0.08] rounded-2xl p-1.5">

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Pill } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import { mapAuthError } from '../lib/authErrors'
 
@@ -58,10 +57,13 @@ export default function ResetPassword() {
     >
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand/10 border border-brand/20 mb-5">
-            <Pill size={30} className="text-brand" />
-          </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">StackForge</h1>
+          <img
+            src="/Logo.png"
+            alt=""
+            aria-hidden="true"
+            className="inline-block w-16 h-16 rounded-2xl mb-5 object-cover"
+          />
+          <h1 className="font-display text-3xl font-bold text-white tracking-tight">StackForge</h1>
           <p className="text-slate-400 text-sm mt-2">Reset your password</p>
         </div>
 
@@ -89,7 +91,7 @@ export default function ResetPassword() {
               <button
                 onClick={submit}
                 disabled={busy}
-                className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-[#0A0E1A] font-bold rounded-xl transition">
+                className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-bg font-bold rounded-xl transition">
                 {busy ? 'Updating...' : 'Update password'}
               </button>
               {error && <p className="text-center text-sm text-rose-400 mt-3">{error}</p>}

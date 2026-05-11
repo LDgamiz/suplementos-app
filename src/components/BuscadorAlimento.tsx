@@ -46,7 +46,7 @@ export default function BuscadorAlimento({ onAgregar }: Props) {
             </div>
             <button
               onClick={() => onAgregar(producto.product_name, producto.nutrition_data_per)}
-              className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
+              className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
               <Plus size={14} />
               Agregar
             </button>

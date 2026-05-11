@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Download, X } from 'lucide-react'
 
 interface BeforeInstallPromptEvent extends Event {
@@ -49,7 +49,7 @@ export default function InstallPrompt() {
         </div>
         <button
           onClick={install}
-          className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
+          className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
           Install
         </button>
         <button

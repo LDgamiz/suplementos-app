@@ -19,10 +19,13 @@ export default function SideMenu({ isAdmin, email, onSignOut }: Props) {
   return (
     <aside className="hidden md:flex flex-col w-60 shrink-0 h-screen sticky top-0 px-4 py-6 border-r border-white/[0.06] bg-surface/30">
       <div className="flex items-center gap-3 px-2 mb-8">
-        <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
-          <Pill size={18} className="text-brand" />
-        </div>
-        <h1 className="text-base font-bold text-white tracking-tight">StackForge</h1>
+        <img
+          src="/Logo.png"
+          alt=""
+          aria-hidden="true"
+          className="w-9 h-9 rounded-xl shrink-0 object-cover"
+        />
+        <h1 className="font-display text-base font-bold text-white tracking-tight">StackForge</h1>
       </div>
 
       <nav className="flex flex-col gap-1 flex-1">

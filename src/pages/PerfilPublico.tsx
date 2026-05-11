@@ -37,7 +37,7 @@ export default function PerfilPublico() {
             </div>
             <h1 className="text-lg font-semibold text-slate-200 mb-1">Profile not found</h1>
             <p className="text-sm text-slate-500 mb-5">No user with that username exists.</p>
-            <Link to="/" className="inline-block px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold text-sm transition">
+            <Link to="/" className="inline-block px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition">
               Go home
             </Link>
           </div>
@@ -54,7 +54,7 @@ export default function PerfilPublico() {
                 </div>
               )}
               <div className="min-w-0">
-                <h1 className="text-xl font-bold text-white tracking-tight truncate">
+                <h1 className="font-display text-xl font-bold text-white tracking-tight truncate">
                   {perfil.full_name || perfil.username}
                 </h1>
                 <p className="text-sm text-brand/80">@{perfil.username}</p>
@@ -68,8 +68,8 @@ export default function PerfilPublico() {
               <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
                 <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
                 <div className="flex items-center gap-1.5">
-                  <Flame size={18} className="text-amber-400" />
-                  <span className="text-2xl font-bold text-amber-400">{racha}</span>
+                  <Flame size={18} className="text-streak" />
+                  <span className="font-display text-2xl font-bold text-streak tabular-nums">{racha}</span>
                 </div>
               </div>
               <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">

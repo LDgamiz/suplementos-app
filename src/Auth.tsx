@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './supabaseClient'
-import { Pill } from 'lucide-react'
 import { mapAuthError, isEmailNotConfirmed } from './lib/authErrors'
 
 type Mode = 'signin' | 'signup' | 'forgot'
@@ -74,11 +73,15 @@ export default function Auth() {
     >
       <div className="w-full max-w-sm">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-brand/10 border border-brand/20 mb-5">
-            <Pill size={30} className="text-brand" />
-          </div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">StackForge</h1>
-          <p className="text-slate-400 text-sm mt-2">Fitness Tracker</p>
+          <img
+            src="/Logo.png"
+            alt=""
+            aria-hidden="true"
+            className="inline-block w-16 h-16 rounded-2xl mb-5 object-cover"
+          />
+          <h1 className="font-display text-3xl font-bold text-white tracking-tight">StackForge</h1>
+          <p className="text-xs text-brand/80 mt-2 uppercase tracking-[0.2em] font-semibold">Train · Stack · Repeat</p>
+          <p className="text-slate-500 text-xs mt-1">Fitness Tracker</p>
         </div>
 
         <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 shadow-2xl">
@@ -115,7 +118,7 @@ export default function Auth() {
           <button
             onClick={handleSubmit}
             disabled={busy}
-            className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-[#0A0E1A] font-bold rounded-xl transition mb-4">
+            className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-bg font-bold rounded-xl transition mb-4">
             {busy ? 'Working...' : submitLabel}
           </button>
 

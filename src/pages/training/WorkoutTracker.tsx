@@ -7,7 +7,7 @@ import { abandonWorkout } from '../../lib/training'
 import ConfirmModal from '../../components/ConfirmModal'
 
 const inputClass =
-  'w-full px-3 py-2.5 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-base text-center font-semibold tabular-nums'
+  'w-full px-3 py-2.5 rounded-xl bg-bg border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-base text-center font-semibold tabular-nums'
 
 function formatElapsed(startedAt: string, now: number): string {
   const ms = Math.max(0, now - new Date(startedAt).getTime())
@@ -92,7 +92,7 @@ export default function WorkoutTracker() {
           <ArrowLeft size={18} />
         </Link>
         <div className="flex-1 min-w-0">
-          <h1 className="text-lg font-bold text-white tracking-tight truncate">
+          <h1 className="font-display text-lg font-bold text-white tracking-tight truncate">
             {workout.routine_day_name ?? 'Workout'}
           </h1>
           <p className="text-xs text-slate-500 tabular-nums">
@@ -105,7 +105,7 @@ export default function WorkoutTracker() {
           <button
             onClick={() => setFinishOpen(true)}
             disabled={busy}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold text-sm transition disabled:opacity-50">
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition disabled:opacity-50">
             <Flag size={14} />
             Finish
           </button>

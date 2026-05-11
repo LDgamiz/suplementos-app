@@ -11,7 +11,7 @@ export default function SupportUs() {
         <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
           <Heart size={18} className="text-brand" />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">Support Us</h1>
+        <h1 className="font-display text-xl font-bold text-white tracking-tight">Support Us</h1>
       </div>
 
       <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 mb-4 text-center">
