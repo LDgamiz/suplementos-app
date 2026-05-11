@@ -129,9 +129,9 @@ export default function Training() {
       {/* No routine */}
       {!loading && !routine && !creating && (
         <Card padding="lg" className="text-center">
-          <p className="text-base font-semibold text-slate-200 mb-1">Build your weekly routine</p>
+          <p className="font-display text-lg font-bold text-slate-100 mb-1 tracking-tight">Forge your weekly routine</p>
           <p className="text-sm text-slate-500 mb-5">
-            Pick days, add exercises, then come back to start a workout.
+            Map the days. Stack the lifts. Show up.
           </p>
           <Button onClick={() => setCreating(true)}>
             <Plus size={16} />
@@ -180,7 +180,7 @@ export default function Training() {
             </div>
 
             {isRestDay ? (
-              <p className="text-sm text-slate-500">No exercises planned for today.</p>
+              <p className="text-sm text-slate-500">Rest hard. The next session builds on this one.</p>
             ) : (
               <>
                 <ul className="space-y-2 mb-5">

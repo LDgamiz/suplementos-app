@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Plus, Sparkles } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import type { SuplementoCat } from '../hooks/useSuplementos'
+import { Card, Eyebrow } from './ui'
 
 const SUGGESTIONS = ['Vitamin D', 'Creatine', 'Omega 3']
 
@@ -31,20 +32,18 @@ export default function WelcomeEmptyState({ onAdd }: Props) {
   }, [])
 
   return (
-    <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 text-center">
+    <Card padding="lg" className="text-center">
       <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-brand/10 border border-brand/20 mb-3">
         <Sparkles size={22} className="text-brand" />
       </div>
-      <h2 className="text-base font-semibold text-slate-200 mb-1">Welcome to StackForge</h2>
+      <h2 className="font-display text-lg font-bold text-slate-100 mb-1 tracking-tight">Build today's stack</h2>
       <p className="text-sm text-slate-500 mb-5">
-        Track what you take daily and watch your consistency grow.
+        Log what you take, stack the days, watch the streak climb.
       </p>
 
       {suggestions.length > 0 && (
         <>
-          <p className="text-xs text-slate-500 mb-3 uppercase tracking-wider font-medium">
-            Start with one of these
-          </p>
+          <Eyebrow className="mb-3">Quick add</Eyebrow>
           <div className="flex flex-wrap gap-2 justify-center mb-4">
             {suggestions.map(s => (
               <button
@@ -60,8 +59,8 @@ export default function WelcomeEmptyState({ onAdd }: Props) {
       )}
 
       <p className="text-xs text-slate-600">
-        Or use the search below to add any supplement.
+        Or search below to add any supplement.
       </p>
-    </div>
+    </Card>
   )
 }
