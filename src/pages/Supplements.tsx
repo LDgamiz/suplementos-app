@@ -13,6 +13,7 @@ import HintButton from '../components/HintButton'
 import Rutinas from '../Rutinas'
 import Notificaciones from '../components/Notificaciones'
 import { getLocalDateString } from '../lib/dates'
+import { streakTier } from '../lib/streakTier'
 
 export default function Supplements() {
   const { session, perfil } = useLayoutCtx()
@@ -27,6 +28,7 @@ export default function Supplements() {
   const tomados = suplementos.filter(s => s.tomado).length
   const total = suplementos.length
   const pct = total > 0 ? Math.round((tomados / total) * 100) : 0
+  const tier = streakTier(racha)
 
   const publicSuplementos = suplementos
     .filter(s => s.publico)
@@ -64,6 +66,11 @@ export default function Supplements() {
             <Flame size={20} className={racha > 0 ? 'text-streak' : 'text-slate-600'} />
             <span className={`font-display text-2xl font-bold tabular-nums ${racha > 0 ? 'text-streak' : 'text-slate-600'}`}>{racha}</span>
           </div>
+          {tier && (
+            <p className="text-[10px] uppercase tracking-wider text-streak/80 font-bold mt-1">
+              {tier.label}
+            </p>
+          )}
         </div>
         <ShareButton
           username={perfil?.username ?? null}
