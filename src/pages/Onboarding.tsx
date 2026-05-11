@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
-import { Pill } from 'lucide-react'
 import { supabase } from '../supabaseClient'
 import { useLayoutCtx } from '../layout/context'
 import { LIMITS, isUsername, trimToMax } from '../lib/validation'
@@ -62,10 +61,13 @@ export default function Onboarding() {
   return (
     <div className="max-w-md mx-auto">
       <div className="text-center mb-6">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand/10 border border-brand/20 mb-3">
-          <Pill size={26} className="text-brand" />
-        </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">Welcome to StackForge</h1>
+        <img
+          src="/Logo.png"
+          alt=""
+          aria-hidden="true"
+          className="inline-block w-14 h-14 rounded-2xl mb-3 object-cover"
+        />
+        <h1 className="font-display text-2xl font-bold text-white tracking-tight">Welcome to StackForge</h1>
         <p className="text-sm text-slate-400 mt-1">
           One-time setup. You can fill the rest later from your Profile.
         </p>
@@ -130,7 +132,7 @@ export default function Onboarding() {
         <button
           onClick={save}
           disabled={busy || !username}
-          className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-[#0A0E1A] font-bold rounded-xl transition">
+          className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-bg font-bold rounded-xl transition">
           {busy ? 'Saving...' : 'Save and continue'}
         </button>
         {error && <p className="text-center text-sm text-rose-400 mt-3">{error}</p>}

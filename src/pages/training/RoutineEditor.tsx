@@ -14,7 +14,7 @@ const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frid
 const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0] as const // Mon → Sun
 
 const inputClass =
-  'w-full px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+  'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
 
 export default function RoutineEditor() {
   const { session } = useLayoutCtx()
@@ -59,7 +59,7 @@ export default function RoutineEditor() {
         <Link to="/training" aria-label="Back to Training" className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition">
           <ArrowLeft size={18} />
         </Link>
-        <h1 className="text-xl font-bold text-white tracking-tight">Routine</h1>
+        <h1 className="font-display text-xl font-bold text-white tracking-tight">Routine</h1>
       </div>
 
       {loading && <p className="text-sm text-slate-500 text-center py-10">Loading...</p>}
@@ -275,7 +275,7 @@ function ExerciseRow({ exercise, onChange }: { exercise: RoutineExercise; onChan
           <button onClick={() => setEditing(false)} className="px-3 py-1 text-xs rounded-lg bg-surface-2 border border-white/10 text-slate-400 hover:text-slate-200 transition">
             Cancel
           </button>
-          <button onClick={save} className="px-3 py-1 text-xs font-bold rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] transition">
+          <button onClick={save} className="px-3 py-1 text-xs font-bold rounded-lg bg-brand hover:bg-brand-dark text-bg transition">
             Save
           </button>
         </div>
@@ -382,7 +382,7 @@ function AddExerciseForm({ userId, routineId, dayOfWeek, existingDay, orderIndex
         <button onClick={onCancel} className="px-3 py-1.5 text-xs rounded-lg bg-surface-2 border border-white/10 text-slate-400 hover:text-slate-200 transition">
           Cancel
         </button>
-        <button onClick={save} disabled={busy} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] transition disabled:opacity-50">
+        <button onClick={save} disabled={busy} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-brand hover:bg-brand-dark text-bg transition disabled:opacity-50">
           {busy ? 'Adding...' : 'Add'}
         </button>
       </div>

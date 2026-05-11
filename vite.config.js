@@ -23,7 +23,7 @@ export default defineConfig({
       manifest: {
         name: 'StackForge: Fitness Tracker',
         short_name: 'StackForge',
-        description: 'Daily supplement tracker',
+        description: 'Train, track your routines and dial in your supplement stack.',
         theme_color: '#00C896',
         background_color: '#0A0E1A',
         display: 'standalone',

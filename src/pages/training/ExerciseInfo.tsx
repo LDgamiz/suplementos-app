@@ -35,7 +35,7 @@ export default function ExerciseInfo() {
         <Link to="/training" aria-label="Back to Training" className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] transition">
           <ArrowLeft size={18} />
         </Link>
-        <h1 className="text-lg font-bold text-white tracking-tight truncate">{decoded}</h1>
+        <h1 className="font-display text-lg font-bold text-white tracking-tight truncate">{decoded}</h1>
       </div>
 
       {loading && <p className="text-sm text-slate-500 text-center py-10">Loading...</p>}
@@ -167,7 +167,7 @@ function NotFound({ query }: { query: string }) {
       <div className="flex flex-col gap-2">
         <a
           href={youtube} target="_blank" rel="noreferrer"
-          className="inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold text-sm transition">
+          className="inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition">
           <ExternalLink size={14} />
           Search on YouTube
         </a>

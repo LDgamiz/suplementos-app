@@ -28,7 +28,7 @@ export default function SupplementoItem({ suple, onMarcar, onEliminar, onToggleP
   }
 
   const inputClass =
-    'flex-1 px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 text-sm transition'
+    'flex-1 px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 text-sm transition'
 
   const iconBtn = 'p-2 rounded-lg border transition flex items-center justify-center'
 
@@ -46,7 +46,7 @@ export default function SupplementoItem({ suple, onMarcar, onEliminar, onToggleP
         </button>
         <button
           onClick={guardar}
-          className="text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition">
+          className="text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition">
           Save
         </button>
       </div>

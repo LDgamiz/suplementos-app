@@ -167,7 +167,7 @@ export default function Profile() {
         <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
           <User size={18} className="text-brand" />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">Profile</h1>
+        <h1 className="font-display text-xl font-bold text-white tracking-tight">Profile</h1>
       </div>
 
       {/* Avatar */}
@@ -184,7 +184,7 @@ export default function Profile() {
             onClick={() => fileRef.current?.click()}
             disabled={subiendo}
             aria-label="Change avatar"
-            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-brand hover:bg-brand-dark text-[#0A0E1A] flex items-center justify-center transition disabled:opacity-50">
+            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-brand hover:bg-brand-dark text-bg flex items-center justify-center transition disabled:opacity-50">
             <Camera size={13} />
           </button>
           <input
@@ -285,7 +285,7 @@ export default function Profile() {
         <button
           onClick={guardar}
           disabled={guardando}
-          className="mt-4 w-full py-2.5 flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition disabled:opacity-50">
+          className="mt-4 w-full py-2.5 flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition disabled:opacity-50">
           <Save size={15} />
           {guardando ? 'Saving...' : 'Save profile'}
         </button>
@@ -308,7 +308,7 @@ export default function Profile() {
                 <button
                   onClick={copiarLink}
                   aria-label="Copy public profile link"
-                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition shrink-0">
+                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
                   {copiado ? <Check size={13} /> : <Copy size={13} />}
                   {copiado ? 'Copied' : 'Copy'}
                 </button>
@@ -323,7 +323,7 @@ export default function Profile() {
           </>
         ) : (
           <>
-            <p className="text-xs text-amber-400/80 mb-3">
+            <p className="text-xs text-warn/80 mb-3">
               Choose carefully — your username can only be set once.
             </p>
             <input
@@ -336,7 +336,7 @@ export default function Profile() {
             <button
               onClick={guardarUsername}
               disabled={!username}
-              className="w-full py-2.5 bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold rounded-xl transition disabled:opacity-50">
+              className="w-full py-2.5 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition disabled:opacity-50">
               Create public profile
             </button>
             {usernameMsg && <p className="text-sm text-center mt-3 text-slate-400">{usernameMsg}</p>}

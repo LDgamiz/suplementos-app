@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 
 interface Props {
@@ -36,7 +36,7 @@ export default function ConfirmModal({
   const confirmClass =
     confirmTone === 'danger'
       ? 'bg-rose-500 hover:bg-rose-600 text-white'
-      : 'bg-brand hover:bg-brand-dark text-[#0A0E1A]'
+      : 'bg-brand hover:bg-brand-dark text-bg'
 
   return createPortal(
     <div

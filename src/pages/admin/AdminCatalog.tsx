@@ -27,7 +27,7 @@ interface Form {
 const emptyForm: Form = { name: '', category: '', recommended_dose: '', dose_unit: '' }
 
 const inputClass =
-  'w-full px-3 py-2 rounded-xl bg-[#0A0E1A] border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+  'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
 
 export default function AdminCatalog() {
   const [items, setItems] = useState<Cat[]>([])
@@ -193,7 +193,7 @@ export default function AdminCatalog() {
         <button
           onClick={crear}
           disabled={busy}
-          className="w-full py-2 text-sm rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition disabled:opacity-50">
+          className="w-full py-2 text-sm rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition disabled:opacity-50">
           Add to catalog
         </button>
       </div>
@@ -263,7 +263,7 @@ export default function AdminCatalog() {
                       <div className="flex items-center gap-2">
                         {c.name}
                         {c.status === 'pending' && (
-                          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-amber-400/10 text-amber-400 border border-amber-400/20">
+                          <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-warn/10 text-warn border border-warn/20">
                             pending
                           </span>
                         )}

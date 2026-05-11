@@ -24,7 +24,7 @@ export default function LegalPage({ title, lastUpdated, children }: Props) {
       </header>
 
       <main className="max-w-3xl mx-auto px-4 pt-8 pb-16">
-        <h1 className="text-2xl font-bold text-white tracking-tight mb-1">{title}</h1>
+        <h1 className="font-display text-2xl font-bold text-white tracking-tight mb-1">{title}</h1>
         <p className="text-xs text-slate-500 mb-8">Last updated: {lastUpdated}</p>
         <article className="prose prose-invert prose-sm max-w-none text-slate-300 space-y-5 leading-relaxed">
           {children}

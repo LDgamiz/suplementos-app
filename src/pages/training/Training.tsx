@@ -93,7 +93,7 @@ export default function Training() {
         <div className="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center shrink-0">
           <Dumbbell size={18} className="text-brand" />
         </div>
-        <h1 className="text-xl font-bold text-white tracking-tight">Training</h1>
+        <h1 className="font-display text-xl font-bold text-white tracking-tight">Training</h1>
         <div className="ml-auto">
           <HintButton
             label="Training hint"
@@ -104,8 +104,8 @@ export default function Training() {
 
       {/* In-progress banner */}
       {inProgress && (
-        <div className="bg-amber-400/10 border border-amber-400/30 rounded-2xl p-4 mb-4 flex items-center gap-3">
-          <Hourglass size={18} className="text-amber-400 shrink-0" />
+        <div className="bg-warn/10 border border-warn/30 rounded-2xl p-4 mb-4 flex items-center gap-3">
+          <Hourglass size={18} className="text-warn shrink-0" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-slate-100 truncate">
               Workout in progress{inProgress.routine_day_name ? ` · ${inProgress.routine_day_name}` : ''}
@@ -119,7 +119,7 @@ export default function Training() {
           </button>
           <Link
             to={`/training/workout/${inProgress.id}`}
-            className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition">
+            className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition">
             Resume
           </Link>
         </div>
@@ -136,7 +136,7 @@ export default function Training() {
           </p>
           <button
             onClick={() => setCreating(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition">
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition">
             <Plus size={16} />
             Create routine
           </button>
@@ -163,7 +163,7 @@ export default function Training() {
             <button
               onClick={handleCreateRoutine}
               disabled={busy || !newName.trim()}
-              className="px-4 py-2 text-sm font-bold rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] transition disabled:opacity-50">
+              className="px-4 py-2 text-sm font-bold rounded-xl bg-brand hover:bg-brand-dark text-bg transition disabled:opacity-50">
               {busy ? 'Creating...' : 'Create'}
             </button>
           </div>
@@ -211,7 +211,7 @@ export default function Training() {
                 <button
                   onClick={() => todayDay && handleStart(todayDay.id)}
                   disabled={busy || !!inProgress}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold transition disabled:opacity-50">
+                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition disabled:opacity-50">
                   <Play size={16} />
                   {inProgress ? 'Resume the active workout above' : 'Start workout'}
                 </button>

@@ -48,20 +48,20 @@ export default function Supplements() {
         <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
           <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Today</p>
           <div className="flex items-end gap-2">
-            <span className="text-2xl font-bold text-white">
+            <span className="font-display text-2xl font-bold text-white tabular-nums">
               {tomados}
               <span className="text-slate-600 text-base font-normal">/{total}</span>
             </span>
             {total > 0 && (
-              <span className="text-brand text-sm font-semibold mb-0.5">{pct}%</span>
+              <span className="text-brand text-sm font-semibold mb-0.5 tabular-nums">{pct}%</span>
             )}
           </div>
         </div>
         <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
           <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
           <div className="flex items-center gap-1.5">
-            <Flame size={20} className={racha > 0 ? 'text-amber-400' : 'text-slate-600'} />
-            <span className={`text-2xl font-bold ${racha > 0 ? 'text-amber-400' : 'text-slate-600'}`}>{racha}</span>
+            <Flame size={20} className={racha > 0 ? 'text-streak' : 'text-slate-600'} />
+            <span className={`font-display text-2xl font-bold tabular-nums ${racha > 0 ? 'text-streak' : 'text-slate-600'}`}>{racha}</span>
           </div>
         </div>
         <ShareButton

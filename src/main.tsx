@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+﻿import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { registerSW } from 'virtual:pwa-register'
@@ -27,7 +27,7 @@ function ErrorFallback() {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-[#0A0E1A] font-bold text-sm transition">
+          className="px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition">
           Refresh
         </button>
       </div>
