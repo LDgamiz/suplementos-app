@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Suplemento } from '../hooks/useSuplementos'
 import { Globe, Pencil, Check, Circle, Trash2 } from 'lucide-react'
+import { Button, Input } from './ui'
 
 interface Props {
   suple: Suplemento
@@ -27,28 +28,17 @@ export default function SupplementoItem({ suple, onMarcar, onEliminar, onToggleP
     setEditando(false)
   }
 
-  const inputClass =
-    'flex-1 px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 text-sm transition'
-
   const iconBtn = 'p-2 rounded-lg border transition flex items-center justify-center'
 
   if (editando) return (
     <li className="p-4 mb-3 rounded-xl border border-brand/20 bg-brand/[0.04]">
       <p className="text-slate-400 text-sm mb-2 font-medium">{nombre}</p>
       <div className="flex gap-2 mb-3">
-        <input value={dosis} onChange={e => setDosis(e.target.value)} className={inputClass} placeholder="Dose" />
+        <Input size="sm" value={dosis} onChange={e => setDosis(e.target.value)} placeholder="Dose" />
       </div>
       <div className="flex gap-2 justify-end">
-        <button
-          onClick={cancelar}
-          className="text-xs px-3 py-1.5 rounded-lg bg-surface-2 border border-white/10 text-slate-400 hover:text-slate-200 hover:border-white/20 transition">
-          Cancel
-        </button>
-        <button
-          onClick={guardar}
-          className="text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition">
-          Save
-        </button>
+        <Button variant="secondary" size="sm" onClick={cancelar}>Cancel</Button>
+        <Button size="sm" onClick={guardar}>Save</Button>
       </div>
     </li>
   )

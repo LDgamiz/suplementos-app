@@ -6,6 +6,7 @@ import './index.css'
 import App from './App'
 import { initSentry, SentryErrorBoundary } from './lib/sentry'
 import { registerSWUpdate } from './lib/swUpdate'
+import { Button } from './components/ui'
 
 initSentry()
 const updateSW = registerSW({
@@ -25,11 +26,7 @@ function ErrorFallback() {
           The app hit an unexpected error. Please refresh and try again. If it keeps happening,
           contact support.
         </p>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition">
-          Refresh
-        </button>
+        <Button onClick={() => window.location.reload()}>Refresh</Button>
       </div>
     </div>
   )

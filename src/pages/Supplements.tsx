@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Flame } from 'lucide-react'
+import { Eyebrow } from '../components/ui'
 import { useSuplementos } from '../hooks/useSuplementos'
 import { useRacha } from '../hooks/useRacha'
 import { useLayoutCtx } from '../layout/context'
@@ -46,7 +47,7 @@ export default function Supplements() {
       </div>
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
-          <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Today</p>
+          <Eyebrow className="mb-1">Today</Eyebrow>
           <div className="flex items-end gap-2">
             <span className="font-display text-2xl font-bold text-white tabular-nums">
               {tomados}
@@ -58,7 +59,7 @@ export default function Supplements() {
           </div>
         </div>
         <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3 flex flex-col justify-between">
-          <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
+          <Eyebrow className="mb-1">Streak</Eyebrow>
           <div className="flex items-center gap-1.5">
             <Flame size={20} className={racha > 0 ? 'text-streak' : 'text-slate-600'} />
             <span className={`font-display text-2xl font-bold tabular-nums ${racha > 0 ? 'text-streak' : 'text-slate-600'}`}>{racha}</span>

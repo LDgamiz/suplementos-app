@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Search, Plus } from 'lucide-react'
+import { Button, Card, Input } from './ui'
 
 interface Producto {
   product_name: string
@@ -25,16 +26,16 @@ export default function BuscadorAlimento({ onAgregar }: Props) {
   }, [busqueda])
 
   return (
-    <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
+    <Card padding="lg" className="mt-8">
       <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
         <Search size={16} className="text-brand" />
         Buscar alimento
       </h2>
-      <input
+      <Input
         placeholder="Ej. whey protein, creatine..."
         value={busqueda}
         onChange={e => setBusqueda(e.target.value)}
-        className="w-full mb-4 px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition"
+        className="mb-4"
       />
       {cargando && <p className="text-center text-slate-500 text-sm">Buscando...</p>}
       <ul className="space-y-2 mt-2">
@@ -44,15 +45,16 @@ export default function BuscadorAlimento({ onAgregar }: Props) {
               <p className="font-semibold text-slate-200">{producto.product_name || 'Sin nombre'}</p>
               <p className="text-sm text-slate-500">Calorías: {producto.nutriments?.energy_value || 'N/A'} kcal</p>
             </div>
-            <button
+            <Button
               onClick={() => onAgregar(producto.product_name, producto.nutrition_data_per)}
-              className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
+              size="sm"
+              className="shrink-0">
               <Plus size={14} />
               Agregar
-            </button>
+            </Button>
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   )
 }

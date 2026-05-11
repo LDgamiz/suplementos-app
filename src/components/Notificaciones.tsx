@@ -5,6 +5,7 @@ import { supabase } from '../supabaseClient'
 import { subscribeToPush, unsubscribeFromPush, pushSupported } from '../lib/push'
 import { LIMITS, trimToMax } from '../lib/validation'
 import HintButton from './HintButton'
+import { Button, Card } from './ui'
 
 interface Props {
   session: Session
@@ -61,7 +62,7 @@ export default function Notificaciones({ session }: Props) {
   }
 
   return (
-    <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
+    <Card padding="lg" className="mt-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
           <Bell size={16} className="text-brand" />
@@ -69,7 +70,7 @@ export default function Notificaciones({ session }: Props) {
         </h2>
         <HintButton
           label="Daily reminder hint"
-          text="Push notification at the time you choose. Works on installed PWAs (iOS Safari â‰¥16, Android Chrome). Each device has its own subscription."
+          text="Push notification at the time you choose. Works on installed PWAs (iOS Safari ≥16, Android Chrome). Each device has its own subscription."
         />
       </div>
 
@@ -125,16 +126,13 @@ export default function Notificaciones({ session }: Props) {
             />
           </div>
 
-          <button
-            onClick={guardar}
-            disabled={guardando}
-            className="w-full py-2.5 flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition disabled:opacity-40">
+          <Button onClick={guardar} disabled={guardando} fullWidth>
             {guardando ? 'Saving...' : guardado ? <><Check size={15} /> Saved</> : 'Save reminder'}
-          </button>
+          </Button>
 
           {error && <p className="text-xs text-rose-400 mt-2 text-center">{error}</p>}
         </>
       )}
-    </div>
+    </Card>
   )
 }

@@ -3,9 +3,8 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 import { useLayoutCtx } from '../layout/context'
 import { LIMITS, isUsername, trimToMax } from '../lib/validation'
+import { Button, Card, Input, Eyebrow, fieldClassName } from '../components/ui'
 
-const inputClass =
-  'w-full px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition'
 const labelClass = 'block text-xs text-slate-400 mb-1.5 font-medium'
 
 export default function Onboarding() {
@@ -73,15 +72,14 @@ export default function Onboarding() {
         </p>
       </div>
 
-      <div className="bg-surface border border-white/[0.08] rounded-2xl p-6">
+      <Card padding="lg">
         <div className="mb-5">
           <label className={labelClass}>Username <span className="text-rose-400">*</span></label>
-          <input
+          <Input
             placeholder="pick-a-handle"
             value={username}
             onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
             maxLength={LIMITS.username.max}
-            className={inputClass}
             autoFocus
           />
           <p className="text-xs text-slate-500 mt-1.5">
@@ -90,24 +88,21 @@ export default function Onboarding() {
         </div>
 
         <div className="border-t border-white/[0.06] pt-5 mb-4">
-          <p className="text-xs text-slate-500 uppercase tracking-wider font-medium mb-4">
-            Optional — skip if you prefer
-          </p>
+          <Eyebrow className="mb-4">Optional — skip if you prefer</Eyebrow>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="sm:col-span-2">
               <label className={labelClass}>Full name</label>
-              <input
+              <Input
                 placeholder="Jane Doe"
                 value={fullName}
                 onChange={e => setFullName(e.target.value)}
                 maxLength={LIMITS.fullName.max}
-                className={inputClass}
               />
             </div>
             <div>
               <label className={labelClass}>Goal</label>
-              <select value={goal} onChange={e => setGoal(e.target.value)} className={inputClass}>
+              <select value={goal} onChange={e => setGoal(e.target.value)} className={fieldClassName('md')}>
                 <option value="">—</option>
                 <option value="lose_weight">Lose weight</option>
                 <option value="gain_muscle">Gain muscle</option>
@@ -117,7 +112,7 @@ export default function Onboarding() {
             </div>
             <div>
               <label className={labelClass}>Activity level</label>
-              <select value={activity} onChange={e => setActivity(e.target.value)} className={inputClass}>
+              <select value={activity} onChange={e => setActivity(e.target.value)} className={fieldClassName('md')}>
                 <option value="">—</option>
                 <option value="sedentary">Sedentary</option>
                 <option value="light">Light</option>
@@ -129,14 +124,11 @@ export default function Onboarding() {
           </div>
         </div>
 
-        <button
-          onClick={save}
-          disabled={busy || !username}
-          className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-bg font-bold rounded-xl transition">
+        <Button onClick={save} disabled={busy || !username} fullWidth>
           {busy ? 'Saving...' : 'Save and continue'}
-        </button>
+        </Button>
         {error && <p className="text-center text-sm text-rose-400 mt-3">{error}</p>}
-      </div>
+      </Card>
     </div>
   )
 }
