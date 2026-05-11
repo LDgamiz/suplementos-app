@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { applySWUpdate, SW_UPDATE_AVAILABLE_EVENT } from '../lib/swUpdate'
+import { Button } from './ui'
 
 export default function UpdateBanner() {
   const [available, setAvailable] = useState(false)
@@ -20,11 +21,7 @@ export default function UpdateBanner() {
           <RefreshCw size={14} className="text-brand" />
         </div>
         <p className="flex-1 text-sm text-slate-200">A new version is available.</p>
-        <button
-          onClick={() => applySWUpdate()}
-          className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
-          Refresh
-        </button>
+        <Button onClick={() => applySWUpdate()} size="sm" className="shrink-0">Refresh</Button>
       </div>
     </div>
   )

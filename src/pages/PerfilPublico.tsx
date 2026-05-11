@@ -3,6 +3,7 @@ import { Pill, Flame, Check, UserX } from 'lucide-react'
 import { usePublicProfile } from '../hooks/usePublicProfile'
 import { useRachaForUser } from '../hooks/useRacha'
 import WeeklyChart from '../WeeklyChart'
+import { Card, Eyebrow } from '../components/ui'
 
 export default function PerfilPublico() {
   const { username } = useParams<{ username: string }>()
@@ -31,7 +32,7 @@ export default function PerfilPublico() {
         {loading && <p className="text-center text-slate-500 py-20 text-sm">Loading…</p>}
 
         {!loading && notFound && (
-          <div className="bg-surface border border-white/[0.08] rounded-2xl p-10 text-center mt-10">
+          <Card className="p-10 text-center mt-10" padding="none">
             <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-rose-400/10 border border-rose-400/20 mb-4">
               <UserX size={26} className="text-rose-400" />
             </div>
@@ -40,12 +41,12 @@ export default function PerfilPublico() {
             <Link to="/" className="inline-block px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition">
               Go home
             </Link>
-          </div>
+          </Card>
         )}
 
         {!loading && perfil && (
           <>
-            <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 mb-4 flex items-center gap-4">
+            <Card padding="lg" className="mb-4 flex items-center gap-4">
               {perfil.avatar_url ? (
                 <img src={perfil.avatar_url} alt={perfil.username} className="w-20 h-20 rounded-full object-cover border border-white/10" />
               ) : (
@@ -62,31 +63,31 @@ export default function PerfilPublico() {
                   <p className="text-sm text-slate-400 mt-2 leading-snug">{perfil.bio}</p>
                 )}
               </div>
-            </div>
+            </Card>
 
             <div className="grid grid-cols-3 gap-3 mb-6">
               <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
-                <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Streak</p>
+                <Eyebrow className="mb-1">Streak</Eyebrow>
                 <div className="flex items-center gap-1.5">
                   <Flame size={18} className="text-streak" />
                   <span className="font-display text-2xl font-bold text-streak tabular-nums">{racha}</span>
                 </div>
               </div>
               <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
-                <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Today</p>
-                <span className="text-2xl font-bold text-white">
+                <Eyebrow className="mb-1">Today</Eyebrow>
+                <span className="font-display text-2xl font-bold text-white tabular-nums">
                   {tomados}<span className="text-slate-600 text-base font-normal">/{total}</span>
                 </span>
               </div>
               <div className="bg-surface border border-white/[0.08] rounded-2xl px-4 py-3">
-                <p className="text-xs text-slate-500 mb-1 uppercase tracking-wider font-medium">Done</p>
-                <span className="text-2xl font-bold text-brand">{pct}%</span>
+                <Eyebrow className="mb-1">Done</Eyebrow>
+                <span className="font-display text-2xl font-bold text-brand tabular-nums">{pct}%</span>
               </div>
             </div>
 
             <WeeklyChart refreshKey={0} userId={perfil.user_id} publicOnly />
 
-            <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 mt-4">
+            <Card padding="lg" className="mt-4">
               <h2 className="text-base font-semibold text-slate-200 mb-4">Today's public stack</h2>
               {suplementosHoy.length === 0 ? (
                 <p className="text-sm text-slate-500">No public supplements today.</p>
@@ -105,7 +106,7 @@ export default function PerfilPublico() {
                   ))}
                 </ul>
               )}
-            </div>
+            </Card>
 
             <p className="text-center text-xs text-slate-600 mt-8">
               Powered by <Link to="/" className="text-brand/80 hover:text-brand transition">StackForge: Fitness Tracker</Link>

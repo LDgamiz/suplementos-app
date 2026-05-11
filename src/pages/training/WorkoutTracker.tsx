@@ -5,8 +5,10 @@ import { useWorkout } from '../../hooks/useWorkout'
 import type { WorkoutSet } from '../../lib/training'
 import { abandonWorkout } from '../../lib/training'
 import ConfirmModal from '../../components/ConfirmModal'
+import { Button, Card } from '../../components/ui'
 
-const inputClass =
+// Tracker numeric input — distinct from generic Input (center-aligned, tabular).
+const trackerInputClass =
   'w-full px-3 py-2.5 rounded-xl bg-bg border border-white/[0.08] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-base text-center font-semibold tabular-nums'
 
 function formatElapsed(startedAt: string, now: number): string {
@@ -76,10 +78,10 @@ export default function WorkoutTracker() {
 
   if (loading) return <p className="text-sm text-slate-500 text-center py-10">Loading workout...</p>
   if (!workout) return (
-    <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 text-center">
+    <Card padding="lg" className="text-center">
       <p className="text-sm text-slate-300 mb-3">Workout not found.</p>
       <Link to="/training" className="text-sm text-brand hover:underline">Back to Training</Link>
-    </div>
+    </Card>
   )
 
   const isInProgress = workout.status === 'in_progress'
@@ -102,13 +104,10 @@ export default function WorkoutTracker() {
           </p>
         </div>
         {isInProgress && (
-          <button
-            onClick={() => setFinishOpen(true)}
-            disabled={busy}
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold text-sm transition disabled:opacity-50">
+          <Button onClick={() => setFinishOpen(true)} disabled={busy}>
             <Flag size={14} />
             Finish
-          </button>
+          </Button>
         )}
       </div>
 
@@ -134,13 +133,10 @@ export default function WorkoutTracker() {
 
       {/* Footer actions */}
       {isInProgress && (
-        <button
-          onClick={() => setDiscardOpen(true)}
-          disabled={busy}
-          className="w-full mt-6 inline-flex items-center justify-center gap-2 py-2.5 rounded-xl bg-surface-2 border border-white/10 text-rose-400/80 hover:text-rose-400 hover:border-rose-400/30 transition text-sm font-medium disabled:opacity-50">
+        <Button variant="danger" onClick={() => setDiscardOpen(true)} disabled={busy} fullWidth className="mt-6">
           <Trash2 size={14} />
           Discard workout
-        </button>
+        </Button>
       )}
 
       <ConfirmModal
@@ -182,7 +178,7 @@ interface ExerciseCardProps {
 
 function ExerciseCard({ name, repRange, sets, disabled, onUpdate }: ExerciseCardProps) {
   return (
-    <div className="bg-surface border border-white/[0.08] rounded-2xl p-4">
+    <Card padding="sm">
       <div className="flex items-baseline justify-between mb-3">
         <h2 className="text-base font-semibold text-slate-100 truncate">{name}</h2>
         {repRange && <span className="text-xs text-slate-500 ml-3 shrink-0">{repRange} reps</span>}
@@ -206,7 +202,7 @@ function ExerciseCard({ name, repRange, sets, disabled, onUpdate }: ExerciseCard
           />
         ))}
       </div>
-    </div>
+    </Card>
   )
 }
 
@@ -273,7 +269,7 @@ function SetRow({ set, previous, disabled, onUpdate }: SetRowProps) {
         placeholder={repsPlaceholder}
         disabled={disabled}
         aria-label={`Set ${set.set_number} reps`}
-        className={inputClass}
+        className={trackerInputClass}
       />
       <input
         type="number" inputMode="decimal" min={0} step="0.5"
@@ -282,7 +278,7 @@ function SetRow({ set, previous, disabled, onUpdate }: SetRowProps) {
         placeholder={weightPlaceholder}
         disabled={disabled}
         aria-label={`Set ${set.set_number} weight`}
-        className={inputClass}
+        className={trackerInputClass}
       />
       <button
         type="button"

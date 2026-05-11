@@ -5,6 +5,7 @@ import { useLayoutCtx } from '../../layout/context'
 import { useActiveRoutine } from '../../hooks/useActiveRoutine'
 import HintButton from '../../components/HintButton'
 import ConfirmModal from '../../components/ConfirmModal'
+import { Button, Card, Input } from '../../components/ui'
 import {
   createRoutine, setActiveRoutine, startWorkout,
   getInProgressWorkout, abandonWorkout,
@@ -112,11 +113,9 @@ export default function Training() {
             </p>
             <p className="text-xs text-slate-400">Started {timeAgo(inProgress.started_at)}</p>
           </div>
-          <button
-            onClick={() => setDiscardOpen(true)}
-            className="px-3 py-1.5 text-xs rounded-lg bg-surface-2 border border-white/10 text-slate-300 hover:text-rose-400 hover:border-rose-400/30 transition">
+          <Button variant="secondary" size="sm" onClick={() => setDiscardOpen(true)}>
             Discard
-          </button>
+          </Button>
           <Link
             to={`/training/workout/${inProgress.id}`}
             className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition">
@@ -129,52 +128,45 @@ export default function Training() {
 
       {/* No routine */}
       {!loading && !routine && !creating && (
-        <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 text-center">
+        <Card padding="lg" className="text-center">
           <p className="text-base font-semibold text-slate-200 mb-1">Build your weekly routine</p>
           <p className="text-sm text-slate-500 mb-5">
             Pick days, add exercises, then come back to start a workout.
           </p>
-          <button
-            onClick={() => setCreating(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition">
+          <Button onClick={() => setCreating(true)}>
             <Plus size={16} />
             Create routine
-          </button>
-        </div>
+          </Button>
+        </Card>
       )}
 
       {/* Create routine inline form */}
       {!loading && !routine && creating && (
-        <div className="bg-surface border border-white/[0.08] rounded-2xl p-6">
+        <Card padding="lg">
           <p className="text-sm font-semibold text-slate-200 mb-3">Name your routine</p>
-          <input
+          <Input
             placeholder="e.g. Push / Pull / Legs"
             value={newName}
             onChange={e => setNewName(e.target.value)}
             autoFocus
-            className="w-full px-4 py-2.5 mb-3 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition"
+            className="mb-3"
           />
           <div className="flex gap-2 justify-end">
-            <button
-              onClick={() => { setCreating(false); setNewName(''); setError(null) }}
-              className="px-4 py-2 text-sm rounded-xl bg-surface-2 border border-white/10 text-slate-300 hover:text-slate-100 hover:border-white/20 transition">
+            <Button variant="secondary" onClick={() => { setCreating(false); setNewName(''); setError(null) }}>
               Cancel
-            </button>
-            <button
-              onClick={handleCreateRoutine}
-              disabled={busy || !newName.trim()}
-              className="px-4 py-2 text-sm font-bold rounded-xl bg-brand hover:bg-brand-dark text-bg transition disabled:opacity-50">
+            </Button>
+            <Button onClick={handleCreateRoutine} disabled={busy || !newName.trim()}>
               {busy ? 'Creating...' : 'Create'}
-            </button>
+            </Button>
           </div>
           {error && <p className="text-xs text-rose-400 mt-3">{error}</p>}
-        </div>
+        </Card>
       )}
 
       {/* Today view */}
       {!loading && routine && (
         <>
-          <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 mb-3">
+          <Card padding="lg" className="mb-3">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider font-medium mb-0.5">{todayLabel}</p>
@@ -208,17 +200,17 @@ export default function Training() {
                     </li>
                   ))}
                 </ul>
-                <button
+                <Button
                   onClick={() => todayDay && handleStart(todayDay.id)}
                   disabled={busy || !!inProgress}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition disabled:opacity-50">
+                  fullWidth>
                   <Play size={16} />
                   {inProgress ? 'Resume the active workout above' : 'Start workout'}
-                </button>
+                </Button>
                 {error && <p className="text-xs text-rose-400 mt-3 text-center">{error}</p>}
               </>
             )}
-          </div>
+          </Card>
 
           <Link
             to="/training/routine"

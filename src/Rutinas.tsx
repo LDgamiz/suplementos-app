@@ -4,6 +4,7 @@ import { Session } from '@supabase/supabase-js'
 import { Zap, Play, Trash2, Plus, Search } from 'lucide-react'
 import { SuplementoCat } from './hooks/useSuplementos'
 import HintButton from './components/HintButton'
+import { Button, Card, fieldClassName } from './components/ui'
 import { LIMITS, ValidationError, requireString, boundedNumber } from './lib/validation'
 
 interface SupplementoRutina {
@@ -217,17 +218,12 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
     setRutinas(rutinas.filter(r => r.id !== id))
   }
 
-  const inputClass =
-    'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
-
-  const dosisClass =
-    'w-28 shrink-0 px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
-
-  const miniInput =
-    'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+  const inputClass = fieldClassName('sm')
+  const miniInput = inputClass
+  const dosisClass = `${inputClass.replace('w-full', 'w-28 shrink-0')}`
 
   return (
-    <div className="mt-8 bg-surface border border-white/[0.08] rounded-2xl p-6">
+    <Card padding="lg" className="mt-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-base font-semibold text-slate-200 flex items-center gap-2">
           <Zap size={16} className="text-brand" />
@@ -248,12 +244,12 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
                 <p className="text-xs text-slate-500">{rutina.rutina_suplementos.length} supplements</p>
               </div>
               <div className="flex gap-2">
-                <button
+                <Button
                   onClick={() => onAplicarRutina(rutina.rutina_suplementos.map(s => ({ suplemento_id: s.suplemento_id, dosis: s.dosis })))}
-                  className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition">
+                  size="sm">
                   <Play size={13} />
                   Apply
-                </button>
+                </Button>
                 <button
                   onClick={() => eliminarRutina(rutina.id)}
                   className="p-2 rounded-lg bg-surface border border-white/10 text-rose-400/50 hover:border-rose-400/30 hover:text-rose-400 transition">
@@ -382,11 +378,7 @@ export default function Rutinas({ session, onAplicarRutina }: Props) {
         <Plus size={14} />
         Add supplement to routine
       </button>
-      <button
-        onClick={guardarRutina}
-        className="w-full py-2.5 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition">
-        Save routine
-      </button>
-    </div>
+      <Button onClick={guardarRutina} fullWidth>Save routine</Button>
+    </Card>
   )
 }

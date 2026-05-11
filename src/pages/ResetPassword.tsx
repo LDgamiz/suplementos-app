@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 import { mapAuthError } from '../lib/authErrors'
+import { Button, Card, Input } from '../components/ui'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
@@ -47,9 +48,6 @@ export default function ResetPassword() {
     }
   }
 
-  const inputClass =
-    'w-full px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition'
-
   return (
     <div
       className="min-h-screen flex items-center justify-center px-4"
@@ -67,38 +65,35 @@ export default function ResetPassword() {
           <p className="text-slate-400 text-sm mt-2">Reset your password</p>
         </div>
 
-        <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 shadow-2xl">
+        <Card padding="lg" className="shadow-2xl">
           {!ready ? (
             <p className="text-sm text-slate-400 text-center py-4">
               Verifying your reset link...
             </p>
           ) : (
             <>
-              <input
+              <Input
                 placeholder="New password"
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className={`${inputClass} mb-3`}
+                className="mb-3"
               />
-              <input
+              <Input
                 placeholder="Confirm new password"
                 type="password"
                 value={confirm}
                 onChange={e => setConfirm(e.target.value)}
-                className={`${inputClass} mb-4`}
+                className="mb-4"
               />
-              <button
-                onClick={submit}
-                disabled={busy}
-                className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-bg font-bold rounded-xl transition">
+              <Button onClick={submit} disabled={busy} fullWidth>
                 {busy ? 'Updating...' : 'Update password'}
-              </button>
+              </Button>
               {error && <p className="text-center text-sm text-rose-400 mt-3">{error}</p>}
               {mensaje && <p className="text-center text-sm text-slate-400 mt-3">{mensaje}</p>}
             </>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   )

@@ -1,5 +1,6 @@
 ﻿import { useEffect, useState } from 'react'
 import { Download, X } from 'lucide-react'
+import { Button } from './ui'
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>
@@ -47,11 +48,7 @@ export default function InstallPrompt() {
           <p className="text-sm font-semibold text-slate-100">Install StackForge</p>
           <p className="text-xs text-slate-500">Get the app on your home screen.</p>
         </div>
-        <button
-          onClick={install}
-          className="px-3 py-1.5 text-xs rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
-          Install
-        </button>
+        <Button onClick={install} size="sm" className="shrink-0">Install</Button>
         <button
           onClick={dismiss}
           aria-label="Dismiss install prompt"

@@ -4,6 +4,7 @@ import { ArrowLeft, Check, Pencil, Plus, Trash2, X } from 'lucide-react'
 import { useLayoutCtx } from '../../layout/context'
 import { useActiveRoutine } from '../../hooks/useActiveRoutine'
 import ConfirmModal from '../../components/ConfirmModal'
+import { Button, Card, Input, Eyebrow, fieldClassName } from '../../components/ui'
 import {
   RoutineDay, RoutineExercise,
   renameRoutine, deleteRoutine, upsertRoutineDay,
@@ -13,8 +14,7 @@ import {
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const DISPLAY_ORDER = [1, 2, 3, 4, 5, 6, 0] as const // Mon → Sun
 
-const inputClass =
-  'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+const smField = fieldClassName('sm')
 
 export default function RoutineEditor() {
   const { session } = useLayoutCtx()
@@ -66,7 +66,7 @@ export default function RoutineEditor() {
 
       {!loading && routine && (
         <>
-          <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 mb-4">
+          <Card padding="md" className="mb-4">
             <div className="flex items-center gap-2">
               {renaming ? (
                 <>
@@ -74,7 +74,7 @@ export default function RoutineEditor() {
                     value={renameDraft}
                     onChange={e => setRenameDraft(e.target.value)}
                     autoFocus
-                    className={inputClass}
+                    className={smField}
                   />
                   <button onClick={handleRename} disabled={busy} aria-label="Save name" className="p-1.5 rounded-lg text-brand hover:bg-brand/10 transition">
                     <Check size={16} />
@@ -104,7 +104,7 @@ export default function RoutineEditor() {
                 </>
               )}
             </div>
-          </div>
+          </Card>
 
           <div className="space-y-3">
             {DISPLAY_ORDER.map(dow => (
@@ -161,11 +161,9 @@ function DaySection({ userId, routineId, dayOfWeek, day, exercises, onChange }: 
   }
 
   return (
-    <div className="bg-surface border border-white/[0.08] rounded-2xl p-4">
+    <Card padding="sm">
       <div className="flex items-center gap-2 mb-3">
-        <p className="text-xs uppercase tracking-wider text-slate-500 font-medium">
-          {DAY_NAMES[dayOfWeek]}
-        </p>
+        <Eyebrow>{DAY_NAMES[dayOfWeek]}</Eyebrow>
         {editingLabel ? (
           <>
             <input
@@ -173,7 +171,7 @@ function DaySection({ userId, routineId, dayOfWeek, day, exercises, onChange }: 
               onChange={e => setLabelDraft(e.target.value)}
               placeholder="Label (e.g. Push)"
               autoFocus
-              className={`${inputClass} flex-1`}
+              className={`${smField} flex-1`}
             />
             <button onClick={saveLabel} aria-label="Save label" className="p-1 rounded-lg text-brand hover:bg-brand/10 transition">
               <Check size={14} />
@@ -223,7 +221,7 @@ function DaySection({ userId, routineId, dayOfWeek, day, exercises, onChange }: 
           Add exercise
         </button>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -255,29 +253,25 @@ function ExerciseRow({ exercise, onChange }: { exercise: RoutineExercise; onChan
   if (editing) {
     return (
       <li className="p-2 rounded-xl border border-brand/20 bg-brand/[0.04] space-y-2">
-        <input value={name} onChange={e => setName(e.target.value)} className={inputClass} placeholder="Exercise name" />
+        <input value={name} onChange={e => setName(e.target.value)} className={smField} placeholder="Exercise name" />
         <div className="flex gap-2">
           <input
             value={sets}
             onChange={e => setSets(e.target.value)}
             type="number" min={1} max={20}
-            className={`${inputClass} w-10`}
+            className={`${smField} w-10`}
             placeholder="Sets"
           />
           <input
             value={repRange}
             onChange={e => setRepRange(e.target.value)}
-            className={`${inputClass} w-10`}
+            className={`${smField} w-10`}
             placeholder="Rep range (e.g. 8-10)"
           />
         </div>
         <div className="flex gap-2 justify-end">
-          <button onClick={() => setEditing(false)} className="px-3 py-1 text-xs rounded-lg bg-surface-2 border border-white/10 text-slate-400 hover:text-slate-200 transition">
-            Cancel
-          </button>
-          <button onClick={save} className="px-3 py-1 text-xs font-bold rounded-lg bg-brand hover:bg-brand-dark text-bg transition">
-            Save
-          </button>
+          <Button variant="secondary" size="sm" onClick={() => setEditing(false)}>Cancel</Button>
+          <Button size="sm" onClick={save}>Save</Button>
         </div>
       </li>
     )
@@ -359,7 +353,7 @@ function AddExerciseForm({ userId, routineId, dayOfWeek, existingDay, orderIndex
         autoFocus
         value={name}
         onChange={e => setName(e.target.value)}
-        className={inputClass}
+        className={smField}
         placeholder="Exercise name"
       />
       <div className="flex gap-2">
@@ -367,24 +361,20 @@ function AddExerciseForm({ userId, routineId, dayOfWeek, existingDay, orderIndex
           value={sets}
           onChange={e => setSets(e.target.value)}
           type="number" min={1} max={20}
-          className={`${inputClass} w-10`}
+          className={`${smField} w-10`}
           placeholder="Sets"
         />
         <input
           value={repRange}
           onChange={e => setRepRange(e.target.value)}
-          className={`${inputClass} w-10`}
+          className={`${smField} w-10`}
           placeholder="Rep range (e.g. 8-10)"
         />
       </div>
       {error && <p className="text-xs text-rose-400">{error}</p>}
       <div className="flex gap-2 justify-end">
-        <button onClick={onCancel} className="px-3 py-1.5 text-xs rounded-lg bg-surface-2 border border-white/10 text-slate-400 hover:text-slate-200 transition">
-          Cancel
-        </button>
-        <button onClick={save} disabled={busy} className="px-3 py-1.5 text-xs font-bold rounded-lg bg-brand hover:bg-brand-dark text-bg transition disabled:opacity-50">
-          {busy ? 'Adding...' : 'Add'}
-        </button>
+        <Button variant="secondary" size="sm" onClick={onCancel}>Cancel</Button>
+        <Button size="sm" onClick={save} disabled={busy}>{busy ? 'Adding...' : 'Add'}</Button>
       </div>
     </div>
   )

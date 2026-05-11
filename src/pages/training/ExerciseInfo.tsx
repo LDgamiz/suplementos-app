@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, ExternalLink, Dumbbell, Target, Activity } from 'lucide-react'
 import { findExercise, findAlternatives, imageUrl, type Exercise } from '../../lib/exercises'
+import { Card } from '../../components/ui'
 
 export default function ExerciseInfo() {
   const { name } = useParams<{ name: string }>()
@@ -77,7 +78,7 @@ function ExerciseDetails({ ex, originalName }: { ex: Exercise; originalName: str
   const matchedDifferently = ex.name.toLowerCase() !== originalName.toLowerCase()
 
   return (
-    <div className="bg-surface border border-white/[0.08] rounded-2xl p-4">
+    <Card padding="sm">
       {matchedDifferently && (
         <p className="text-[11px] text-slate-500 mb-3">
           Showing closest match: <span className="text-slate-300 font-medium">{ex.name}</span>
@@ -113,7 +114,7 @@ function ExerciseDetails({ ex, originalName }: { ex: Exercise; originalName: str
           </ol>
         </div>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -159,7 +160,7 @@ function NotFound({ query }: { query: string }) {
   const google = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query + ' exercise')}`
 
   return (
-    <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 text-center">
+    <Card padding="lg" className="text-center">
       <p className="text-sm text-slate-300 mb-1">No info found for this exercise</p>
       <p className="text-xs text-slate-500 mb-5">
         The catalog couldn't match "<span className="text-slate-300">{query}</span>". Try a more standard name or search the web:
@@ -178,6 +179,6 @@ function NotFound({ query }: { query: string }) {
           Search Google Images
         </a>
       </div>
-    </div>
+    </Card>
   )
 }

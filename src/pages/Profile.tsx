@@ -5,6 +5,7 @@ import { useLayoutCtx } from '../layout/context'
 import { uploadAvatar } from '../lib/avatar'
 import { getLocalDateString } from '../lib/dates'
 import { LIMITS, isUsername } from '../lib/validation'
+import { Button, Card, Input, fieldClassName } from '../components/ui'
 
 interface FormState {
   full_name: string
@@ -23,8 +24,7 @@ const empty: FormState = {
   gender: '', country: '', goal: '', activity: '', bio: ''
 }
 
-const inputClass =
-  'w-full px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition'
+const fieldClass = fieldClassName('md')
 const labelClass = 'block text-xs text-slate-400 mb-1.5 font-medium'
 
 export default function Profile() {
@@ -171,7 +171,7 @@ export default function Profile() {
       </div>
 
       {/* Avatar */}
-      <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 mb-4 flex items-center gap-4">
+      <Card padding="lg" className="mb-4 flex items-center gap-4">
         <div className="relative">
           {avatarUrl ? (
             <img src={avatarUrl} alt="avatar" className="w-20 h-20 rounded-full object-cover border border-white/10" />
@@ -198,15 +198,15 @@ export default function Profile() {
           </p>
           <p className="text-xs text-slate-500">{subiendo ? 'Uploading...' : 'Tap the camera to update'}</p>
         </div>
-      </div>
+      </Card>
 
       {/* Personal data */}
-      <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 mb-4">
+      <Card padding="lg" className="mb-4">
         <h2 className="text-base font-semibold text-slate-200 mb-4">Personal info</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div className="sm:col-span-2">
             <label className={labelClass}>Full name</label>
-            <input value={form.full_name} onChange={update('full_name')} maxLength={LIMITS.fullName.max} className={inputClass} />
+            <input value={form.full_name} onChange={update('full_name')} maxLength={LIMITS.fullName.max} className={fieldClass} />
           </div>
           <div>
             <label className={labelClass}>Birth date</label>
@@ -216,12 +216,12 @@ export default function Profile() {
               onChange={update('birth_date')}
               min="1900-01-01"
               max={getLocalDateString()}
-              className={inputClass}
+              className={fieldClass}
             />
           </div>
           <div>
             <label className={labelClass}>Gender</label>
-            <select value={form.gender} onChange={update('gender')} className={inputClass}>
+            <select value={form.gender} onChange={update('gender')} className={fieldClass}>
               <option value="">—</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -234,7 +234,7 @@ export default function Profile() {
             <input
               type="number" step="0.1" min="20" max="400"
               value={form.weight_kg} onChange={update('weight_kg')}
-              className={inputClass}
+              className={fieldClass}
             />
           </div>
           <div>
@@ -242,16 +242,16 @@ export default function Profile() {
             <input
               type="number" step="0.1" min="50" max="250"
               value={form.height_cm} onChange={update('height_cm')}
-              className={inputClass}
+              className={fieldClass}
             />
           </div>
           <div>
             <label className={labelClass}>Country</label>
-            <input value={form.country} onChange={update('country')} maxLength={LIMITS.country.max} className={inputClass} />
+            <input value={form.country} onChange={update('country')} maxLength={LIMITS.country.max} className={fieldClass} />
           </div>
           <div>
             <label className={labelClass}>Goal</label>
-            <select value={form.goal} onChange={update('goal')} className={inputClass}>
+            <select value={form.goal} onChange={update('goal')} className={fieldClass}>
               <option value="">—</option>
               <option value="lose_weight">Lose weight</option>
               <option value="gain_muscle">Gain muscle</option>
@@ -261,7 +261,7 @@ export default function Profile() {
           </div>
           <div className="sm:col-span-2">
             <label className={labelClass}>Activity level</label>
-            <select value={form.activity} onChange={update('activity')} className={inputClass}>
+            <select value={form.activity} onChange={update('activity')} className={fieldClass}>
               <option value="">—</option>
               <option value="sedentary">Sedentary</option>
               <option value="light">Light</option>
@@ -277,23 +277,20 @@ export default function Profile() {
               onChange={update('bio')}
               rows={3}
               maxLength={LIMITS.bio.max}
-              className={`${inputClass} resize-none`}
+              className={`${fieldClass} resize-none`}
             />
           </div>
         </div>
 
-        <button
-          onClick={guardar}
-          disabled={guardando}
-          className="mt-4 w-full py-2.5 flex items-center justify-center gap-2 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition disabled:opacity-50">
+        <Button onClick={guardar} disabled={guardando} fullWidth className="mt-4">
           <Save size={15} />
           {guardando ? 'Saving...' : 'Save profile'}
-        </button>
+        </Button>
         {mensaje && <p className="text-sm text-center mt-3 text-slate-400">{mensaje}</p>}
-      </div>
+      </Card>
 
       {/* Public profile / username */}
-      <div className="bg-surface border border-white/[0.08] rounded-2xl p-6">
+      <Card padding="lg">
         <h2 className="text-base font-semibold text-slate-200 mb-4 flex items-center gap-2">
           <Link2 size={16} className="text-brand" />
           Public profile
@@ -305,13 +302,14 @@ export default function Profile() {
               <p className="text-xs text-slate-500 mb-1">Your public link:</p>
               <div className="flex items-center justify-between gap-2">
                 <p className="text-sm text-brand font-medium truncate">{urlPerfil}</p>
-                <button
+                <Button
                   onClick={copiarLink}
                   aria-label="Copy public profile link"
-                  className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg bg-brand hover:bg-brand-dark text-bg font-bold transition shrink-0">
+                  size="sm"
+                  className="shrink-0">
                   {copiado ? <Check size={13} /> : <Copy size={13} />}
                   {copiado ? 'Copied' : 'Copy'}
-                </button>
+                </Button>
               </div>
             </div>
             <div className="flex items-center gap-2 p-3 bg-surface-2 border border-white/10 rounded-xl">
@@ -326,23 +324,20 @@ export default function Profile() {
             <p className="text-xs text-warn/80 mb-3">
               Choose carefully — your username can only be set once.
             </p>
-            <input
+            <Input
               placeholder="Pick a username (a-z, 0-9, _)"
               value={username}
               onChange={e => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, ''))}
               maxLength={LIMITS.username.max}
-              className={`${inputClass} mb-3`}
+              className="mb-3"
             />
-            <button
-              onClick={guardarUsername}
-              disabled={!username}
-              className="w-full py-2.5 bg-brand hover:bg-brand-dark text-bg font-bold rounded-xl transition disabled:opacity-50">
+            <Button onClick={guardarUsername} disabled={!username} fullWidth>
               Create public profile
-            </button>
+            </Button>
             {usernameMsg && <p className="text-sm text-center mt-3 text-slate-400">{usernameMsg}</p>}
           </>
         )}
-      </div>
+      </Card>
     </>
   )
 }

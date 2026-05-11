@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from './supabaseClient'
 import { mapAuthError, isEmailNotConfirmed } from './lib/authErrors'
+import { Button, Card, Input } from './components/ui'
 
 type Mode = 'signin' | 'signup' | 'forgot'
 
@@ -58,9 +59,6 @@ export default function Auth() {
     setLastError(undefined)
   }
 
-  const inputClass =
-    'w-full px-4 py-2.5 rounded-xl bg-surface-2 border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition'
-
   const heading =
     mode === 'signup' ? 'Create account' : mode === 'forgot' ? 'Reset password' : 'Sign in'
   const submitLabel =
@@ -84,24 +82,24 @@ export default function Auth() {
           <p className="text-slate-500 text-xs mt-1">Fitness Tracker</p>
         </div>
 
-        <div className="bg-surface border border-white/[0.08] rounded-2xl p-6 shadow-2xl">
+        <Card padding="lg" className="shadow-2xl">
           <h2 className="text-lg font-semibold text-slate-200 mb-5">{heading}</h2>
 
-          <input
+          <Input
             placeholder="Email"
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
-            className={`${inputClass} mb-3`}
+            className="mb-3"
           />
 
           {mode !== 'forgot' && (
-            <input
+            <Input
               placeholder="Password"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              className={`${inputClass} mb-2`}
+              className="mb-2"
             />
           )}
 
@@ -115,12 +113,13 @@ export default function Auth() {
 
           {mode === 'forgot' && <div className="mb-3" />}
 
-          <button
+          <Button
             onClick={handleSubmit}
             disabled={busy}
-            className="w-full py-2.5 bg-brand hover:bg-brand-dark disabled:opacity-50 text-bg font-bold rounded-xl transition mb-4">
+            fullWidth
+            className="mb-4">
             {busy ? 'Working...' : submitLabel}
-          </button>
+          </Button>
 
           {mode !== 'forgot' && (
             <p
@@ -150,7 +149,7 @@ export default function Auth() {
               </button>
             </p>
           )}
-        </div>
+        </Card>
 
         <p className="text-center text-[10px] text-slate-600 mt-6 space-x-3">
           <Link to="/privacy" className="hover:text-slate-400 transition">Privacy</Link>

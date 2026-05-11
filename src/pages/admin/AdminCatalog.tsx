@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Plus, Trash2, Pencil, Check, X } from 'lucide-react'
 import { supabase } from '../../supabaseClient'
 import ConfirmModal from '../../components/ConfirmModal'
+import { Button, Card, fieldClassName } from '../../components/ui'
 import { LIMITS, ValidationError, requireString, boundedNumber } from '../../lib/validation'
 
 type Status = 'pending' | 'approved' | 'rejected'
@@ -26,8 +27,7 @@ interface Form {
 
 const emptyForm: Form = { name: '', category: '', recommended_dose: '', dose_unit: '' }
 
-const inputClass =
-  'w-full px-3 py-2 rounded-xl bg-bg border border-white/[0.08] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-brand/50 focus:ring-1 focus:ring-brand/30 transition text-sm'
+const inputClass = fieldClassName('sm')
 
 export default function AdminCatalog() {
   const [items, setItems] = useState<Cat[]>([])
@@ -180,7 +180,7 @@ export default function AdminCatalog() {
   return (
     <>
       {/* New entry */}
-      <div className="bg-surface border border-white/[0.08] rounded-2xl p-5 mb-4">
+      <Card padding="md" className="mb-4">
         <h2 className="text-sm font-semibold text-slate-200 mb-3 flex items-center gap-2">
           <Plus size={14} className="text-brand" /> New catalog entry
         </h2>
@@ -190,13 +190,8 @@ export default function AdminCatalog() {
           <input placeholder="Dose" type="number" min={LIMITS.doseAmount.min} max={LIMITS.doseAmount.max} step="any" value={form.recommended_dose} onChange={e => setForm(p => ({ ...p, recommended_dose: e.target.value }))} className={inputClass} />
           <input placeholder="Unit (mg, mcg...)" value={form.dose_unit} onChange={e => setForm(p => ({ ...p, dose_unit: e.target.value }))} maxLength={LIMITS.doseUnit.max} className={inputClass} />
         </div>
-        <button
-          onClick={crear}
-          disabled={busy}
-          className="w-full py-2 text-sm rounded-xl bg-brand hover:bg-brand-dark text-bg font-bold transition disabled:opacity-50">
-          Add to catalog
-        </button>
-      </div>
+        <Button onClick={crear} disabled={busy} fullWidth>Add to catalog</Button>
+      </Card>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-3">
@@ -226,7 +221,7 @@ export default function AdminCatalog() {
       {loading ? (
         <p className="text-sm text-slate-400 text-center py-8">Loading...</p>
       ) : (
-        <div className="bg-surface border border-white/[0.08] rounded-2xl overflow-hidden">
+        <Card padding="none" className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -316,7 +311,7 @@ export default function AdminCatalog() {
               </tbody>
             </table>
           </div>
-        </div>
+        </Card>
       )}
 
       <ConfirmModal
