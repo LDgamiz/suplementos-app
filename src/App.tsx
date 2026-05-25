@@ -15,6 +15,7 @@ import Training from './pages/training/Training'
 import RoutineEditor from './pages/training/RoutineEditor'
 import WorkoutTracker from './pages/training/WorkoutTracker'
 import ExerciseInfo from './pages/training/ExerciseInfo'
+import { Analytics } from "@vercel/analytics/next"
 
 export default function App() {
   return (
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="catalog" element={<AdminCatalog />} />
         </Route>
       </Route>
+      <Analytics/>
     </Routes>
   )
 }
