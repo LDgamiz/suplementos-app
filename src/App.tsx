@@ -15,31 +15,33 @@ import Training from './pages/training/Training'
 import RoutineEditor from './pages/training/RoutineEditor'
 import WorkoutTracker from './pages/training/WorkoutTracker'
 import ExerciseInfo from './pages/training/ExerciseInfo'
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/react'
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/perfil/:username" element={<PerfilPublico />} />
-      <Route path="/privacy" element={<Privacy />} />
-      <Route path="/terms" element={<Terms />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
-      <Route element={<AppLayout />}>
-        <Route path="/onboarding" element={<Onboarding />} />
-        <Route path="/" element={<Supplements />} />
-        <Route path="/training" element={<Training />} />
-        <Route path="/training/routine" element={<RoutineEditor />} />
-        <Route path="/training/workout/:id" element={<WorkoutTracker />} />
-        <Route path="/training/exercise/:name" element={<ExerciseInfo />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/support" element={<SupportUs />} />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Navigate to="users" replace />} />
-          <Route path="users" element={<AdminUsers />} />
-          <Route path="catalog" element={<AdminCatalog />} />
+    <>
+      <Routes>
+        <Route path="/perfil/:username" element={<PerfilPublico />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route element={<AppLayout />}>
+          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/" element={<Supplements />} />
+          <Route path="/training" element={<Training />} />
+          <Route path="/training/routine" element={<RoutineEditor />} />
+          <Route path="/training/workout/:id" element={<WorkoutTracker />} />
+          <Route path="/training/exercise/:name" element={<ExerciseInfo />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/support" element={<SupportUs />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Navigate to="users" replace />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="catalog" element={<AdminCatalog />} />
+          </Route>
         </Route>
-      </Route>
-      <Analytics/>
-    </Routes>
+      </Routes>
+      <Analytics />
+    </>
   )
 }
