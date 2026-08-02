@@ -16,6 +16,7 @@ Single source of truth for visual decisions in StackForge: Fitness Tracker. Befo
 - `<img src="/Logo.png">` — every wordmark/brand surface (SideMenu header, Auth wordmark, ResetPassword header, Onboarding hero).
 - Lucide `Pill` icon — *only* as the section icon for Supplements (in nav, in card headers). Never as the brand mark.
 - Lucide `Dumbbell` icon — section icon for Training.
+- Lucide `Apple` icon — section icon for Diet.
 
 ## Color tokens
 
@@ -34,8 +35,9 @@ All tokens are declared in `src/index.css` under `@theme`. Reference them via Ta
 | `--color-danger` | `#FB7185` | Destructive actions, error text |
 | `--color-streak` | `#F59E0B` | Streak Flame + streak number (alias of warn) |
 | `--color-pr` | `#C6F432` | Reserved: PR / Top-set badges (gated until backend logic ships) |
+| `--color-macro-fat` | `#8B7CF6` | Fat in the macro trio only (see Macro readouts) |
 
-**Contrast rule:** all foreground/background pairs must meet WCAG AA (4.5:1 normal text). Verified: brand on bg = 8.6:1, slate-200 on bg = 13.4:1, warn on bg = 10.7:1, pr on bg = 17.1:1.
+**Contrast rule:** all foreground/background pairs must meet WCAG AA (4.5:1 normal text). Verified: brand on bg = 8.6:1, slate-200 on bg = 13.4:1, warn on bg = 10.7:1, pr on bg = 17.1:1, macro-fat on bg = 5.8:1.
 
 ## Typography
 
@@ -171,6 +173,30 @@ Tiers: 3 → "Warming up", 7 → "On fire", 14 → "Locked in", 30 → "Relentle
 ```
 
 Used identically in SideMenu, BottomNav (text-only), and "Active" routine badge. Don't drift this pattern.
+
+### Macro readouts (Diet)
+
+Protein / fat / carbs always keep the same three colours and the same `P · F · C` order,
+whether in the day total bar or in a per-meal chip row:
+
+| Macro | Token | Class |
+|---|---|---|
+| Protein | `--color-brand` | `text-brand` / `bg-brand` |
+| Fat | `--color-macro-fat` | `text-macro-fat` / `bg-macro-fat` |
+| Carbs | `--color-warn` | `text-warn` / `bg-warn` |
+
+The day total is a single 6px stacked bar sized by gram share, with kcal above it as a
+display number (`4P + 9F + 4C`, rounded). `--color-macro-fat` exists only for this trio —
+don't reach for it as a general accent.
+
+### Time rail (Diet)
+
+The five meal slots of a day render as a vertical timeline: a 12-unit-wide left column
+holding the slot's **scheduled push time** (`font-display text-[11px] tabular-nums`), a dot
+(`bg-brand` when planned, `bg-slate-700` when empty), and a `w-px bg-white/[0.08]` connector
+running to the next slot. The times are the reminder times, not decoration — the plan and
+the notification schedule are the same object. Empty slots render a dashed-border add
+button rather than a filled card, so an unfinished day reads as unfinished at a glance.
 
 ### Pending / warning chip
 

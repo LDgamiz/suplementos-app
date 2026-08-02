@@ -58,6 +58,26 @@ supabase functions deploy send-push --no-verify-jwt
   the function sends a push to all users whose `hora` matches the current
   minute in their timezone.
 
+## Meal reminders (Diet module)
+
+The Diet module adds up to five more reminders per user on the same pipeline — no extra
+cron job or Edge Function.
+
+- Run `supabase/migrations/diet_schema.sql` once (creates `diet_meals` and `meal_reminders`).
+- Redeploy the function after pulling these changes:
+  `supabase functions deploy send-push --no-verify-jwt`
+- Configure the times in the app under **Diet → bell icon** (`/diet/reminders`).
+
+Per minute, `send-push` also scans `meal_reminders` where `activa = true`, keeps the rows
+whose `hora` matches the current time in that user's timezone, resolves the user's **local
+weekday**, and looks up `diet_meals` for that `(user, day_of_week, slot)`. The push is
+titled with the slot ("Breakfast") and its body is the planned meal's title. **A slot with
+nothing planned that day sends nothing.**
+
+Each reminder carries its own notification `tag` (`meal-breakfast`, `meal-lunch`, …) so
+several meal pushes can coexist instead of replacing one another. The supplement reminder
+keeps the `daily-reminder` tag.
+
 ## How it works
 
 - Browser subscribes to push (`PushManager.subscribe`) using the VAPID public

@@ -16,6 +16,8 @@ interface PushPayload {
   title?: string
   body?: string
   url?: string
+  /** Distinct per reminder type so meal pushes don't replace each other. */
+  tag?: string
 }
 
 self.addEventListener('push', (event: PushEvent) => {
@@ -25,13 +27,14 @@ self.addEventListener('push', (event: PushEvent) => {
   const title = payload.title || 'StackForge'
   const body = payload.body || 'Have you taken your supplements today?'
   const url = payload.url || '/'
+  const tag = payload.tag || 'daily-reminder'
 
   event.waitUntil(
     self.registration.showNotification(title, {
       body,
       icon: '/icons/icon-192.png',
       badge: '/icons/icon-192.png',
-      tag: 'daily-reminder',
+      tag,
       data: { url }
     })
   )

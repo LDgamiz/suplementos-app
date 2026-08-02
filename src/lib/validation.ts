@@ -23,6 +23,10 @@ export const LIMITS = {
   repRange: { max: 30 },
   notes: { max: 500 },
   timezone: { max: 50 },
+  mealTitle: { min: 1, max: 100 },
+  ingredient: { max: 100 },
+  ingredientsCount: { max: 30 },
+  macroGrams: { min: 0, max: 1000 },
 } as const
 
 export class ValidationError extends Error {

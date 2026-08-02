@@ -5,11 +5,17 @@ import { renderWithRouter } from '../test/utils'
 import BottomNav from './BottomNav'
 
 describe('BottomNav', () => {
-  it('shows Supps, Training, Profile always', () => {
+  it('shows Supps, Diet, Training, Profile always', () => {
     renderWithRouter(<BottomNav isAdmin={false} />)
     expect(screen.getByRole('link', { name: /supps/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /diet/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /train/i })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /profile/i })).toBeInTheDocument()
+  })
+
+  it('points Diet at /diet', () => {
+    renderWithRouter(<BottomNav isAdmin={false} />)
+    expect(screen.getByRole('link', { name: /diet/i })).toHaveAttribute('href', '/diet')
   })
 
   it('does not show Support in the bottom nav (it lives in the sidebar)', () => {

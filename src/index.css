@@ -23,6 +23,9 @@
   --color-streak: #F59E0B;
   --color-pr: #C6F432;
 
+  /* macros — protein reuses brand, carbs reuses warn, fat needs its own hue */
+  --color-macro-fat: #8B7CF6;
+
   /* typography */
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
