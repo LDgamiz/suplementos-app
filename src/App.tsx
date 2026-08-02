@@ -11,6 +11,8 @@ import Privacy from './pages/legal/Privacy'
 import Terms from './pages/legal/Terms'
 import ResetPassword from './pages/ResetPassword'
 import Onboarding from './pages/Onboarding'
+import Diet from './pages/diet/Diet'
+import DietReminders from './pages/diet/DietReminders'
 import Training from './pages/training/Training'
 import RoutineEditor from './pages/training/RoutineEditor'
 import WorkoutTracker from './pages/training/WorkoutTracker'
@@ -28,6 +30,8 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/" element={<Supplements />} />
+          <Route path="/diet" element={<Diet />} />
+          <Route path="/diet/reminders" element={<DietReminders />} />
           <Route path="/training" element={<Training />} />
           <Route path="/training/routine" element={<RoutineEditor />} />
           <Route path="/training/workout/:id" element={<WorkoutTracker />} />

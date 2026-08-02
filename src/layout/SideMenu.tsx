@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Pill, User, Heart, Shield, LogOut, Dumbbell } from 'lucide-react'
+import { Pill, User, Heart, Shield, LogOut, Dumbbell, Apple } from 'lucide-react'
 
 interface Props {
   isAdmin: boolean
@@ -31,6 +31,9 @@ export default function SideMenu({ isAdmin, email, onSignOut }: Props) {
       <nav className="flex flex-col gap-1 flex-1">
         <NavLink to="/" end className={linkClass}>
           <Pill size={16} /> Supplements
+        </NavLink>
+        <NavLink to="/diet" className={linkClass}>
+          <Apple size={16} /> Diet
         </NavLink>
         <NavLink to="/training" className={linkClass}>
           <Dumbbell size={16} /> Training
